@@ -10,9 +10,5 @@ Setup scripts are provided for Mac, Linux and Windows. You can run the appropria
 
 #### Windows
 ```bash
-./start.ps1
-
-# or
-
 ./start.bat
 ```
