@@ -1,3 +1,10 @@
+### Verifying Installation
+Run the following commands to confirm that your installations succeeded:
+```bash
+python --version
+git -v
+```
+
 ### Environment Setup
 Once you have installed Python and Git, have your IDE set up, and have cloned the repository, you can use one of the provided `start` scripts to activate the [Python virtual environment](https://docs.python.org/3/library/venv.html), install Python dependencies, and start the backend server.
 
