@@ -19,7 +19,7 @@ CREATE TABLE users (
     user_coins INT NOT NULL
 );
 
-CREATE TABLE pomodoro_timer(
+CREATE TABLE pomodoro_timers(
     timer_id SERIAL PRIMARY KEY, 
     user_id INT UNIQUE NOT NULL REFERENCES users(user_id), 
     timer_start_time TIME NOT NULL,
@@ -46,12 +46,19 @@ CREATE TABLE users_flashcards(
     PRIMARY KEY (user_id, flashcard_id)
 );
 
-CREATE TABLE todo_list (
+CREATE TABLE todo_lists (
     todo_id SERIAL PRIMARY KEY, 
     user_id INT UNIQUE NOT NULL REFERENCES users(user_id), 
     todo_description TEXT,
     status TODO_STATUS NOT NULL,
     difficulty DIFFICULTY NOT NULL,
     deadline DATE
+);
+
+CREATE TABLE streaks (
+    streak_id SERIAL PRIMARY KEY,
+    user_id INT UNIQUE NOT NULL REFERENCES users(user_id),
+    last_updated DATE NOT NULL DEFAULT CURRENT_DATE,
+    streak_count INT NOT NULL DEFAULT 1
 );
 
