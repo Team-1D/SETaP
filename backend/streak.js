@@ -14,7 +14,8 @@ async function getStreak(){
 async function updateStreak(){
     let streak = await getStreak();
     const today = new Date();
-    //let lastUpdate when the user last loged on;
+    let lastUpdate = streak.last_updated;
     //if user logged in today
-    //{streak.streak_count += 1}
+    //{streak.streak_count += 1
+    //let lastUpdate = today}   
 }
