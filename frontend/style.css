@@ -1,133 +1,236 @@
+/* background color */
+body{
+    font-family: Arial, sans-serif;
+    padding: 0;
+    margin: 0;
+}
 /* Style for the navbar */
-.nav {
+#nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.63em; /* 10px */
-    background-color: darkseagreen;
+    padding: 0.63em; /* 10px */ 
+    background-color: #f8f8f8;
 }
 
 /* Profile section */
-.profile {
+#profile, #logo, #right-section {
     display: flex;
     align-items: center;
 }
 
-.profile p {
-    margin-left: 0.63em; /* 10px */
-    font-weight: bold;
-}
-
-.profile-img {
-    width: 5em; /* 80px */
-    height: 5em; /* 80px */
+#profile-img {
+    width: 4em; 
+    height: 4em; 
     border-radius: 50%;
     background-color: bisque;
-}
-
-/* Logo styling */
-.logo {
-    font-size: 1.5em; /* 24px */
-    font-weight: bold;
-}
-
-/* Right section with dropdown and settings */
-.right-section {
-    display: flex;
-    align-items: center;
-    gap: 1.25em; /* 20px */
+    margin-right: 0.6em;
 }
 
 /* Dropdown button */
-.menu-button {
-    background-color: green;
-    color: white;
+#menu-button {
     border: none;
-    padding: 0.5em 1em; /* 8px 16px */
+    padding: 0.5em 1em; 
+    font-size: 0.88em;  
+    border-radius: 0.31em;
+    margin-right: 1em;
     cursor: pointer;
-    font-size: 0.88em; /* 14px */
-    border-radius: 0.31em; /* 5px */
 }
 
-/* Dropdown styling */
-.dropdown {
+#dropdown{
     position: relative;
-    display: inline-block;
+    cursor: pointer;
 }
 
 /* Dropdown Content */
-.dropdown-content {
+#dropdown-content {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
-    min-width: 10em; /* 160px */
-    top: 100%; /* Ensures it appears below the button */
+    box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
+    min-width: 10em; 
+    top: 100%;
     left: 0;
 }
 
 /* Links inside the dropdown */
-.dropdown-content a {
+#dropdown-content a {
     color: black;
-    padding: 0.75em 1em; /* 12px 16px */
+    display: block;
+    padding: 0.75em 1em;
     text-decoration: none;
+}
+
+/* Dropdown styling */
+#dropdown:hover #dropdown-content {
     display: block;
 }
 
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {
-    background-color: #f1f1f1;
-}
-
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-/* Button color change on hover */
-.dropdown:hover .menu-button {
-    background-color: #3e8e41;
-}
-
-.settings a {
+#settings a {
     text-decoration: none;
     color: black;
-    cursor: default;
+    cursor: pointer;
 }
 
-/* Add note button */
-#add-note {
-    display: flex;
-    height: 4em; /* 65px */
-    width: 4em; /* 65px */
-    border-radius: 25%;
-    background-color: skyblue;
-    margin-top: 3em; /* 50px */
-    margin-left: 1em;
-    border: none;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    font-size: 1.25em; /* 50px */
+#filter-container{
+    padding: 0.6em;
+    margin-top: 2em;
 }
 
-#add-note:hover {
-    background-color: lightblue;
-}
-
-/* for the filters */
-#recently-used, #favourites{
-    display: flex;
-    width: 15em;
-    height: 3em;
+#filter-container button{
+    margin: 0.3em;
+    padding: 0.6em;
     border: none;
     border-radius: 1em;
-    margin-top: 0.5em;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.20em;
-    background-color: skyblue;
+    cursor: pointer;
+    font-size: 1em;
 }
 
-#recently-used:hover, #favourites:hover{
-    background-color: lightblue;
+
+#recently-used:hover, #favourites:hover, #dropdown-content a:hover{
+    background:rgba(0, 0, 0, 0.1);
+    transition: background 0.2s;
+}
+
+
+/* Style for the notes */
+
+#notes-container{
+    padding: 1.25em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6em;
+}
+
+.add-note{
+    width: 3em;
+    height: 3em;
+    font-size: 1.5em;
+    border: none;
+    border-radius: 1em;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+}
+
+.add-note:hover{
+    background: #005bb5;
+    transition: background 0.2s;
+}
+/* popup style */
+.popup{
+    display: none;
+    position: fixed;
+    margin-left: 40%;
+    background-color: whitesmoke;
+    padding: 2em;
+    border-radius: 0.6em;
+    box-shadow: 0 0 0.6em rgba(0, 0, 0, 0.1);
+    width: auto;
+    text-align: center;
+    justify-items: left;
+}
+
+.close-popup{
+    float: right;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+#note-form input, #note-form select{
+    border-radius: 1em;
+    border: none;
+    box-shadow: 0 0 0.6em rgba(0, 0, 0, 0.1);
+    margin-top: 1em;
+}
+
+#note-form button{
+    margin-top: 1em;
+    text-align: right;
+    border: none;
+    box-shadow: 0 0 0.6em rgba(0, 0, 0, 0.1);
+    background-color: #007bff;
+    border-radius: 1em;
+    color: #f9f9f9;
+}
+
+/* style for the full screen note */
+.fullscreen-note {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    padding: 2em;
+    box-sizing: border-box;
+}
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+#fullscreen-textarea {
+    width: 100%;
+    height: calc(100% - 100px); /* Adjust height to fit the screen */
+    border: 1px solid #ccc;
+    border-radius: 0.5em;
+    padding: 0.5em;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    resize: none; /* Disable resizing */
+}
+
+#close-fullscreen {
+    padding: 0.5em 1em;
+    border: none;
+    border-radius: 0.5em;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+#close-fullscreen:hover {
+    background-color: #005bb5;
+}
+
+/* Note preview styles */
+.note {
+    width: 200px;
+    height: 150px; /* Smaller height for preview */
+    padding: 1em;
+    border: 1px solid #ccc;
+    border-radius: 1em;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 0.6em rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Hide overflow content */
+    cursor: pointer;
+}
+
+.note-preview {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-note {
+    margin-top: 1em;
+    padding: 0.5em 1em;
+    border: none;
+    border-radius: 0.5em;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.edit-note:hover {
+    background-color: #005bb5;
 }
