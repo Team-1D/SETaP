@@ -13,7 +13,7 @@ CREATE TABLE leaderboards (
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY, 
     leaderboard_id INT REFERENCES leaderboards(leaderboard_id), 
-    user_email VARCHAR(50) NOT NULL,
+    user_email VARCHAR(50) UNIQUE NOT NULL,
     user_nickname VARCHAR(100) NOT NULL,
     user_streak INT NOT NULL,
     user_points INT NOT NULL,

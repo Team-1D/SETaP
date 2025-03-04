@@ -200,8 +200,8 @@ body{
 
 /* Note preview styles */
 .note {
-    width: 200px;
-    height: 150px; /* Smaller height for preview */
+    width: 12.5em;
+    height: 9.38em; /* Smaller height for preview */
     padding: 1em;
     border: 1px solid #ccc;
     border-radius: 1em;
