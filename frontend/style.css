@@ -1,1 +1,241 @@
+/* background color */
+body{
+    font-family: Arial, sans-serif;
+    padding: 0;
+    margin: 0;
+}
+/* Styles for note page */
+/* Style for the navbar */
+#nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.63em; /* 10px */ 
+    background-color: #f8f8f8;
+}
 
+/* Profile section */
+#profile, #logo, #right-section {
+    display: flex;
+    align-items: center;
+}
+
+#profile-img {
+    width: 4em; 
+    height: 4em; 
+    border-radius: 50%;
+    background-color: bisque;
+    margin-right: 0.6em;
+}
+
+/* Dropdown button */
+#menu-button {
+    border: none;
+    padding: 0.5em 1em; 
+    font-size: 0.88em;  
+    border-radius: 0.31em;
+    margin-right: 1em;
+    cursor: pointer;
+}
+
+#dropdown{
+    position: relative;
+    cursor: pointer;
+}
+
+/* Dropdown Content */
+#dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
+    min-width: 10em; 
+    top: 100%;
+    left: 0;
+}
+
+/* Links inside the dropdown */
+#dropdown-content a {
+    color: black;
+    display: block;
+    padding: 0.75em 1em;
+    text-decoration: none;
+}
+
+/* Dropdown styling */
+#dropdown:hover #dropdown-content {
+    display: block;
+}
+
+#settings a {
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}
+
+#filter-container{
+    padding: 0.6em;
+    margin-top: 2em;
+}
+
+#filter-container button{
+    margin: 0.3em;
+    padding: 0.6em;
+    border: none;
+    border-radius: 1em;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+
+#recently-used:hover, #favourites:hover, #dropdown-content a:hover{
+    background:rgba(0, 0, 0, 0.1);
+    transition: background 0.2s;
+}
+
+
+/* Style for the notes */
+
+#notes-container{
+    padding: 1.25em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6em;
+}
+
+.add-note{
+    width: 3em;
+    height: 3em;
+    font-size: 1.5em;
+    border: none;
+    border-radius: 1em;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+}
+
+.add-note:hover{
+    background: #005bb5;
+    transition: background 0.2s;
+}
+/* popup style */
+.popup{
+    display: none;
+    position: fixed;
+    margin-left: 40%;
+    background-color: whitesmoke;
+    padding: 2em;
+    border-radius: 0.6em;
+    box-shadow: 0 0 0.6em rgba(0, 0, 0, 0.1);
+    width: auto;
+    text-align: center;
+    justify-items: left;
+}
+
+.close-popup{
+    float: right;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+#note-form input, #note-form select{
+    border-radius: 1em;
+    border: none;
+    box-shadow: 0 0 0.6em rgba(0, 0, 0, 0.1);
+    margin-top: 1em;
+}
+
+#note-form button{
+    margin-top: 1em;
+    text-align: right;
+    border: none;
+    box-shadow: 0 0 0.6em rgba(0, 0, 0, 0.1);
+    background-color: #007bff;
+    border-radius: 1em;
+    color: #f9f9f9;
+}
+
+/* style for the full screen note */
+.fullscreen-note {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    padding: 2em;
+    box-sizing: border-box;
+}
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+#fullscreen-textarea {
+    width: 100%;
+    height: calc(100% - 100px); /* Adjust height to fit the screen */
+    border: 1px solid #ccc;
+    border-radius: 0.5em;
+    padding: 0.5em;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    resize: none; /* Disable resizing */
+}
+
+#close-fullscreen {
+    padding: 0.5em 1em;
+    border: none;
+    border-radius: 0.5em;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+#close-fullscreen:hover {
+    background-color: #005bb5;
+}
+
+/* Note preview styles */
+.note {
+    width: 12.5em;
+    height: 9.38em; /* Smaller height for preview */
+    padding: 1em;
+    border: 1px solid #ccc;
+    border-radius: 1em;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 0.6em rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Hide overflow content */
+    cursor: pointer;
+}
+
+.note-preview {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-note {
+    margin-top: 1em;
+    padding: 0.5em 1em;
+    border: none;
+    border-radius: 0.5em;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.edit-note:hover {
+    background-color: #005bb5;
+}
+
+.add-fav{
+    background-color: red;
+}
