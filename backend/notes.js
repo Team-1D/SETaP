@@ -2,7 +2,7 @@
 //npm install express pg cors body-parser dotenv
 
 const express = require("express");
-const pool  = require("../database");
+const pool  = require("./database");
 
 //CRUD OPERATIONS
 
@@ -37,10 +37,31 @@ async function deleteNote(id) {
     return x.rows[0]; // Return deleted note
 }
 
+async function toggleFavourite(id){
+    try{
+        const check = await pool.query('SELECT favourite FROM notes WHERE id = $1', [id]);
+        if (check.rows.length === 0) {
+            return { error: 'Note not found' };
+        }
+        const currentStatus = check.rows[0].favourite;
+        const newStatus = !currentStatus; // Toggle true/false
+        const result = await pool.query(
+            'UPDATE notes SET favourite = $1 WHERE id = $2 RETURNING *',
+            [newStatus, id]
+        );
+        return result.rows[0]; // Return updated note
+    } catch (err) {
+    console.error(err);
+    return { error: 'Database error' };
+    }
+}
+
+
 module.exports = {
     createNote,
     getNotes,
     getNoteByName,
     updateNote,
-    deleteNote
+    deleteNote,
+    toggleFavourite
 };
