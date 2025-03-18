@@ -150,3 +150,31 @@ document.querySelector('#fullscreen-textarea').addEventListener('input', () => {
     // Apply the selected color to the newly typed text
     document.execCommand('foreColor', false, selectedColor);
 });
+
+// scroll
+document.addEventListener('DOMContentLoaded', function () {
+    const scrollLeftButton = document.getElementById('scroll-left');
+    const scrollRightButton = document.getElementById('scroll-right');
+    const cardsContainer = document.querySelector('.services__cards');
+    const cards = document.querySelectorAll('.services__card');
+    let currentIndex = 0;
+
+    scrollLeftButton.addEventListener('click', function () {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateScrollPosition();
+        }
+    });
+
+    scrollRightButton.addEventListener('click', function () {
+        if (currentIndex < cards.length - 1) {
+            currentIndex++;
+            updateScrollPosition();
+        }
+    });
+
+    function updateScrollPosition() {
+        const cardWidth = cards[0].offsetWidth; // Get the width of a card
+        cardsContainer.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+    }
+});
