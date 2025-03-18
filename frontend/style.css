@@ -1,81 +1,140 @@
-/* background color */
 body{
-    font-family: Arial, sans-serif;
-    padding: 0;
+    font-family: "Press Start 2P", system-ui;
+    /* font-weight: 400; */
+    font-style: normal;
     margin: 0;
+    padding: 0;
+    text-align: center;
 }
-/* Styles for note page */
-/* Style for the navbar */
-#nav {
+
+button, .bx{
+    font-family: "Press Start 2P", system-ui;
+}
+textarea, textarea::placeholder {
+    font-family: "Press Start 2P", system-ui !important;
+    font-size: 13px !important;
+}
+select, input{
+    font-family:  "Press Start 2P", system-ui !important;
+    font-size: 11px;
+}
+/* --- Navbar --- */
+.navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.63em; /* 10px */ 
-    background-color: #f8f8f8;
-}
-
-/* Profile section */
-#profile, #logo, #right-section {
-    display: flex;
-    align-items: center;
-}
-
-#profile-img {
-    width: 4em; 
-    height: 4em; 
-    border-radius: 50%;
-    background-color: bisque;
-    margin-right: 0.6em;
-}
-
-/* Dropdown button */
-#menu-button {
-    border: none;
-    padding: 0.5em 1em; 
-    font-size: 0.88em;  
-    border-radius: 0.31em;
-    margin-right: 1em;
-    cursor: pointer;
-}
-
-#dropdown{
+    padding: 15px 30px;
     position: relative;
-    cursor: pointer;
 }
 
-/* Dropdown Content */
-#dropdown-content {
-    display: none;
+.nav-menu-container {
+    padding: 1rem;
+    background-color: #ffe9b8;
+}
+
+/* Centered Logo */
+.nav-logo {
     position: absolute;
-    background-color: #f9f9f9;
-    box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
-    min-width: 10em; 
-    top: 100%;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-/* Links inside the dropdown */
-#dropdown-content a {
-    color: black;
-    display: block;
-    padding: 0.75em 1em;
+.nav-logo h1 {
+    font-size: 3rem;
+}
+
+/* Right Side (Settings & Timer) */
+.right-side {
+    display: flex;
+    gap: 20px;
+}
+
+/* --- Profile (Left Side) & Right Side (Settings & Timer) --- */
+.left-side {
+    display: flex;
+    align-items: center; 
+    gap: 10px; 
+}
+.left-side a,
+.right-side a {
+    font-size: 40px;
+    color: #000;
     text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
 }
 
-/* Dropdown styling */
-#dropdown:hover #dropdown-content {
-    display: block;
+.left-side a:hover,
+.right-side a:hover {
+    color: #d8893f;
+    transform: scale(1.3);
 }
 
-#settings a {
+.bar{
+    position: relative;
+    border: 2px solid #d8893f;
+    border-radius: 1em;
+    width: 5em;
+    margin-top: 1em;
+}
+
+.bar div{
+    position: relative;
+    width: 25%;
+    height: 0.56em;
+    border-radius: 1em;
+    background-color: #d8893f;
+}
+
+.bx.bxs-hot {
+    font-size: 1.25em;
+    margin-top: 0.30em;
+    margin-right: 1em;
+}
+
+.left-side p{
+    font-size: 10px;
+    margin-top: 2.5em;
+}
+/* --- Navigation Menu Below "ReviiT" --- */
+.nav-menu-container {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    gap: 4rem;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-link {
     text-decoration: none;
-    color: black;
-    cursor: pointer;
+    font-size: 2.5rem;
+    color: #000;
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
 }
 
+.nav-link:hover {
+    color: #d8893f;
+    transform: scale(1.3);
+}
+
+.nav-link.active {
+    color: #d8893f;
+    transform: scale(1.5);
+    pointer-events: none;
+}
+
+/* Filters button below the navigation menu */
 #filter-container{
     padding: 0.6em;
     margin-top: 2em;
+    text-align: left;
 }
 
 #filter-container button{
@@ -87,22 +146,19 @@ body{
     font-size: 1em;
 }
 
-
-#recently-used:hover, #favourites:hover, #dropdown-content a:hover{
-    background:rgba(0, 0, 0, 0.1);
+#recently-used:hover, #favourites:hover{
+    background:#ffe9b8;
     transition: background 0.2s;
 }
 
-
-/* Style for the notes */
-
+/* Add note button */
 #notes-container{
     padding: 1.25em;
     display: flex;
     flex-wrap: wrap;
     gap: 0.6em;
+    text-align: left;
 }
-
 .add-note{
     width: 3em;
     height: 3em;
@@ -110,15 +166,14 @@ body{
     border: none;
     border-radius: 1em;
     cursor: pointer;
-    background-color: #007bff;
-    color: white;
 }
 
-.add-note:hover{
-    background: #005bb5;
+.add-note:hover, #note-form button:hover{
+    background: #ffe9b8;
     transition: background 0.2s;
 }
-/* popup style */
+
+/* Popup add note */
 .popup{
     display: none;
     position: fixed;
@@ -138,7 +193,8 @@ body{
     font-size: 1em;
 }
 
-#note-form input, #note-form select{
+#note-form input, 
+#note-form select{
     border-radius: 1em;
     border: none;
     box-shadow: 0 0 0.6em rgba(0, 0, 0, 0.1);
@@ -146,18 +202,20 @@ body{
 }
 
 #note-form button{
-    margin-top: 1em;
+    margin-top: 1.75em;
     text-align: right;
     border: none;
     box-shadow: 0 0 0.6em rgba(0, 0, 0, 0.1);
-    background-color: #007bff;
+    cursor: pointer;
+    background-color: #d8893f;
     border-radius: 1em;
     color: #f9f9f9;
+
 }
 
-/* style for the full screen note */
+/* Fulscreen note */
 .fullscreen-note {
-    display: none; /* Hidden by default */
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -181,25 +239,64 @@ body{
     border: 1px solid #ccc;
     border-radius: 0.5em;
     padding: 0.5em;
-    font-family: Arial, sans-serif;
-    font-size: 16px;
     resize: none; /* Disable resizing */
+    overflow-y: auto; /* Add scrollbar if content overflows */
+    white-space: pre-wrap; /* Preserve line breaks and spaces */
+    background-color: white;
+    color: black; /* Default text color */
+    text-align: left;
 }
 
-#close-fullscreen {
+#fullscreen-textarea:empty::before {
+    content: attr(placeholder); 
+    color: gray;
+    font-style: italic;
+}
+
+#close-fullscreen,
+#update {
     padding: 0.5em 1em;
     border: none;
     border-radius: 0.5em;
-    background-color: #007bff;
+    background-color: #ffe9b8;
     color: white;
     cursor: pointer;
 }
 
-#close-fullscreen:hover {
-    background-color: #005bb5;
+#close-fullscreen:hover,
+#update:hover {
+    background-color: #d8893f;
 }
 
-/* Note preview styles */
+#textColor{
+    border: none;
+    border-radius: 50%;
+    width: 2.5em;
+    height: 2.5em;
+    padding: 0;
+    box-shadow: 0 0 0.6em rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    background-color: transparent;
+    appearance: none;
+}
+
+#change-color{
+    font-size: 13px;
+    margin: 0;
+}
+
+.color-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.right-section{
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+/* Note preview */
 .note {
     width: 12.5em;
     height: 9.38em; /* Smaller height for preview */
@@ -214,28 +311,49 @@ body{
     cursor: pointer;
 }
 
-.note-preview {
+.note-preview{
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    font-size: small;
+    background-color: #f5f5f5; /* Light gray background */
+    border-radius: 1em; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
-.edit-note {
+.button-container{
+    font-size: small;
+}
+
+.edit-note,
+.add-favourite {
     margin-top: 1em;
     padding: 0.5em 1em;
     border: none;
     border-radius: 0.5em;
-    background-color: #007bff;
+    background-color: #d8893f;
     color: white;
     cursor: pointer;
 }
 
-.edit-note:hover {
-    background-color: #005bb5;
+.edit-note:hover,
+.add-favourite:hover {
+    background-color: #ffe9b8;
 }
 
-.add-fav{
-    background-color: red;
+.add-favourite i {
+    color: white;
+    transition: 0.2s;
+}
+
+.add-favourite.active i {
+    color: rgb(229, 27, 27);
+}
+
+.add-favourite:hover i {
+    color: rgb(229, 27, 27);
+    transform: scale(1.3);
+    transition: 0.2s;
 }
