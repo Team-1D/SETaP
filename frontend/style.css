@@ -1,1 +1,359 @@
+body{
+    font-family: "Press Start 2P", system-ui;
+    /* font-weight: 400; */
+    font-style: normal;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
 
+button, .bx{
+    font-family: "Press Start 2P", system-ui;
+}
+textarea, textarea::placeholder {
+    font-family: "Press Start 2P", system-ui !important;
+    font-size: 13px !important;
+}
+select, input{
+    font-family:  "Press Start 2P", system-ui !important;
+    font-size: 11px;
+}
+/* --- Navbar --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    position: relative;
+}
+
+.nav-menu-container {
+    padding: 1rem;
+    background-color: #ffe9b8;
+}
+
+/* Centered Logo */
+.nav-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.nav-logo h1 {
+    font-size: 3rem;
+}
+
+/* Right Side (Settings & Timer) */
+.right-side {
+    display: flex;
+    gap: 20px;
+}
+
+/* --- Profile (Left Side) & Right Side (Settings & Timer) --- */
+.left-side {
+    display: flex;
+    align-items: center; 
+    gap: 10px; 
+}
+.left-side a,
+.right-side a {
+    font-size: 40px;
+    color: #000;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+}
+
+.left-side a:hover,
+.right-side a:hover {
+    color: #d8893f;
+    transform: scale(1.3);
+}
+
+.bar{
+    position: relative;
+    border: 2px solid #d8893f;
+    border-radius: 1em;
+    width: 5em;
+    margin-top: 1em;
+}
+
+.bar div{
+    position: relative;
+    width: 25%;
+    height: 0.56em;
+    border-radius: 1em;
+    background-color: #d8893f;
+}
+
+.bx.bxs-hot {
+    font-size: 1.25em;
+    margin-top: 0.30em;
+    margin-right: 1em;
+}
+
+.left-side p{
+    font-size: 10px;
+    margin-top: 2.5em;
+}
+/* --- Navigation Menu Below "ReviiT" --- */
+.nav-menu-container {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    gap: 4rem;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-link {
+    text-decoration: none;
+    font-size: 2.5rem;
+    color: #000;
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+}
+
+.nav-link:hover {
+    color: #d8893f;
+    transform: scale(1.3);
+}
+
+.nav-link.active {
+    color: #d8893f;
+    transform: scale(1.5);
+    pointer-events: none;
+}
+
+/* Filters button below the navigation menu */
+#filter-container{
+    padding: 0.6em;
+    margin-top: 2em;
+    text-align: left;
+}
+
+#filter-container button{
+    margin: 0.3em;
+    padding: 0.6em;
+    border: none;
+    border-radius: 1em;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+#recently-used:hover, #favourites:hover{
+    background:#ffe9b8;
+    transition: background 0.2s;
+}
+
+/* Add note button */
+#notes-container{
+    padding: 1.25em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6em;
+    text-align: left;
+}
+.add-note{
+    width: 3em;
+    height: 3em;
+    font-size: 1.5em;
+    border: none;
+    border-radius: 1em;
+    cursor: pointer;
+}
+
+.add-note:hover, #note-form button:hover{
+    background: #ffe9b8;
+    transition: background 0.2s;
+}
+
+/* Popup add note */
+.popup{
+    display: none;
+    position: fixed;
+    margin-left: 40%;
+    background-color: whitesmoke;
+    padding: 2em;
+    border-radius: 0.6em;
+    box-shadow: 0 0 0.6em rgba(0, 0, 0, 0.1);
+    width: auto;
+    text-align: center;
+    justify-items: left;
+}
+
+.close-popup{
+    float: right;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+#note-form input, 
+#note-form select{
+    border-radius: 1em;
+    border: none;
+    box-shadow: 0 0 0.6em rgba(0, 0, 0, 0.1);
+    margin-top: 1em;
+}
+
+#note-form button{
+    margin-top: 1.75em;
+    text-align: right;
+    border: none;
+    box-shadow: 0 0 0.6em rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    background-color: #d8893f;
+    border-radius: 1em;
+    color: #f9f9f9;
+
+}
+
+/* Fulscreen note */
+.fullscreen-note {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    padding: 2em;
+    box-sizing: border-box;
+}
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+#fullscreen-textarea {
+    width: 100%;
+    height: calc(100% - 100px); /* Adjust height to fit the screen */
+    border: 1px solid #ccc;
+    border-radius: 0.5em;
+    padding: 0.5em;
+    resize: none; /* Disable resizing */
+    overflow-y: auto; /* Add scrollbar if content overflows */
+    white-space: pre-wrap; /* Preserve line breaks and spaces */
+    background-color: white;
+    color: black; /* Default text color */
+    text-align: left;
+}
+
+#fullscreen-textarea:empty::before {
+    content: attr(placeholder); 
+    color: gray;
+    font-style: italic;
+}
+
+#close-fullscreen,
+#update {
+    padding: 0.5em 1em;
+    border: none;
+    border-radius: 0.5em;
+    background-color: #ffe9b8;
+    color: white;
+    cursor: pointer;
+}
+
+#close-fullscreen:hover,
+#update:hover {
+    background-color: #d8893f;
+}
+
+#textColor{
+    border: none;
+    border-radius: 50%;
+    width: 2.5em;
+    height: 2.5em;
+    padding: 0;
+    box-shadow: 0 0 0.6em rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    background-color: transparent;
+    appearance: none;
+}
+
+#change-color{
+    font-size: 13px;
+    margin: 0;
+}
+
+.color-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.right-section{
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+/* Note preview */
+.note {
+    width: 12.5em;
+    height: 9.38em; /* Smaller height for preview */
+    padding: 1em;
+    border: 1px solid #ccc;
+    border-radius: 1em;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 0.6em rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Hide overflow content */
+    cursor: pointer;
+}
+
+.note-preview{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: small;
+    background-color: #f5f5f5; /* Light gray background */
+    border-radius: 1em; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.button-container{
+    font-size: small;
+}
+
+.edit-note,
+.add-favourite {
+    margin-top: 1em;
+    padding: 0.5em 1em;
+    border: none;
+    border-radius: 0.5em;
+    background-color: #d8893f;
+    color: white;
+    cursor: pointer;
+}
+
+.edit-note:hover,
+.add-favourite:hover {
+    background-color: #ffe9b8;
+}
+
+.add-favourite i {
+    color: white;
+    transition: 0.2s;
+}
+
+.add-favourite.active i {
+    color: rgb(229, 27, 27);
+}
+
+.add-favourite:hover i {
+    color: rgb(229, 27, 27);
+    transform: scale(1.3);
+    transition: 0.2s;
+}

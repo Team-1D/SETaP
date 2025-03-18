@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- link to style file -->
+    <link rel="stylesheet" href="style.css">
+    <!-- icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <!-- Left Side (Profile) -->
+        <div class="left-side">
+            <a href="#"><i class='bx bxs-user'></i></a>
+            <div class="bar">
+                <div id="exp-bar"></div>
+            </div>
+            <p>exp.</p>
+            <i class="bx bxs-hot"></i>
+        </div>
+    
+        <!-- Centered Logo -->
+        <div class="nav-logo">
+            <h1>REViiT</h1>
+        </div>
+    
+        <!-- Right Side (Settings & Timer) -->
+        <div class="right-side">
+            <a href="#"><i class='bx bxs-time'></i></a>
+            <a href="#"><i class='bx bxs-cog'></i></a>
+        </div>
+    </nav>
+
+    <!-- Navigation Menu Below "REViiT" -->
+    <div class="nav-menu-container">
+        <ul class="nav-menu">
+            <li><a href="index.html" class="nav-link"><i class='bx bx-home'></i></a></li>
+            <li><a href="#" class="nav-link"><i class='bx bxs-layout'></i></a></li>
+            <li><a href="#" class="nav-link active"><i class='bx bxs-note'></i></a></li>
+            <li><a href="#" class="nav-link"><i class='bx bxs-collection'></i></a></li>
+            <li><a href="#" class="nav-link"><i class='bx bxs-trophy'></i></a></li>
+        </ul>
+    </div>
+
+    <!-- Filter buttons -->
+    <div id="filter-container">
+        <button id="recently-used">Recently used</button>
+        <button id="favourites">Favourites</button>
+    </div>
+
+    <!-- Add notes button -->
+    <div id="notes-container">
+        <button class="add-note" type="button">+</button>
+    </div>
+
+    <!-- Pop up create note -->
+    <div id="note-popup" class="popup">
+        <div class="popup-content">
+            <!-- Closing page -->
+            <span class="close-popup">x</span>
+
+            <!-- Title of the popup -->
+            <h2>Create Note</h2>
+            <form id="note-form">
+
+                <!-- Title input -->
+                <label for="note-title">Title:</label>
+                <input type="text" id="note-title" required><br>
+
+                <!-- Difficulty dropdown -->
+                <label for="note-difficulty">Difficulty:</label>
+                <select name="note-difficulty" id="note-difficulty" required>
+                    <option value="low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select><br>
+
+                <!-- Date selection -->
+                <label for="note-date">Deadline:</label>
+                <input type="date" id="note-date" required><br>
+
+                <!-- Create note button -->
+                <button type="submit">CREATE NOTE</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Note Fullscreen-->
+    <div class="fullscreen-note" id="fullscreen-note">
+        <div class="note-header">
+            <h3 id="fullscreen-title"></h3>
+            <p id="fullscreen-deadline"></p>
+            <div class="right-section">
+                <div class="color-container">
+                    <p id="change-color">color:</p>
+                    <input type="color"  id="textColor">
+                </div>
+                <button id="update"><U></U>Update</button>
+                <button id="close-fullscreen">Finish</button>
+            </div>
+        </div>
+        <!-- <textarea id="fullscreen-textarea" placeholder="write your note here..."></textarea> -->
+        <div id="fullscreen-textarea" contenteditable="true" placeholder="write your note here..."></div>
+    </div>
+
+    <script src="frontend.js"></script>
+</body>
+</html>
