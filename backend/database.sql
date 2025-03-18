@@ -53,6 +53,21 @@ CREATE TABLE users_flashcards(
     PRIMARY KEY (user_id, flashcard_id)
 );
 
+CREATE TABLE flashcards (
+    id SERIAL PRIMARY KEY,
+    question TEXT NOT NULL,
+    answer TEXT NOT NULL,
+    collection_id INT REFERENCES collections(id),
+    color VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE collections (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE todo_lists (
     todo_id SERIAL PRIMARY KEY, 
     user_id INT UNIQUE NOT NULL REFERENCES users(user_id), 
