@@ -1,5 +1,5 @@
 
-const {Streak}  = require("../database");
+const {Streak}  = require("./database-pool");
 
 
 async function getStreak(userID){

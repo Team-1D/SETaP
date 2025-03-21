@@ -1,18 +1,16 @@
-// code for terminal
-//npm install pg
-
-import express from 'express';
-const express = require('express');
+const express = require('express'); // Correct import
 const cors = require('cors');
-const {createNote,getNotes, getNoteByName,updateNote, deleteNote } = require('./notes');
-const {getStreak, updateStreak, CreateStreak} = require('./streaks');
-const { getFlashcards, getFlashcardById, createFlashcard, updateFlashcard, deleteFlashcard } = require('./flashcards');
-const { createCollection,getAllCollections,getCollectionById,updateCollection,deleteCollection, addFlashcardToCollection, getFlashcardsByCollectionId} = require('./collections');
+const path = require('path');
+const pool = require('./database-pool');
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-//const { Sequelize } = require("sequelize");
+const { createNote, getNotes, getNoteByName, updateNote, deleteNote, toggleFavourite } = require('./notes');
+const { getStreak, updateStreak, createStreak } = require('./streak');
+const { getFlashcards, getFlashcardById, createFlashcard, updateFlashcard, deleteFlashcard } = require('./flashcard');
+const { createCollection, getAllCollections, getCollectionById, updateCollection, deleteCollection, addFlashcardToCollection, getFlashcardsByCollectionId } = require('./collections');
+
+const app = express(); // Initialize the Express app
+app.use(cors()); // Use CORS middleware
+app.use(express.json()); // Parse JSON request bodies
 
 app.get('/notes', getNotes);
 app.post('/notes', createNote);
@@ -20,8 +18,7 @@ app.get('/notes/:title', getNoteByName);
 app.put('/notes/:id', updateNote);
 app.delete('/notes/:id', deleteNote);
 
-
-app.get('/flashcards', getFlashcards);        
+    
 app.get('/flashcards/:id', getFlashcardById); 
 app.post('/flashcards', createFlashcard);     
 app.put('/flashcards/:id', updateFlashcard);  
@@ -173,7 +170,6 @@ app.post('/collections/:id/flashcards', async (req, res) => {
     const { question, answer, collection_id, color, template } = req.body;
     
     const result = await addFlashcardToCollection(id, question, answer, collection_id, color, template);
-    plate
     if (result.error) {
         return res.status(500).json(result);
     }
@@ -191,32 +187,33 @@ app.get('/collections/:id/flashcards', async (req, res) => {
     res.json(result);
 });
 
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 
-const PORT = 5000;
+const PORT = 8080;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
 
-startTimer();
-
-//Streak
-let streak = getStreak();
 
 
-// Calculate Points // 
-function checkMultiplier () { 
-    let pointMultiplier = 1;
-    if (streak % 5 == 0) {
-        pointMultiplier += 0.5
-    }
-}
+// //Streak
+// let streak = getStreak();
 
-function checkPoints() {
-    if (seconds % 300 === 0 && seconds !== 0) { 
-        points += 10 * seconds / 60;
-        updatePointsDisplay();
-    }
-}
+
+// // Calculate Points // 
+// function checkMultiplier () { 
+//     let pointMultiplier = 1;
+//     if (streak % 5 == 0) {
+//         pointMultiplier += 0.5
+//     }
+// }
+
+// function checkPoints() {
+//     if (seconds % 300 === 0 && seconds !== 0) { 
+//         points += 10 * seconds / 60;
+//         updatePointsDisplay();
+//     }
+// }
 
 

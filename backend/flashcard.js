@@ -1,4 +1,4 @@
-const { pool } = require("../database");
+const { pool } = require("./database-pool");
 
 // function to get all flashcards
 
