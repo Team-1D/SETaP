@@ -1,0 +1,58 @@
+.templates-section {
+    margin-top: 2rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+}
+
+/* Grid layout */
+.templates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 2rem;
+    margin: 2rem;
+}
+
+/* Each template card */
+.template-card {
+    border: 0.1rem solid black;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transition for scale and shadow */
+}
+
+.template-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.template-image {
+    width: 100%;
+    height: 12rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e8e4db;
+}
+
+.template-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.template-name {
+    font-size: 1.2rem;
+    text-align: center;
+    padding-top: 0.5rem;
+    width: 100%;
+    border-top: 0.1rem solid black;
+}
