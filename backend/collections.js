@@ -1,3 +1,4 @@
+const {collection} = require("./database-pool");
 // function to create a collection of flashcards
 
 async function createCollection(name) {

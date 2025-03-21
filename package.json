@@ -1,0 +1,26 @@
+{
+  "name": "setap",
+  "version": "1.0.0",
+  "description": "This is a revision app created by TEAM 1D for Software Engineering Theory and Practice Coursework",
+  "main": "index.js",
+  "scripts": {
+    "start": "node backend/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Team-1D/SETaP.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Team-1D/SETaP/issues"
+  },
+  "homepage": "https://github.com/Team-1D/SETaP#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "pg": "^8.14.1"
+  }
+}
