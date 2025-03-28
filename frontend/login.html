@@ -1,5 +1,6 @@
         <!-- link to style file -->
         <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="login.css">
         <!-- icons -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     
@@ -9,39 +10,31 @@
         <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     </head>
     <body>
-        <nav class="navbar">
-            <!-- Left Side (Profile) -->
-            <div class="left-side">
-                <a href="#"><i class='bx bxs-user'></i></a>
-                <div class="bar">
-                    <div id="exp-bar"></div>
-                </div>
-                <p>exp.</p>
-                <i class="bx bxs-hot"></i>
-            </div>
-    
-            <!-- Centered Logo -->
-            <div class="nav-logo">
-                <h1>REViiT</h1>
-            </div>
-    
-            <!-- Right Side (Settings & Timer) -->
-            <div class="right-side">
-                <a href="#"><i class='bx bxs-time'></i></a>
-                <a href="#"><i class='bx bxs-cog'></i></a>
-            </div>
-        </nav>
-    
-        <!-- Navigation Menu Below "REViiT" -->
-        <div class="nav-menu-container">
-            <ul class="nav-menu">
-                <li><a href="index.html" class="nav-link"><i class='bx bx-home'></i></a></li>
-                <li><a href="#" class="nav-link"><i class='bx bxs-layout'></i></a></li>
-                <li><a href="#" class="nav-link active"><i class='bx bxs-note'></i></a></li>
-                <li><a href="#" class="nav-link"><i class='bx bxs-collection'></i></a></li>
-                <li><a href="#" class="nav-link"><i class='bx bxs-trophy'></i></a></li>
-            </ul>
+        <!-- Centered Logo -->
+        <div class="nav-logo">
+            <h1>REViiT</h1>
         </div>
+        <!-- Login section -->
+        <div class="login-container">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <!-- Text fields -->
+                <input type="text" id="username" placeholder="Username">
+                
+                <div class="password-container"> <!-- In a container for the eye icon-->
+                    <input type="password" id="password" placeholder="Password">
+                    <i class="bx bx-show" id="togglePassword"></i>
+                </div>
+
+                <!-- Space for error message - wrong user/password or non-existent user -->
+                <p class="error-message" id="errorMessage">Invalid username or password</p>
+                
+                <button class="login-btn" id="loginButton">Log In</button>
+            </form>
+
+            <button class="signup-btn" onclick="window.location.href='signup.html'">Sign Up</button>
+        </div>
+        <script src="../backend/login.js"></script>
     </body>
     </html>
 

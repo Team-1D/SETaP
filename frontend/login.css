@@ -1,0 +1,65 @@
+.login-container {
+    background: #ffe9b8;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 450px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.login-container h2 {
+    font-size: 30px;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+}
+.login-container input {
+    width: 100%;
+    padding: 15px;
+    margin: 12px 0;
+    font-size: 18px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+}
+.password-container {
+    position: relative;
+}
+.password-container i {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 30px;
+}
+.login-container button {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+}
+.login-btn {
+    background-color: #c58804;
+    color: white;
+}
+.signup-btn {
+    background-color: #28a745;
+    color: white;
+}
+.login-btn:hover {
+    background-color: #a87300;
+}
+.signup-btn:hover {
+    background-color: #218838;
+}
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin: 10px 0;
+    display: none; /* Initially hidden - change visibility when needed*/  
+}
