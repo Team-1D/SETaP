@@ -13,7 +13,23 @@ document.querySelector('.close-popup').addEventListener('click', () => {
 let currentNote = null;
 
 // Function to create a new note
-const createNote = (title, date, content) => {
+const createNote = async (title, content, dateCreated) => {
+    try {
+        const response = await fetch('http://localhost:8080/notes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, content, dateCreated })
+        });
+
+        const data = await response.json();
+        console.log('Note saved:', data);
+        
+        // Update the UI
+        //addNoteToUI(data.title, data.content, data.dateCreated);
+    } catch (error) {
+        console.error('Error saving note:', error);
+    }
+
     const notesContainer = document.querySelector('#notes-container');
     const note = document.createElement('div');
     note.className = 'note';
