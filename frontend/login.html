@@ -29,10 +29,21 @@
                 <!-- Space for error message - wrong user/password or non-existent user -->
                 <p class="error-message" id="errorMessage">Invalid username or password</p>
                 
-                <button class="login-btn" id="loginButton">Log In</button>
+                <button class="pushable" onclick="validateLogin()">
+                    <span class="front">
+                      Login
+                    </span>
+                </button>
             </form>
 
-            <button class="signup-btn" onclick="window.location.href='signup.html'">Sign Up</button>
+            <div class="createContainer">
+                <p>Don't have an account yet?</p>
+                <button class="createbtn" onclick="createLogin()">
+                    <span class="back">
+                        Create an account
+                    </span>
+                </button> 
+            </div>
         </div>
         <script src="../backend/login.js"></script>
     </body>

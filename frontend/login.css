@@ -18,8 +18,8 @@
 .login-container input {
     width: 100%;
     padding: 15px;
-    margin: 12px 0;
-    font-size: 18px;
+    margin: 5px 0;
+    font-size: 16px;
     border: 2px solid #ccc;
     border-radius: 8px;
 }
@@ -43,21 +43,52 @@
     cursor: pointer;
     font-size: 18px;
 }
-.login-btn {
-    background-color: #c58804;
+.pushable {
+    background: #995200;
+    border-radius: 12px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline-offset: 4px;
+}
+.front {
+    display: block;
+    padding: 12px 42px;
+    border-radius: 12px;
+    font-size: 1.25rem;
+    background: #c46800;
     color: white;
+    transform: translateY(-6px);
 }
-.signup-btn {
-    background-color: #28a745;
+
+.pushable:active .front {
+    transform: translateY(-2px);
+}
+
+.createbtn {
+    background: #218838;
+    border-radius: 5px;
+    border:none;
+    padding: 0;
+    cursor: pointer;
+    outline-offset: 4px;
+}
+
+.back {
+    display: block;
+    padding: 6px 36px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    background: #28a745;
     color: white;
+    transform: translateY(-6px);
 }
-.login-btn:hover {
-    background-color: #a87300;
+
+.createbtn:active .back {
+    transform: translateY(-2px);
 }
-.signup-btn:hover {
-    background-color: #218838;
-}
-.error-message {
+
+#errorMessage {
     color: red;
     font-size: 12px;
     margin: 10px 0;
