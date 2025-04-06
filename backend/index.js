@@ -12,13 +12,6 @@ const app = express(); // Initialize the Express app
 app.use(cors()); // Use CORS middleware
 app.use(express.json()); // Parse JSON request bodies
 
-app.get('/notes', getNotes);
-app.post('/notes', createNote);
-app.get('/notes/:title', getNoteByName);
-app.put('/notes/:id', updateNote);
-app.delete('/notes/:id', deleteNote);
-
-    
 app.get('/flashcards/:id', getFlashcardById); 
 app.post('/flashcards', createFlashcard);     
 app.put('/flashcards/:id', updateFlashcard);  
@@ -30,6 +23,62 @@ app.post('/collections', createCollection);
 app.put('/collections/:id', updateCollection);
 app.delete('/collections/:id', deleteCollection);
 app.get('/collections/:collection_id/flashcards', getFlashcardsByCollectionId);
+
+app.get('/notes', async (req, res) => {
+    try {
+        const notes = await getNotes();
+        res.json(notes);
+    } catch (err) {
+        console.error("Failed to get notes:", err.message);
+        res.status(500).json({ error: "Failed to fetch notes" });
+    }
+});
+
+app.post('/notes', async (req, res) => {
+    try {
+        const { title, content, dateCreated, userId } = req.body;
+        const note = await createNote(title, content, dateCreated, userId);
+        res.status(201).json(note);
+    } catch (err) {
+        console.error("Failed to create note:", err.message);
+        res.status(500).json({ error: "Failed to create note" });
+    }
+});
+
+app.get('/notes/:title', async (req, res) => {
+    try {
+        const { title } = req.params;
+        const note = await getNoteByName(title);
+        if (!note) return res.status(404).json({ error: "Note not found" });
+        res.json(note);
+    } catch (err) {
+        console.error("Failed to get note:", err);
+        res.status(500).json({ error: "Failed to get note" });
+    }
+});
+
+app.put('/notes/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, content, dateCreated } = req.body;
+        const note = await updateNote(id, title, content, dateCreated);
+        res.json(note);
+    } catch (err) {
+        console.error("Failed to update note:", err);
+        res.status(500).json({ error: "Failed to update note" });
+    }
+});
+
+app.delete('/notes/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const note = await deleteNote(id);
+        res.json(note);
+    } catch (err) {
+        console.error("❌ Failed to delete note:", err);
+        res.status(500).json({ error: "Failed to delete note" });
+    }
+});
 
 app.put('/notes/favourite/:id', async (req, res) => {
     const { id } = req.params;

@@ -6,10 +6,11 @@ const pool  = require("./database-pool");
 
 //CRUD OPERATIONS
 
-async function createNote(title, content, dateCreated){
+async function createNote(title, content, dateCreated, userId){
+    const date = dateCreated || new Date().toISOString().split("T")[0];
     const x = await pool.query(
-        "INSERT INTO notes (title, content, dateCreated) VALUES ($1, $2, $3) RETURNING *",
-        [title, content, dateCreated]
+        "INSERT INTO notes (note_title, note_content, date_created, user_id) VALUES ($1, $2, $3, $4) RETURNING *",
+        [title, content, date, userId]
     );
     return x.rows[0]; 
 }

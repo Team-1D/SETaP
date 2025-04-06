@@ -4,7 +4,7 @@ const { Pool } = require('pg');
 
 // Create a new connection pool
 const pool = new Pool({
-    user: 'up2249809',
+    user: 'postgres',
     host: 'localhost', // Or your remote database host
     database: 'setap_cw',
     password: 'TarirO12345',
