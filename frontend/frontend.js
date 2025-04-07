@@ -1,4 +1,7 @@
-
+//Query selectors for cleaner look xd
+const notesContainer = document.querySelector('#notes-container');
+const deadline = document.querySelector('#note-date');
+const navbar = document.querySelector('.navbar');
 // Open popup
 document.querySelector('.add-note').addEventListener('click', () => {
     document.querySelector('.popup').style.display = 'block';
@@ -13,15 +16,32 @@ document.querySelector('.close-popup').addEventListener('click', () => {
 let currentNote = null;
 
 // Function to create a new note
-const createNote = (title, date, content) => {
-    const notesContainer = document.querySelector('#notes-container');
+const createNote = async (title, content, dateCreated) => {
+    //for now that we dont have auth
+    const userId = 1
+    try {
+        const response = await fetch('http://localhost:8080/notes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, content, dateCreated,userId })
+        });
+
+        const data = await response.json();
+        console.log('Note saved:', data);
+        
+        // Update the UI
+        //addNoteToUI(data.title, data.content, data.dateCreated);
+    } catch (error) {
+        console.error('Error saving note:', error);
+    }
+
     const note = document.createElement('div');
     note.className = 'note';
 
     note.innerHTML = `
     <div class="note-preview">
         <h3>${title}</h3>
-        <p>Deadline: ${date}</p>
+        <p>Deadline: ${deadline.value}</p>
         <div class="button-container">
             <button class="edit-note">Edit</button>
             <button class="add-favourite"><i class="bx bxs-heart"></i></button>
@@ -31,27 +51,24 @@ const createNote = (title, date, content) => {
 
     // Append the new note to the notes container
     notesContainer.appendChild(note);
-
     // Add event listener for the edit button
     const editButton = note.querySelector('.edit-note');
     editButton.addEventListener('click', () => {
         console.log('Edit button clicked');
-
         // Set the current note being edited
         currentNote = note;
-
         // Hide other elements
-        document.querySelector('.navbar').style.display = 'none';
+        navbar.style.display = 'none';
         document.querySelector('.nav-menu-container').style.display = 'none';
         document.querySelector('#filter-container').style.display = 'none';
-        document.querySelector('#notes-container').style.display = 'none';
+        notesContainer.style.display = 'none';
 
         // Show fullscreen note
         document.querySelector('.fullscreen-note').style.display = 'block';
 
         // Set the title, deadline, and content in the fullscreen note
         document.querySelector("#fullscreen-title").textContent = title;
-        document.querySelector("#fullscreen-deadline").textContent = `Deadline: ${date}`;
+        document.querySelector("#fullscreen-deadline").textContent = `Deadline: ${deadline.value}`;
         document.querySelector('#fullscreen-textarea').value = content;
     });
 };
@@ -62,23 +79,23 @@ document.querySelector('#note-form').addEventListener('submit', (event) => {
 
     const title = document.querySelector('#note-title').value;
     const difficulty = document.querySelector('#note-difficulty').value;
-    const date = document.querySelector('#note-date').value;
+    deadline.value;
 
     console.log(`Title: ${title}`);
     console.log(`Difficulty: ${difficulty}`);
-    console.log(`Date: ${date}`);
+    console.log(`Date: ${deadline}`);
 
     // Hide other elements
-    document.querySelector('.navbar').style.display = 'none';
+    navbar.style.display = 'none';
     document.querySelector('.nav-menu-container').style.display = 'none';
     document.querySelector('#filter-container').style.display = 'none';
-    document.querySelector('#notes-container').style.display = 'none';
+    notesContainer.style.display = 'none';
     document.querySelector('.popup').style.display = 'none';
 
     // Show fullscreen note
     document.querySelector(".fullscreen-note").style.display = 'block';
     document.querySelector("#fullscreen-title").textContent = title;
-    document.querySelector("#fullscreen-deadline").textContent = `Deadline: ${date}`;
+    document.querySelector("#fullscreen-deadline").textContent = `Deadline: ${deadline}`;
     document.querySelector('#fullscreen-textarea').value = '';
 
     // Reset currentNote when creating a new note
@@ -93,17 +110,17 @@ document.querySelector('#note-form').addEventListener('submit', (event) => {
         document.querySelector('.fullscreen-note').style.display = 'none';
 
         // Show other elements
-        document.querySelector('.navbar').style.display = 'flex';
+        navbar.style.display = 'flex';
         document.querySelector('.nav-menu-container').style.display = 'flex';
         document.querySelector('#filter-container').style.display = 'block';
-        document.querySelector('#notes-container').style.display = 'flex';
+        notesContainer.style.display = 'flex';
 
         // Get the updated content
         const updatedContent = document.querySelector('#fullscreen-textarea').value;
 
         // If it's a new note, create it
         if (!currentNote) {
-            createNote(title, date, updatedContent);
+            createNote(title, deadline, updatedContent);
         }
     };
 
@@ -129,12 +146,13 @@ document.querySelector('#note-form').addEventListener('submit', (event) => {
         document.querySelector('.fullscreen-note').style.display = 'none';
 
         // Show other elements
-        document.querySelector('.navbar').style.display = 'flex';
+        navbar.style.display = 'flex';
         document.querySelector('.nav-menu-container').style.display = 'flex';
         document.querySelector('#filter-container').style.display = 'block';
-        document.querySelector('#notes-container').style.display = 'flex';
+        notesContainer.style.display = 'flex';
     };
 });
+//We need delete note, favourite, 
 
 // Variable to store the selected color
 let selectedColor = '#000000'; // Default color is black
