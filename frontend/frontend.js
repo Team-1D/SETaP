@@ -5,6 +5,9 @@ const navbar = document.querySelector('.navbar');
 // Open popup
 document.querySelector('.add-note').addEventListener('click', () => {
     document.querySelector('.popup').style.display = 'block';
+    document.querySelector('#note-title').value = ''; // When u open the pop up it set as empty by default
+    document.querySelector('#note-difficulty').value = 'low'; // By dafult the diffulty is Low
+    // Need to set a dafault date 
 });
 
 // Close popup
