@@ -312,6 +312,7 @@ select, input{
 }
 
 .note-preview{
+    width: 18.75em;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -328,7 +329,8 @@ select, input{
 }
 
 .edit-note,
-.add-favourite {
+.add-favourite ,
+.delete-note{
     margin-top: 1em;
     padding: 0.5em 1em;
     border: none;
@@ -339,7 +341,8 @@ select, input{
 }
 
 .edit-note:hover,
-.add-favourite:hover {
+.add-favourite:hover,
+.delete-note:hover {
     background-color: #ffe9b8;
 }
 

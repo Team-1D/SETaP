@@ -46,6 +46,7 @@ const createNote = async (title, content, dateCreated) => {
         <h3>${title}</h3>
         <p>Deadline: ${deadline.value}</p>
         <div class="button-container">
+            <button class="delete-note">Delete</button>
             <button class="edit-note">Edit</button>
             <button class="add-favourite"><i class="bx bxs-heart"></i></button>
         </div>
