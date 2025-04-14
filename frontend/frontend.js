@@ -1,12 +1,14 @@
 //Query selectors for cleaner look xd
 const notesContainer = document.querySelector('#notes-container');
-const deadline = document.querySelector('#note-date');
+//const deadline = document.querySelector('#note-date');
 const navbar = document.querySelector('.navbar');
+const myTextArea = document.querySelector('#fullscreen-textarea');
 // Open popup
 document.querySelector('.add-note').addEventListener('click', () => {
     document.querySelector('.popup').style.display = 'block';
     document.querySelector('#note-title').value = ''; // When u open the pop up it set as empty by default
     document.querySelector('#note-difficulty').value = 'low'; // By dafult the diffulty is Low
+    document.querySelector('#fullscreen-textarea').value = '';
     // Need to set a dafault date 
 });
 
@@ -21,12 +23,13 @@ let currentNote = null;
 // Function to create a new note
 const createNote = async (title, content, dateCreated) => {
     //for now that we dont have auth
-    const userId = 1
+    const userId = 1;
+    const favourite = false;
     try {
         const response = await fetch('http://localhost:8080/notes', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, content, dateCreated,userId })
+            body: JSON.stringify({ title, content, dateCreated,userId , favourite})
         });
 
         const data = await response.json();
@@ -52,6 +55,8 @@ const createNote = async (title, content, dateCreated) => {
         </div>
     </div>
     `;
+
+    addFav(note,userId);
 
     // Append the new note to the notes container
     notesContainer.appendChild(note);
@@ -83,6 +88,7 @@ document.querySelector('#note-form').addEventListener('submit', (event) => {
 
     const title = document.querySelector('#note-title').value;
     const difficulty = document.querySelector('#note-difficulty').value;
+    document.querySelector('#fullscreen-textarea').value = '';
     // deadline.value;
 
     console.log(`Title: ${title}`);
@@ -120,18 +126,22 @@ document.querySelector('#note-form').addEventListener('submit', (event) => {
         notesContainer.style.display = 'flex';
 
         // Get the updated content
-        const updatedContent = document.querySelector('#fullscreen-textarea').value;
+        const updatedContent = document.querySelector('#fullscreen-textarea').textContent;
+        console.log('This is the updated content', updatedContent);
 
         // If it's a new note, create it
         if (!currentNote) {
-            createNote(title, deadline, updatedContent);
+            const dateCreated = new Date().toISOString();
+            //console.log('im here');
+            createNote(title,  updatedContent, dateCreated, false);
         }
     };
-
+    myTextArea.textContent = '';
     // Add event listener for the "Update" button
     const updateButton = document.querySelector('#update');
     updateButton.onclick = () => {
         console.log('Update button clicked');
+        
 
         // Get the updated content
         const updatedContent = document.querySelector('#fullscreen-textarea').value;
@@ -139,10 +149,10 @@ document.querySelector('#note-form').addEventListener('submit', (event) => {
         // Update the current note's content
         if (currentNote) {
             const newTitle = document.querySelector("#fullscreen-title").textContent;
-            const newDate = document.querySelector("#fullscreen-deadline").textContent.replace('Deadline: ', '');
+            //const newDate = document.querySelector("#fullscreen-deadline").textContent.replace('Deadline: ', '');
 
             currentNote.querySelector('.note-preview h3').textContent = newTitle;
-            currentNote.querySelector('.note-preview p').textContent = `Deadline: ${newDate}`;
+            //currentNote.querySelector('.note-preview p').textContent = `Deadline: ${newDate}`;
             console.log('Updated Note Content:', updatedContent);
         }
 
@@ -200,3 +210,32 @@ document.addEventListener('DOMContentLoaded', function () {
         cardsContainer.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
     }
 });
+
+// add favourite
+async function addFav(note, id){
+    const favButton = note.querySelector('.add-favourite');
+    favButton.addEventListener('click', async function() {
+        //const id = this.dataset.note_id;
+        const heartIcon = this.querySelector('i');
+        
+        // Toggle heart color between red and default
+        const isFavourited = heartIcon.style.color === 'red';
+
+        try {
+            const response = await fetch(`http://localhost:8080/notes/favourite/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+            });
+    
+            const data = await response.json();
+            if(data.error){
+                console.error('Server error:', data.error);
+                return; 
+            }
+            heartIcon.style.color = isFavourited ? '' : 'red';
+            //addNoteToUI(data.title, data.content, data.dateCreated);
+        } catch (error) {
+            console.error('Error toggling favourite:', error);
+        }
+    });
+}

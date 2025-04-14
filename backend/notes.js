@@ -6,13 +6,20 @@ const pool  = require("./database-pool");
 
 //CRUD OPERATIONS
 
-async function createNote(title, content, dateCreated, userId){
+async function createNote(title, content, dateCreated, userId, favourite = false){
     const date = dateCreated || new Date().toISOString().split("T")[0];
-    const x = await pool.query(
-        "INSERT INTO notes (note_title, note_content, date_created, user_id) VALUES ($1, $2, $3, $4) RETURNING *",
-        [title, content, date, userId]
-    );
-    return x.rows[0]; 
+    console.log('im here');
+    try {
+        const result = await pool.query(
+            "INSERT INTO notes (user_id, note_title, note_content, date_created, favourite) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+            [userId, title, content, date, favourite]
+        );
+        console.log('Note Created:', result.rows[0]); // Log the created note
+        return result.rows[0];
+    } catch (err) {
+        console.error('Error creating note:', err); // Log errors if they occur
+        throw err;
+    }
 }
 
 async function getNotes(){
@@ -40,14 +47,14 @@ async function deleteNote(id) {
 
 async function toggleFavourite(id){
     try{
-        const check = await pool.query('SELECT favourite FROM notes WHERE id = $1', [id]);
+        const check = await pool.query('SELECT favourite FROM notes WHERE note_id = $1', [id]);
         if (check.rows.length === 0) {
             return { error: 'Note not found' };
         }
         const currentStatus = check.rows[0].favourite;
         const newStatus = !currentStatus; // Toggle true/false
         const result = await pool.query(
-            'UPDATE notes SET favourite = $1 WHERE id = $2 RETURNING *',
+            'UPDATE notes SET favourite = $1 WHERE note_id = $2 RETURNING *',
             [newStatus, id]
         );
         return result.rows[0]; // Return updated note
