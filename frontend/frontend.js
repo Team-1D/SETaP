@@ -44,7 +44,7 @@ const createNote = async (title, content, dateCreated) => {
     note.innerHTML = `
     <div class="note-preview">
         <h3>${title}</h3>
-        <p>Deadline: ${deadline.value}</p>
+        
         <div class="button-container">
             <button class="delete-note">Delete</button>
             <button class="edit-note">Edit</button>
@@ -72,7 +72,7 @@ const createNote = async (title, content, dateCreated) => {
 
         // Set the title, deadline, and content in the fullscreen note
         document.querySelector("#fullscreen-title").textContent = title;
-        document.querySelector("#fullscreen-deadline").textContent = `Deadline: ${deadline.value}`;
+        // document.querySelector("#fullscreen-deadline").textContent = `Deadline: ${deadline.value}`;
         document.querySelector('#fullscreen-textarea').value = content;
     });
 };
@@ -83,11 +83,11 @@ document.querySelector('#note-form').addEventListener('submit', (event) => {
 
     const title = document.querySelector('#note-title').value;
     const difficulty = document.querySelector('#note-difficulty').value;
-    deadline.value;
+    // deadline.value;
 
     console.log(`Title: ${title}`);
     console.log(`Difficulty: ${difficulty}`);
-    console.log(`Date: ${deadline}`);
+    // console.log(`Date: ${deadline}`);
 
     // Hide other elements
     navbar.style.display = 'none';
@@ -99,7 +99,7 @@ document.querySelector('#note-form').addEventListener('submit', (event) => {
     // Show fullscreen note
     document.querySelector(".fullscreen-note").style.display = 'block';
     document.querySelector("#fullscreen-title").textContent = title;
-    document.querySelector("#fullscreen-deadline").textContent = `Deadline: ${deadline}`;
+    // document.querySelector("#fullscreen-deadline").textContent = `Deadline: ${deadline}`;
     document.querySelector('#fullscreen-textarea').value = '';
 
     // Reset currentNote when creating a new note
