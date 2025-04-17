@@ -1,5 +1,4 @@
 //npm install pg
-
 const { Pool } = require('pg');
 
 // Create a new connection pool
@@ -11,4 +10,4 @@ const pool = new Pool({
     port: 5432, // Default PostgreSQL port
 });
 
-module.exports = pool;
+module.exports = { pool };

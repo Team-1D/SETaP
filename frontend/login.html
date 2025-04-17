@@ -19,7 +19,7 @@
             <h2>Login</h2>
             <form id="loginForm">
                 <!-- Text fields -->
-                <input type="text" id="username" placeholder="Username">
+                <input type="text" id="email" placeholder="Email">
                 
                 <div class="password-container"> <!-- In a container for the eye icon-->
                     <input type="password" id="password" placeholder="Password">
@@ -29,10 +29,8 @@
                 <!-- Space for error message - wrong user/password or non-existent user -->
                 <p class="error-message" id="errorMessage">Invalid username or password</p>
                 
-                <button class="pushable" onclick="validateLogin()">
-                    <span class="front">
-                      Login
-                    </span>
+                <button type="submit" class="pushable">
+                    <span class="front">Login</span>
                 </button>
             </form>
 
@@ -45,7 +43,7 @@
                 </button> 
             </div>
         </div>
-        <script src="../backend/login.js"></script>
+        <script src="login.js"></script> 
     </body>
     </html>
 
