@@ -18,6 +18,7 @@ CREATE TABLE users (
     leaderboard_id INT NOT NULL REFERENCES leaderboards(leaderboard_id),  -- Fixed plural 'leaderboards'
     user_email VARCHAR(50) NOT NULL,
     user_nickname VARCHAR(100) NOT NULL,
+    user_password VARCHAR(100) NOT NULL,
     user_streak INT NOT NULL,
     user_points INT NOT NULL,
     user_coins INT NOT NULL
@@ -48,13 +49,13 @@ CREATE TABLE flashcards(
 );
 
 -- Other tables with corrected references and enum usage
-CREATE TABLE pomodoro_timers(
-    timer_id SERIAL PRIMARY KEY, 
-    user_id INT UNIQUE NOT NULL REFERENCES users(user_id) ON DELETE CASCADE, 
-    timer_start_time TIME NOT NULL,
-    timer_end_time TIME NOT NULL,
-    status timer_status NOT NULL  -- Lowercase enum type
-);
+-- CREATE TABLE pomodoro_timers(
+--     timer_id SERIAL PRIMARY KEY, 
+--     user_id INT UNIQUE NOT NULL REFERENCES users(user_id) ON DELETE CASCADE, 
+--     timer_start_time TIME NOT NULL,
+--     timer_end_time TIME NOT NULL,
+--     status timer_status NOT NULL  -- Lowercase enum type
+-- );
 
 CREATE TABLE notes (
     note_id SERIAL PRIMARY KEY, 
@@ -71,14 +72,14 @@ CREATE TABLE users_flashcards(
     PRIMARY KEY (user_id, flashcard_id)
 );
 
-CREATE TABLE todo_lists (
-    todo_id SERIAL PRIMARY KEY, 
-    user_id INT UNIQUE NOT NULL REFERENCES users(user_id) ON DELETE CASCADE, 
-    todo_description TEXT,
-    status todo_status NOT NULL,  -- Lowercase enum type
-    difficulty difficulty NOT NULL,  -- Lowercase enum type
-    deadline DATE
-);
+-- CREATE TABLE todo_lists (
+--     todo_id SERIAL PRIMARY KEY, 
+--     user_id INT UNIQUE NOT NULL REFERENCES users(user_id) ON DELETE CASCADE, 
+--     todo_description TEXT,
+--     status todo_status NOT NULL,  -- Lowercase enum type
+--     difficulty difficulty NOT NULL,  -- Lowercase enum type
+--     deadline DATE
+-- );
 
 CREATE TABLE streaks (
     streak_id SERIAL PRIMARY KEY,
@@ -99,14 +100,13 @@ CREATE TABLE profiles(
     profile_img VARCHAR(255)
 );
 
+
 --test leaderboard
 INSERT INTO leaderboards(leaderboard_id, leaderboard_start_date, leaderboard_end_date)
 VALUES
 (1, '10-05-2025','17-05-2025');
 
 --dummy user for now
-INSERT INTO users (user_id,leaderboard_id, user_email, user_nickname, user_streak, user_points, user_coins) 
+INSERT INTO users (user_id,leaderboard_id, user_email, user_nickname, user_password, user_streak, user_points, user_coins) 
 VALUES 
-(1,1, 'myemail.com' ,'Test User', 3,100 , 0);
-
-
+(1,1, 'myemail.com' ,'Test User', '1234', 3,100 , 0);
