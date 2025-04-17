@@ -45,9 +45,10 @@ app.post('/notes', async (req, res) => {
     }
 });
 
-app.get('/notes/:title', async (req, res) => {
+app.get('/notes/name/:title', async (req, res) => {
+    const { title } = req.params;
+    console.log(`Fetching note with title: ${title}`);
     try {
-        const { title } = req.params;
         const note = await getNoteByName(title);
         if (!note) return res.status(404).json({ error: "Note not found" });
         res.json(note);

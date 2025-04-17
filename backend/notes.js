@@ -29,6 +29,7 @@ async function getNotes(){
 
 async function getNoteByName(name){
     const x  =  await pool.query("SELECT * FROM notes WHERE note_title = $1", [name]);
+    console.log('Query result:', x.rows);
     return x.rows[0];
 } 
 

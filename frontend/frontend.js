@@ -3,6 +3,7 @@ const notesContainer = document.querySelector('#notes-container');
 //const deadline = document.querySelector('#note-date');
 const navbar = document.querySelector('.navbar');
 const myTextArea = document.querySelector('#fullscreen-textarea');
+
 // Open popup
 document.querySelector('.add-note').addEventListener('click', () => {
     document.querySelector('.popup').style.display = 'block';
@@ -56,7 +57,7 @@ const createNote = async (title, content, dateCreated) => {
     </div>
     `;
 
-    addFav(note,userId);
+    addFav(note,title);
 
     // Append the new note to the notes container
     notesContainer.appendChild(note);
@@ -212,17 +213,25 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // add favourite
-async function addFav(note, id){
+async function addFav(note, noteName){
     const favButton = note.querySelector('.add-favourite');
     favButton.addEventListener('click', async function() {
         //const id = this.dataset.note_id;
         const heartIcon = this.querySelector('i');
-        
         // Toggle heart color between red and default
         const isFavourited = heartIcon.style.color === 'red';
 
         try {
-            const response = await fetch(`http://localhost:8080/notes/favourite/${id}`, {
+            const noteData = await getNoteByName(noteName);
+            console.log('note:', noteData);
+            const noteId = noteData.note_id;
+            console.log(`how fun ${JSON.stringify(noteData)}, ${noteId}`);
+
+            if (!noteId) {
+                console.error('Note ID not found for title:', title);
+                return;
+            }
+            const response = await fetch(`http://localhost:8080/notes/favourite/${noteId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
             });
@@ -238,4 +247,23 @@ async function addFav(note, id){
             console.error('Error toggling favourite:', error);
         }
     });
+}
+
+async function getNoteByName(title) {
+    console.log('Fetching note with title:', title);
+    try {
+        const response = await fetch(`http://localhost:8080/notes/name/${encodeURIComponent(title)}`);
+        
+        if (!response.ok) {
+            const errorText = await response.text(); // read the HTML
+            throw new Error(`Server returned ${response.status}: ${errorText}`);
+        }
+
+        const data = await response.json();
+        console.log('Received note data:', data);
+        return data; 
+    } catch (err) {
+        console.error('Error fetching note by name:', err);
+        return { error: true };
+    }
 }

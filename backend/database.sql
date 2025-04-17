@@ -59,7 +59,7 @@ CREATE TABLE pomodoro_timers(
 CREATE TABLE notes (
     note_id SERIAL PRIMARY KEY, 
     user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE, 
-    note_title VARCHAR(100) NOT NULL,
+    note_title VARCHAR(100) NOT NULL UNIQUE,
     note_content TEXT,
     date_created DATE NOT NULL,
     favourite BOOLEAN NOT NULL DEFAULT false
@@ -98,12 +98,15 @@ CREATE TABLE profiles(
     user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     profile_img VARCHAR(255)
 );
---dummy user for now
-INSERT INTO users (user_id,leaderboard_id, user_email, user_nickname, user_streak, user_points, user_coins) 
-VALUES 
-(1,1, 'myemail.com' ,'Test User', 3,100 , 0);
 
 --test leaderboard
 INSERT INTO leaderboards(leaderboard_id, leaderboard_start_date, leaderboard_end_date)
 VALUES
 (1, '10-05-2025','17-05-2025');
+
+--dummy user for now
+INSERT INTO users (user_id,leaderboard_id, user_email, user_nickname, user_streak, user_points, user_coins) 
+VALUES 
+(1,1, 'myemail.com' ,'Test User', 3,100 , 0);
+
+
