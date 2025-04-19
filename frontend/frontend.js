@@ -212,6 +212,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+function addNoteToUI(){
+    
+}
+
 // add favourite
 async function addFav(note, noteName){
     const favButton = note.querySelector('.add-favourite');
@@ -248,7 +252,7 @@ async function addFav(note, noteName){
         }
     });
 }
-
+//getting the note by finding the title --> due to using locastorage this is possible
 async function getNoteByName(title) {
     console.log('Fetching note with title:', title);
     try {
@@ -266,4 +270,12 @@ async function getNoteByName(title) {
         console.error('Error fetching note by name:', err);
         return { error: true };
     }
+}
+//this is needed as a page reload needs to put everything in again
+function loadAllUserNotes(){
+    //when the page loads this will load in all the individual notes
+}
+
+function removeAllNotes(){
+    notesContainer.innerHTML = '';
 }

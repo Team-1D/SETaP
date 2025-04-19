@@ -5,7 +5,7 @@ async function loginUser(email, password) {
     if (!email || !password) {
         return { error: 'Username and password are required' };
     }
-
+    console.log(email,password);
     try {
         const result = await pool.query(
             'SELECT user_id, user_email, user_password FROM users WHERE user_email = $1', 
@@ -17,7 +17,10 @@ async function loginUser(email, password) {
         }
 
         const user = result.rows[0];
+        console.log('inputted password', password);
+        console.log('database password', user.user_password);
         const isMatch = await bcrypt.compare(password, user.user_password);
+        console.log('Password match result:', isMatch);
         
         if (!isMatch) {
             return { error: 'Invalid email or password' };

@@ -109,4 +109,4 @@ VALUES
 --dummy user for now
 INSERT INTO users (user_id,leaderboard_id, user_email, user_nickname, user_password, user_streak, user_points, user_coins) 
 VALUES 
-(1,1, 'myemail.com' ,'Test User', '1234', 3,100 , 0);
+(1,1, 'myemail.com' ,'Test User', '$2b$10$lixETDYjQppF8VbXWJAKYuMxWYIUusRnJPAGY/6EuU2jqnn7t/luW', 3,100 , 0);
