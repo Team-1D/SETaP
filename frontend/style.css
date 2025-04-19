@@ -701,7 +701,10 @@ select, input{
     height: 100vh;
 }
 
-.services h1{
+.services h1,
+main h1,
+#title,
+section h1{
     background-color: #7789ff;
     background-image: linear-gradient(
         to right, 
@@ -893,4 +896,69 @@ select, input{
 .footer__link--items a:hover {
     color: #e9e9e9;
     transition: 0.3s ease-out;
+}
+
+/* Style for leaderboard */
+#leaderboard{
+    display: flex;
+    box-shadow: 0 0 0.6em rgba(0, 0, 0, 0.1);
+    width:max-content;
+    border-radius: 1em;
+    padding: 2em;
+    margin: auto;
+}
+#leaderboard ol {
+    padding-left: 0;
+    margin: 0 auto;
+    width: max-content;
+}
+
+#leaderboard ol li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    gap: 2rem;
+    background-color: #ffe9b8;
+    border-radius: 1rem;
+    padding: 1rem 2rem;
+    
+}
+
+#leaderboard .name,
+#leaderboard .score {
+    margin: 0;
+    font-size: 0.75rem;
+}
+
+.medal {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.medal i {
+    font-size: 1.5rem;
+}
+
+.medal.gold i {
+    color: gold;
+}
+
+.medal.silver i {
+    color: silver;
+}
+
+.medal.bronze i {
+    color: #cd7f32;
+}
+/* To make the leaderboard scrollable */
+.scroll-container {
+    max-height: 400px; /* adjust this height as needed */
+    overflow-y: auto;
+    width: 100%;
+}
+/* To hide the scroll bar */
+.scroll-container::-webkit-scrollbar {
+    width: 8px;
 }
