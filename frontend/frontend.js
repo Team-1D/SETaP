@@ -3,15 +3,17 @@ const notesContainer = document.querySelector('#notes-container');
 //const deadline = document.querySelector('#note-date');
 const navbar = document.querySelector('.navbar');
 const myTextArea = document.querySelector('#fullscreen-textarea');
+const addNoteButton = document.querySelector('.add-note');
 
 // Open popup
-document.querySelector('.add-note').addEventListener('click', () => {
+function addNewNote (){
+    console.log('added plus button');
     document.querySelector('.popup').style.display = 'block';
     document.querySelector('#note-title').value = ''; // When u open the pop up it set as empty by default
     document.querySelector('#note-difficulty').value = 'low'; // By dafult the diffulty is Low
     document.querySelector('#fullscreen-textarea').value = '';
     // Need to set a dafault date 
-});
+};
 
 // Close popup
 document.querySelector('.close-popup').addEventListener('click', () => {
@@ -42,45 +44,10 @@ const createNote = async (title, content, dateCreated) => {
         console.error('Error saving note:', error);
     }
 
-    const note = document.createElement('div');
-    note.className = 'note';
-
-    note.innerHTML = `
-    <div class="note-preview">
-        <h3>${title}</h3>
-        
-        <div class="button-container">
-            <button class="delete-note">Delete</button>
-            <button class="edit-note">Edit</button>
-            <button class="add-favourite"><i class="bx bxs-heart"></i></button>
-        </div>
-    </div>
-    `;
-
-    addFav(note,title);
-
-    // Append the new note to the notes container
-    notesContainer.appendChild(note);
-    // Add event listener for the edit button
-    const editButton = note.querySelector('.edit-note');
-    editButton.addEventListener('click', () => {
-        console.log('Edit button clicked');
-        // Set the current note being edited
-        currentNote = note;
-        // Hide other elements
-        navbar.style.display = 'none';
-        document.querySelector('.nav-menu-container').style.display = 'none';
-        document.querySelector('#filter-container').style.display = 'none';
-        notesContainer.style.display = 'none';
-
-        // Show fullscreen note
-        document.querySelector('.fullscreen-note').style.display = 'block';
-
-        // Set the title, deadline, and content in the fullscreen note
-        document.querySelector("#fullscreen-title").textContent = title;
-        // document.querySelector("#fullscreen-deadline").textContent = `Deadline: ${deadline.value}`;
-        document.querySelector('#fullscreen-textarea').value = content;
-    });
+    addNoteToUI(title);
+    //Saving note to localstorage
+    const noteObj = {title: title,content: content,date: dateCreated,user: userId,fav: favourite};
+    localStorage.setItem('note_' + title, JSON.stringify(noteObj));
 };
 
 // Create the note
@@ -167,7 +134,7 @@ document.querySelector('#note-form').addEventListener('submit', (event) => {
         notesContainer.style.display = 'flex';
     };
 });
-//We need delete note, favourite, 
+//We need delete note 
 
 // Variable to store the selected color
 let selectedColor = '#000000'; // Default color is black
@@ -212,11 +179,50 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-function addNoteToUI(){
-    
+function addNoteToUI(title){
+    const note = document.createElement('div');
+    note.className = 'note';
+
+    note.innerHTML = `
+    <div class="note-preview">
+        <h3>${title}</h3>
+        
+        <div class="button-container">
+            <button class="delete-note">Delete</button>
+            <button class="edit-note">Edit</button>
+            <button class="add-favourite"><i class="bx bxs-heart"></i></button>
+        </div>
+    </div>
+    `;
+
+    //Adding favourite button
+    addFav(note,title);
+
+    // Append the new note to the notes container
+    notesContainer.appendChild(note);
+    // Add event listener for the edit button
+    const editButton = note.querySelector('.edit-note');
+    editButton.addEventListener('click', () => {
+        console.log('Edit button clicked');
+        // Set the current note being edited
+        currentNote = note;
+        // Hide other elements
+        navbar.style.display = 'none';
+        document.querySelector('.nav-menu-container').style.display = 'none';
+        document.querySelector('#filter-container').style.display = 'none';
+        notesContainer.style.display = 'none';
+
+        // Show fullscreen note
+        document.querySelector('.fullscreen-note').style.display = 'block';
+
+        // Set the title, deadline, and content in the fullscreen note
+        document.querySelector("#fullscreen-title").textContent = title;
+        // document.querySelector("#fullscreen-deadline").textContent = `Deadline: ${deadline.value}`;
+        document.querySelector('#fullscreen-textarea').value = content;
+    });
 }
 
-// add favourite
+// add favourite button and its functions
 async function addFav(note, noteName){
     const favButton = note.querySelector('.add-favourite');
     favButton.addEventListener('click', async function() {
@@ -273,9 +279,29 @@ async function getNoteByName(title) {
 }
 //this is needed as a page reload needs to put everything in again
 function loadAllUserNotes(){
+    addNoteButton.addEventListener('click',addNewNote);
+    removeAllNotes();
     //when the page loads this will load in all the individual notes
+    console.log('reloading page');
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('note_')) {
+            try {
+                const noteData = JSON.parse(localStorage.getItem(key));
+
+                if (noteData && noteData.title) {
+                    addNoteToUI(noteData.title, noteData.content); // Pass content too if needed
+                }
+            } catch (e) {
+                console.error(`Error parsing note from localStorage for key "${key}":`, e);
+            }
+        }
+    }
 }
 
 function removeAllNotes(){
-    notesContainer.innerHTML = '';
+    const notes = notesContainer.querySelectorAll('.note');
+    notes.forEach(note => note.remove());
 }
+
+loadAllUserNotes();
