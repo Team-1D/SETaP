@@ -7,6 +7,9 @@ const { createNote, getNotes, getNoteByName, updateNote, deleteNote, toggleFavou
 const { getStreak, updateStreak, createStreak } = require('./streak');
 const { getFlashcards, getFlashcardById, createFlashcard, updateFlashcard, deleteFlashcard } = require('./flashcard');
 const { createCollection, getAllCollections, getCollectionById, updateCollection, deleteCollection, addFlashcardToCollection, getFlashcardsByCollectionId } = require('./collections');
+const { loginUser } = require('./loginController');
+
+
 
 const app = express(); // Initialize the Express app
 app.use(cors()); // Use CORS middleware
@@ -23,6 +26,34 @@ app.post('/collections', createCollection);
 app.put('/collections/:id', updateCollection);
 app.delete('/collections/:id', deleteCollection);
 app.get('/collections/:collection_id/flashcards', getFlashcardsByCollectionId);
+
+app.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const result = await loginUser(email, password);
+        
+        if (result.error) {
+            return res.status(401).json({ 
+                success: false,
+                error: result.error 
+            });
+        }
+
+        res.status(200).json({ 
+            success: true,
+            userId: result.userId,
+            email: result.email,
+            redirect: '/home.html'
+        });
+
+    } catch (err) {
+        console.error("Login error:", err);
+        res.status(500).json({ 
+            success: false,
+            error: "Internal server error" 
+        });
+    }
+});
 
 app.get('/notes', async (req, res) => {
     try {
@@ -45,9 +76,10 @@ app.post('/notes', async (req, res) => {
     }
 });
 
-app.get('/notes/:title', async (req, res) => {
+app.get('/notes/name/:title', async (req, res) => {
+    const { title } = req.params;
+    console.log(`Fetching note with title: ${title}`);
     try {
-        const { title } = req.params;
         const note = await getNoteByName(title);
         if (!note) return res.status(404).json({ error: "Note not found" });
         res.json(note);
@@ -239,6 +271,9 @@ app.get('/collections/:id/flashcards', async (req, res) => {
 
 app.use(express.static(path.join(__dirname, '../frontend')));
 
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/login.html'));
+});
 
 const PORT = 8080;
 app.listen(PORT, () => {

@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node backend/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --watch backend/index.js",
+    "setup": "npm install bcrypt npm install express",
+    "config": ""
   },
   "repository": {
     "type": "git",
@@ -19,8 +21,11 @@
   },
   "homepage": "https://github.com/Team-1D/SETaP#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "express": "^4.21.2",
+    "install": "^0.13.0",
+    "npm": "^11.3.0",
     "pg": "^8.14.1"
   }
 }
