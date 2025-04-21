@@ -1,0 +1,59 @@
+        <!-- link to style file -->
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="login.css">
+        <!-- icons -->
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+        <!-- font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <!-- Centered Logo -->
+        <div class="nav-logo">
+            <h1>REViiT</h1>
+        </div>
+<!-- Login section -->
+        <div class="login-container">
+            <h2>Create An Account</h2>
+            <form id="loginForm">
+<!-- Email -->
+                 <div class="email_container"> 
+                    <input type="text" id="email" placeholder="Enter an Email Address">
+                <input type="text" id="confirm_email" placeholder="Confirm Email Address">
+                 </div>
+                
+<!-- //Username -->
+                <div class="username_container"> 
+                    <input type="text" id="username" placeholder="Create a Username">
+                 </div>
+<!-- Password -->
+                 <div class="create_password_container">
+                <!-- //Confirm Password -->
+                <div class="password-container"> <!-- In a container for the eye icon-->
+                    <input type="password" id="password" placeholder="Create a Password">
+                    <i class="bx bx-show" id="togglePassword"></i>
+                </div>
+
+                <!-- // Confirm Password -->
+                <div class="password-container"> <!-- In a container for the eye icon-->
+                    <input type="password" id="password" placeholder="Confirm Password">
+                    <i class="bx bx-show" id="togglePassword"></i>
+                </div>
+                 </div>
+
+<!-- Space for error message - wrong user/password or non-existent user -->
+                <p class="error-message" id="errorMessage">Invalid username or password</p>
+                
+                <button type="submit" class="pushable">
+                    <span class="front">Create Account</span>
+                </button>
+            </form>
+
+        </div>
+        <script src="signup.js" type = "module"></script> 
+    </body>
+    </html>
+
+<!-- Login Page -->
