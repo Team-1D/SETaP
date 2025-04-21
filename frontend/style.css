@@ -174,11 +174,11 @@ select, input{
 }
 
 /* Popup add note */
-.popup{
+.popup-notes{
     display: none;
     position: fixed;
     margin-left: 40%;
-    background-color: whitesmoke;
+    background-color: #ffe9b8;
     padding: 2em;
     border-radius: 0.6em;
     box-shadow: 0 0 0.6em rgba(0, 0, 0, 0.1);

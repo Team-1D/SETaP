@@ -8,7 +8,7 @@ const addNoteButton = document.querySelector('.add-note');
 // Open popup
 function addNewNote (){
     console.log('added plus button');
-    document.querySelector('.popup').style.display = 'block';
+    document.querySelector('.popup-notes').style.display = 'block';
     document.querySelector('#note-title').value = ''; // When u open the pop up it set as empty by default
     document.querySelector('#note-difficulty').value = 'low'; // By dafult the diffulty is Low
     document.querySelector('#fullscreen-textarea').value = '';
@@ -17,7 +17,7 @@ function addNewNote (){
 
 // Close popup
 document.querySelector('.close-popup').addEventListener('click', () => {
-    document.querySelector('.popup').style.display = 'none';
+    document.querySelector('.popup-notes').style.display = 'none';
 });
 
 // Variable to store the currently edited note
@@ -68,7 +68,7 @@ document.querySelector('#note-form').addEventListener('submit', (event) => {
     document.querySelector('.nav-menu-container').style.display = 'none';
     document.querySelector('#filter-container').style.display = 'none';
     notesContainer.style.display = 'none';
-    document.querySelector('.popup').style.display = 'none';
+    document.querySelector('.popup-notes').style.display = 'none';
 
     // Show fullscreen note
     document.querySelector(".fullscreen-note").style.display = 'block';
