@@ -94,3 +94,7 @@
     margin: 10px 0;
     display: none; /* Initially hidden - change visibility when needed*/  
 }
+
+.email_container {
+    margin-bottom: 30px;
+}
