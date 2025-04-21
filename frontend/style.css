@@ -501,7 +501,9 @@ select, input{
     height: 100vh;
 }
 
-.services h1{
+.services h1,
+#title,
+#leaderboard h1{
     background-color: #7789ff;
     background-image: linear-gradient(
         to right, 
