@@ -362,205 +362,7 @@ select, input{
 }
 
 * 
-/* old navbar
-{
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Kumbh Sans', sans-serif;
-}
 
-.navbar{
-    background: #131313;
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.2rem;
-    position: sticky;
-    top: 0;
-    z-index: 999;  
-}
-
-.navbar__container {
-    display: flex;
-    justify-content: space-between;
-    height: 80px;
-    z-index: 1;
-    width: 100%;
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 0 50px;
-}
-
-#navbar__logo {
-    background-color: #77dbff;
-    background-image: linear-gradient(to top, #312be1 0%, #7b8dd4 100%);
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 2rem;
-}
-
-.fa-gem {
-    margin-right: 0.5rem;
-}
-
-.navbar__menu{
-    display: flex;
-    align-items: center;
-    list-style: none;
-    text-align: center;
-}
-
-.navbar__item {
-    height: 80px;
-}
-
-.navbar__links {
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    padding: 0 1rem;
-    height: 100%;
-}
-
-.navbar__btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 1rem;
-    width: 100%;
-}
-
-.button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    padding: 10px 20px;
-    height: 100%;
-    width: 100%;
-    border: none;
-    outline: none;
-    border-radius: 4px;
-    background: #62c3f7;
-    color: #fff;
-}
-
-.button:hover {
-    background: #4837ff;
-    transition: all 0.3s ease;
-}
-
-.navbar__links:hover {
-    color: #6273f7;
-    transition: all 0.3s ease;
-}
-
-@media screen and (max-width: 960px) {
-    .navbar__container {
-        display: flex;
-        justify-content: space-between;
-        height: 80px;
-        z-index: 1;
-        width: 100%;
-        max-width: 1300px;
-        padding: 0;
-    }
-
-    .navbar__menu {
-        display: grid;
-        grid-template-columns: auto;
-        margin: 0;
-        width: 100%;
-        position: absolute;
-        top: -1000px;
-        opacity: 0;
-        transition: all 0.5s ease;
-        height: 50vh;
-        z-index: -1;
-        background: #131313;
-    }
-    
-    .navbar__menu.active {
-        background: #131313;
-        top: 100%;
-        opacity: 1;
-        transition: all 0.5s ease;
-        z-index: 99;
-        height: 50vh;
-        font-size: 1.6rem;
-    }
-
-    #navbar__logo {
-        padding-left: 25px;
-    }
-
-    .navbar__toggle .bar {
-        width: 25px;
-        height: 3px;
-        margin: 5px auto;
-        transition: all 0.3s ease-in-out;
-        background: #fff;
-    }
-
-    .navbar__item{
-        width: 100%;
-    }
-
-    .navbar__links {
-        text-align: center;
-        padding: 2rem;
-        width: 100%;
-        display: table;
-    }
-
-    #mobile-menu {
-        position: absolute;
-        top: 20%;
-        right: 5%;
-        transform: translate(5% 20%);
-    }
-
-    .navbar__btn {
-        padding-bottom: 2rem;
-    }
-
-    .button {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 80%;
-        height: 80px;
-        margin: 0;
-    }
-
-    .navbar__toggle .bar{
-        display: block;
-        cursor: pointer;
-    }
-  
-    #mobile-menu.is-active .bar:nth-child(2){
-        opacity: 0;
-    }
-
-    #mobile-menu.is-active .bar:nth-child(1){
-        transform: translateY(8px) rotate(45deg);
-    }
-
-    #mobile-menu.is-active .bar:nth-child(3){
-        transform: translateY(-8px) rotate(-45deg);
-    }
-} */
 body{
     font-family: "Press Start 2P", system-ui;
     /* font-weight: 400; */
@@ -692,146 +494,148 @@ select, input{
     transform: scale(1.5);
     pointer-events: none;
 }
-/* main container */
-.services {
-    background: white;
+/* flashcard */
+.flashcard_container{
     display: flex;
-    flex-direction: column;
     align-items: center;
-    height: 100vh;
-}
-
-.services h1{
-    background-color: #7789ff;
-    background-image: linear-gradient(
-        to right, 
-        #fdd49f 0%, 
-        #fdcb5f 0%, 
-        #f1be3d 21%, 
-        #f4b339 52%, 
-        #de8517 78%, 
-        #e68a0a 100%
-    );
-    
-    background-size: 100%;
-    margin-bottom: 5rem;
-    font-size: 2.5rem;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-    
-}
-
-.services__container {
-    display: flex;
     justify-content: center;
-    flex-wrap: wrap;
-    align-items: center;
-    overflow: hidden; /*Only show one card at a time*/
-    width: 1500px;
-}
-
-.services__cards{
-    display: flex;
-    transition: transform 0.3s ease;
-}
-
-.services__card {
-    min-width: 300px;
-    margin: 1rem;
-    height: 525px;
-    width: 350px;
-    border-radius: 4px;
-    background-image: linear-gradient(
-        to bottom, 
-        rgba(0,0,0,0) 0%, 
-        rgba(17,17,17,0.6) 100%
-        ), 
-        url('/images/orange.jpg');
-    background-size: cover;
-    background-position: center;
     position: relative;
-    color: #fff;
-    transition: 0.2s ease-in;
+    margin: 2rem auto;
+    max-width: 80%;
+} 
+.flashcards {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 1rem;
+    padding: 1rem;
+    max-width: 100%;
+    justify-content: center;
 }
 
-.services__card:nth-child(2) {
-    background-image: linear-gradient(
-        to bottom, 
-        rgba(0,0,0,0) 0%, 
-        rgba(17,17,17,0.6) 100%
-        ), 
-        url('/images/orange.jpg');
-}
-
-.services h2 {
+.scroll_button {
+    display: none;
     position: absolute;
-    top: 350px;
-    left: 30px;
-}
-
-.services__card p {
-    position: absolute;
-    top: 400px;
-    left: 30px;
-}
-
-.services__card button {
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    outline: none;
-    border-radius: 4px;
-    background: #f77062;
-    position: absolute;
-    top: 440px;
-    left: 30px;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-.services__card:hover {
-    transform: scale(1.075);
-    cursor: pointer;
-}
-
-@media screen and (max-width: 960px) {
-    .services {
-        height: 1600px;
-    }
-
-    .services h1 {
-        font-size: 2rem;
-        margin-top: 12rem;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .services{
-        height: 1400px;
-    }
-
-    .services h1 {
-        font-size: 1.2rem;
-    }
-
-    .services__card {
-        width: 300px;
-    }
-}
-
-.scroll-button {
-    position: absolute;
-    right: 10px;
     top: 50%;
     transform: translateY(-50%);
-    background-color: #007BFF;
+    background-color: #007bff;
     color: white;
     border: none;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 0.5rem 1rem;
     cursor: pointer;
+    border-radius: 4px;
+    z-index: 10;
+}
+
+#scroll-left {
+    left: -2rem;
+}
+
+#scroll-right {
+    right: -2rem;
+}
+
+.scroll_button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+
+.flashcard {
+    min-width: 200px;
+    flex-shrink: 0;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.flashcard:hover {
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .flashcard {
+        min-width: 150px;
+    }
+}
+
+/* Flashcard menu (three dots) */
+.flashcard-menu {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #333;
+    opacity: 0;
+    pointer-events: none; /* Prevent interaction when hidden */
+    transition: opacity 0.2s ease;
+}
+
+/* Show the three dots when hovering over the flashcard */
+.flashcard:hover .flashcard-menu {
+    opacity: 1;
+    pointer-events: auto; /* Enable interaction when visible */
+}
+
+/* Flashcard action popup */
+.flashcard-action-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffe9b8;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    border-radius: 8px;
+}
+
+.flashcard-action-popup .popup-content {
+    text-align: center;
+}
+
+.flashcard-action-popup .popup-content span.close-action-popup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.flashcard-action-popup .popup-content button,
+.flashcard-action-popup .popup-content input {
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 1rem;
+    width: 100%;
+}
+
+/* Create Flashcard Pop-up */
+.popup {
+    display: none; /* Hide the popup by default */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffe9b8;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.popup-content {
+    text-align: center;
+}
+
+.popup.active {
+    display: block; /* Show the popup when active */
 }
 
 /* Footer */
