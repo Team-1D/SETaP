@@ -2,7 +2,7 @@
 //npm install express pg cors body-parser dotenv
 
 const express = require("express");
-const pool  = require("./database-pool");
+const { pool }  = require("./database-pool");
 
 //CRUD OPERATIONS
 

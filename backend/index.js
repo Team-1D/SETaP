@@ -114,7 +114,7 @@ app.delete('/notes/:id', async (req, res) => {
 
 app.put('/notes/favourite/:id', async (req, res) => {
     const { id } = req.params;
-    console.log(`Received request to toggle favourite for note ID: ${id}`);
+    console.log(`Received request to toggle favourite for user ID: ${id}`);
     const result = await toggleFavourite(id);
     if (result.error) {
         return res.status(404).json(result);
