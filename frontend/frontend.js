@@ -277,6 +277,7 @@ async function getNoteByName(title) {
         return { error: true };
     }
 }
+
 //this is needed as a page reload needs to put everything in again
 function loadAllUserNotes(){
     addNoteButton.addEventListener('click',addNewNote);
@@ -305,3 +306,4 @@ function removeAllNotes(){
 }
 
 loadAllUserNotes();
+
