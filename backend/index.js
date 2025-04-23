@@ -8,6 +8,7 @@ const { getStreak, updateStreak, createStreak } = require('./streak');
 const { getFlashcards, getFlashcardById, createFlashcard, updateFlashcard, deleteFlashcard } = require('./flashcard');
 const { createCollection, getAllCollections, getCollectionById, updateCollection, deleteCollection, addFlashcardToCollection, getFlashcardsByCollectionId } = require('./collections');
 const { loginUser } = require('./loginController');
+const { signupUser } = require('./signupController');
 
 
 
@@ -48,6 +49,35 @@ app.post('/login', async (req, res) => {
 
     } catch (err) {
         console.error("Login error:", err);
+        res.status(500).json({ 
+            success: false,
+            error: "Internal server error" 
+        });
+    }
+});
+
+app.post('/signup', async (req, res) => {
+    try {
+        const { email, nickname, password } = req.body;
+        const result = await signupUser(email, nickname, password);
+        
+        if (result.error) {
+            return res.status(400).json({ 
+                success: false,
+                error: result.error 
+            });
+        }
+
+        res.status(201).json({ 
+            success: true,
+            userId: result.userId,
+            email: result.email,
+            nickname: result.nickname,
+            redirect: '/home.html'
+        });
+
+    } catch (err) {
+        console.error("Signup error:", err);
         res.status(500).json({ 
             success: false,
             error: "Internal server error" 

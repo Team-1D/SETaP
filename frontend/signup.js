@@ -1,38 +1,76 @@
-// Function to validate the signup form
-function validateSignupForm() {
-    // Get form input values
+// Toggle password visibility for both password fields
+document.querySelectorAll("#togglePassword").forEach(icon => {
+    icon.addEventListener("click", function() {
+        const passwordField = this.previousElementSibling;
+        const type = passwordField.type === "password" ? "text" : "password";
+        passwordField.type = type;
+        
+        this.classList.toggle("bx-show");
+        this.classList.toggle("bx-hide");
+    });
+});
+
+document.getElementById("loginForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    
     const email = document.getElementById("email").value;
-    const confirmEmail = document.getElementById("confirmEmail").value;
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
+    const confirmEmail = document.getElementById("confirm_email").value;
+    const nickname = document.getElementById("username").value;
+    const password = document.querySelector(".create_password_container input[type='password']:first-of-type").value;
+    const confirmPassword = document.querySelector(".create_password_container input[type='password']:last-of-type").value;
+    const errorMessage = document.getElementById("errorMessage");
 
-    // Check if emails match
+    // Reset error message
+    errorMessage.style.display = "none";
+
+    // Client-side validation
     if (email !== confirmEmail) {
-        alert("Error: Emails do not match.");
-        return false;
+        showError("Emails do not match");
+        return;
     }
 
-    // Check if passwords match
     if (password !== confirmPassword) {
-        alert("Error: Passwords do not match.");
-        return false;
+        showError("Passwords do not match");
+        return;
     }
 
-    // Check if password meets complexity requirements
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
     if (!passwordRegex.test(password)) {
-        alert("Error: Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, and a number.");
-        return false;
+        showError("Password must be: 8+ chars, 1 uppercase, 1 lowercase, 1 number");
+        return;
     }
 
-    // If all checks pass
-    alert("Signup form is valid!");
-    return true;
-}
+    try {
+        const response = await fetch("/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+                email, 
+                nickname, 
+                password 
+            })
+        });
 
-// Attach the validation function to the form submission
-document.getElementById("signupForm").addEventListener("submit", function (event) {
-    if (!validateSignupForm()) {
-        event.preventDefault(); // Prevent form submission if validation fails
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "Signup failed");
+        }
+
+        localStorage.setItem('userId', data.userId);
+        localStorage.setItem('email', data.email);
+        localStorage.setItem('nickname', data.nickname);
+        
+        window.location.href = data.redirect || '/login.html';
+
+    } catch (err) {
+        showError(err.message);
+        console.error("Signup error:", err);
     }
 });
+
+function showError(message) {
+    const errorMessage = document.getElementById("errorMessage");
+    errorMessage.style.display = "block";
+    errorMessage.textContent = message;
+}
