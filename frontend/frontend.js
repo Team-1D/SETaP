@@ -218,7 +218,18 @@ function addNoteToUI(title) {
 
     // Add event listener for the delete button
     const deleteButton = note.querySelector('.delete-note');
-    deleteButton.addEventListener('click', () => {
+
+deleteButton.addEventListener('click', async () => {
+    try {
+        const response = await fetch(`http://localhost:8080/notes/${noteId}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete note from server');
+        }
+
         // Remove from local storage
         localStorage.removeItem('note_' + title);
         
@@ -226,7 +237,10 @@ function addNoteToUI(title) {
         note.remove();
         
         console.log(`Note "${title}" deleted from local storage`);
-    });
+    } catch (error) {
+        console.error('Error deleting note:', error);
+    }
+});
 
     // Append the new note to the notes container
     notesContainer.appendChild(note);
