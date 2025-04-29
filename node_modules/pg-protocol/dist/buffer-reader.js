@@ -41,6 +41,7 @@ class BufferReader {
     cstring() {
         const start = this.offset;
         let end = start;
+        // eslint-disable-next-line no-empty
         while (this.buffer[end++] !== 0) { }
         this.offset = end;
         return this.buffer.toString(this.encoding, start, end - 1);

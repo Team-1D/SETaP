@@ -170,34 +170,34 @@ document.querySelector('#fullscreen-textarea').addEventListener('input', () => {
 });
 
 // scroll
-document.addEventListener('DOMContentLoaded', function () {
-    const scrollLeftButton = document.getElementById('scroll-left');
-    const scrollRightButton = document.getElementById('scroll-right');
-    const cardsContainer = document.querySelector('.services__cards');
-    const cards = document.querySelectorAll('.services__card');
-    let currentIndex = 0;
+// document.addEventListener('DOMContentLoaded', function () {
+//     const scrollLeftButton = document.getElementById('scroll-left');
+//     const scrollRightButton = document.getElementById('scroll-right');
+//     const cardsContainer = document.querySelector('.services__cards');
+//     const cards = document.querySelectorAll('.services__card');
+//     let currentIndex = 0;
 
-    scrollLeftButton.addEventListener('click', function () {
-        if (currentIndex > 0) {
-            currentIndex--;
-            updateScrollPosition();
-        }
-    });
+//     scrollLeftButton.addEventListener('click', function () {
+//         if (currentIndex > 0) {
+//             currentIndex--;
+//             updateScrollPosition();
+//         }
+//     });
 
-    scrollRightButton.addEventListener('click', function () {
-        if (currentIndex < cards.length - 1) {
-            currentIndex++;
-            updateScrollPosition();
-        }
-    });
+//     scrollRightButton.addEventListener('click', function () {
+//         if (currentIndex < cards.length - 1) {
+//             currentIndex++;
+//             updateScrollPosition();
+//         }
+//     });
 
-    function updateScrollPosition() {
-        const cardWidth = cards[0].offsetWidth; // Get the width of a card
-        cardsContainer.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
-    }
-});
+//     function updateScrollPosition() {
+//         const cardWidth = cards[0].offsetWidth; // Get the width of a card
+//         cardsContainer.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+//     }
+// });
 
-function addNoteToUI(title){
+function addNoteToUI(title) {
     const note = document.createElement('div');
     note.className = 'note';
 
@@ -213,11 +213,24 @@ function addNoteToUI(title){
     </div>
     `;
 
-    //Adding favourite button
-    addFav(note,title);
+    // Adding favourite button
+    addFav(note, title);
+
+    // Add event listener for the delete button
+    const deleteButton = note.querySelector('.delete-note');
+    deleteButton.addEventListener('click', () => {
+        // Remove from local storage
+        localStorage.removeItem('note_' + title);
+        
+        // Remove from UI
+        note.remove();
+        
+        console.log(`Note "${title}" deleted from local storage`);
+    });
 
     // Append the new note to the notes container
     notesContainer.appendChild(note);
+    
     // Add event listener for the edit button
     const editButton = note.querySelector('.edit-note');
     editButton.addEventListener('click', () => {
@@ -235,7 +248,6 @@ function addNoteToUI(title){
 
         // Set the title, deadline, and content in the fullscreen note
         document.querySelector("#fullscreen-title").textContent = title;
-        // document.querySelector("#fullscreen-deadline").textContent = `Deadline: ${deadline.value}`;
         document.querySelector('#fullscreen-textarea').value = content;
     });
 }
