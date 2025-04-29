@@ -24,7 +24,7 @@ document.querySelector('.close-popup').addEventListener('click', () => {
 let currentNote = null;
 
 // Function to create a new note
-const createNote = async (title, content, dateCreated) => {
+const createNote = async (title, content, dateCreated, difficulty) => {
     //for now that we dont have auth
     const userId = 1;
     const favourite = false;
@@ -44,9 +44,15 @@ const createNote = async (title, content, dateCreated) => {
         console.error('Error saving note:', error);
     }
 
-    addNoteToUI(title);
+    addNoteToUI(title, content = '', difficulty);
     //Saving note to localstorage
-    const noteObj = {title: title,content: content,date: dateCreated,user: userId,fav: favourite};
+    const noteObj = {title: title,
+                     content: content,
+                     date: dateCreated,
+                     user: userId,
+                     fav: favourite,
+                     difficulty: difficulty
+                    };
     localStorage.setItem('note_' + title, JSON.stringify(noteObj));
 };
 
@@ -119,7 +125,7 @@ document.querySelector('#note-form').addEventListener('submit', (event) => {
         if (!currentNote) {
             const dateCreated = new Date().toISOString();
             //console.log('im here');
-            createNote(title,  updatedContent, dateCreated, false);
+            createNote(title, updatedContent, dateCreated, difficulty);
         }
     };
     myTextArea.textContent = '';
@@ -169,42 +175,14 @@ document.querySelector('#fullscreen-textarea').addEventListener('input', () => {
     document.execCommand('foreColor', false, selectedColor);
 });
 
-// scroll
-// document.addEventListener('DOMContentLoaded', function () {
-//     const scrollLeftButton = document.getElementById('scroll-left');
-//     const scrollRightButton = document.getElementById('scroll-right');
-//     const cardsContainer = document.querySelector('.services__cards');
-//     const cards = document.querySelectorAll('.services__card');
-//     let currentIndex = 0;
-
-//     scrollLeftButton.addEventListener('click', function () {
-//         if (currentIndex > 0) {
-//             currentIndex--;
-//             updateScrollPosition();
-//         }
-//     });
-
-//     scrollRightButton.addEventListener('click', function () {
-//         if (currentIndex < cards.length - 1) {
-//             currentIndex++;
-//             updateScrollPosition();
-//         }
-//     });
-
-//     function updateScrollPosition() {
-//         const cardWidth = cards[0].offsetWidth; // Get the width of a card
-//         cardsContainer.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
-//     }
-// });
-
-function addNoteToUI(title) {
+function addNoteToUI(title, content = '', difficulty) {
     const note = document.createElement('div');
     note.className = 'note';
 
     note.innerHTML = `
     <div class="note-preview">
         <h3>${title}</h3>
-        
+        <span class="difficulty-badge ${difficulty.toLowerCase()}">${difficulty}</span>
         <div class="button-container">
             <button class="delete-note">Delete</button>
             <button class="edit-note">Edit</button>
@@ -218,18 +196,7 @@ function addNoteToUI(title) {
 
     // Add event listener for the delete button
     const deleteButton = note.querySelector('.delete-note');
-
-deleteButton.addEventListener('click', async () => {
-    try {
-        const response = await fetch(`http://localhost:8080/notes/${noteId}`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to delete note from server');
-        }
-
+    deleteButton.addEventListener('click', () => {
         // Remove from local storage
         localStorage.removeItem('note_' + title);
         
@@ -237,10 +204,7 @@ deleteButton.addEventListener('click', async () => {
         note.remove();
         
         console.log(`Note "${title}" deleted from local storage`);
-    } catch (error) {
-        console.error('Error deleting note:', error);
-    }
-});
+    });
 
     // Append the new note to the notes container
     notesContainer.appendChild(note);
@@ -335,7 +299,7 @@ function loadAllUserNotes(){
                 const noteData = JSON.parse(localStorage.getItem(key));
 
                 if (noteData && noteData.title) {
-                    addNoteToUI(noteData.title, noteData.content); // Pass content too if needed
+                    addNoteToUI(noteData.title, noteData.content, noteData.difficulty || 'low'); // Pass content too if needed
                 }
             } catch (e) {
                 console.error(`Error parsing note from localStorage for key "${key}":`, e);

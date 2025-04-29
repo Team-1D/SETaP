@@ -789,3 +789,18 @@ select, input{
 .scroll-container::-webkit-scrollbar {
     width: 8px;
 }
+/* for the difficulty */
+.difficulty-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    margin-left: 8px;
+    color: white;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.difficulty-badge.low { background-color: #4CAF50; }
+.difficulty-badge.medium { background-color: #FFC107; color: black; }
+.difficulty-badge.high { background-color: #F44336; }
