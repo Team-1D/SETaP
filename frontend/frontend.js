@@ -75,7 +75,25 @@ document.querySelector('#note-form').addEventListener('submit', (event) => {
     document.querySelector("#fullscreen-title").textContent = title;
     // document.querySelector("#fullscreen-deadline").textContent = `Deadline: ${deadline}`;
     document.querySelector('#fullscreen-textarea').value = '';
-
+    
+    let chosenTemplate = document.querySelector('#note-template');
+    
+    if (chosenTemplate.value === 'Blank') {
+        document.querySelector('#fullscreen-textarea').style.backgroundImage = '';
+    }
+    else if (chosenTemplate.value === 'Lined') {
+        document.querySelector('#fullscreen-textarea').style.backgroundImage = 'url(templates/lined.svg)';
+        document.querySelector('#fullscreen-textarea').style.backgroundRepeat = 'repeat-y';
+        document.querySelector('#fullscreen-textarea').style.backgroundSize = '100% 30px';
+        document.querySelector('#fullscreen-textarea').style.backgroundPosition = 'top left';
+    }
+    else if (chosenTemplate.value === 'Grid') {
+        document.querySelector('#fullscreen-textarea').style.backgroundImage = 'url(templates/grid.svg)';
+        document.querySelector('#fullscreen-textarea').style.backgroundRepeat = 'repeat';
+        document.querySelector('#fullscreen-textarea').style.backgroundSize = '30px 30px';
+        document.querySelector('#fullscreen-textarea').style.backgroundPosition = 'top left';
+    }
+            
     // Reset currentNote when creating a new note
     currentNote = null;
 
