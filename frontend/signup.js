@@ -10,14 +10,14 @@ document.querySelectorAll("#togglePassword").forEach(icon => {
     });
 });
 
-document.getElementById("loginForm").addEventListener("submit", async function(e) {
+document.getElementById("signupForm").addEventListener("submit", async function(e) {
     e.preventDefault();
     
     const email = document.getElementById("email").value;
     const confirmEmail = document.getElementById("confirm_email").value;
     const nickname = document.getElementById("username").value;
-    const password = document.querySelector(".create_password_container input[type='password']:first-of-type").value;
-    const confirmPassword = document.querySelector(".create_password_container input[type='password']:last-of-type").value;
+    const password = document.querySelector("#password").value;
+    const confirmPassword = document.querySelector("#confirmPassword").value;
     const errorMessage = document.getElementById("errorMessage");
 
     // Reset error message
@@ -34,11 +34,6 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
         return;
     }
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-    if (!passwordRegex.test(password)) {
-        showError("Password must be: 8+ chars, 1 uppercase, 1 lowercase, 1 number");
-        return;
-    }
 
     try {
         const response = await fetch("/signup", {

@@ -1,0 +1,79 @@
+// npm init -y
+// npm install express pg cors body-parser dotenv
+
+const express = require("express");
+const { pool } = require("./database-pool"); // Adjust path as necessary
+
+// CRUD OPERATIONS
+
+async function createFlashcard({ userId, term, definition, colour }) {
+    try {
+        const result = await pool.query(
+            `INSERT INTO flashcards (user_id, term, definition, colour)
+             VALUES ($1, $2, $3, $4)
+             RETURNING *`,
+            [userId, term, definition, colour]
+        );
+        console.log('Flashcard Created:', result.rows[0]);
+        return result.rows[0];
+    } catch (err) {
+        console.error('Error creating flashcard:', err);
+        throw err;
+    }
+}
+
+
+async function getFlashcards(userId) {
+    try {
+        const result = await pool.query(
+            "SELECT * FROM flashcards WHERE user_id = $1 ORDER BY created_at DESC",
+            [userId]
+        );
+        return result.rows;
+    } catch (err) {
+        console.error('Error retrieving flashcards:', err);
+        throw err;
+    }
+}
+
+async function getFlashcardById(id) {
+    try {
+        const result = await pool.query("SELECT * FROM flashcards WHERE id = $1", [id]);
+        console.log('Query result:', result.rows);
+        return result.rows[0];
+    } catch (err) {
+        console.error('Error retrieving flashcard:', err);
+        throw err;
+    }
+}
+
+async function updateFlashcard(id, term, definition, colour) {
+    try {
+        const result = await pool.query(
+            "UPDATE flashcards SET term = $1, definition = $2, colour = $3, updated_at = CURRENT_TIMESTAMP WHERE id = $4 RETURNING *",
+            [term, definition, colour, id]
+        );
+        return result.rows[0]; 
+    } catch (err) {
+        console.error('Error updating flashcard:', err);
+        throw err;
+    }
+}
+
+async function deleteFlashcard(id) {
+    try {
+        const result = await pool.query("DELETE FROM flashcards WHERE id = $1 RETURNING *", [id]);
+        return result.rows[0]; // Return deleted flashcard
+    } catch (err) {
+        console.error('Error deleting flashcard:', err);
+        throw err;
+    }
+}
+
+module.exports = {
+    createFlashcard,
+    getFlashcards,
+    getFlashcardById,
+    updateFlashcard,
+    deleteFlashcard
+};
