@@ -307,3 +307,20 @@ function removeAllNotes(){
 
 loadAllUserNotes();
 
+
+const textArea = document.getElementById('fullscreen-textarea');
+
+// custom scrolling for notes to line up with template
+const lineHeight = 30;
+
+textArea.addEventListener('wheel', function (e) {
+    const scrollAmount = lineHeight; 
+
+    if (e.deltaY > 0) {
+        textArea.scrollTop += scrollAmount;  // scroll down
+    } else {
+        textArea.scrollTop -= scrollAmount;  // scroll up
+    }
+
+    e.preventDefault();
+});
