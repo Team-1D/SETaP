@@ -75,7 +75,25 @@ document.querySelector('#note-form').addEventListener('submit', (event) => {
     document.querySelector("#fullscreen-title").textContent = title;
     // document.querySelector("#fullscreen-deadline").textContent = `Deadline: ${deadline}`;
     document.querySelector('#fullscreen-textarea').value = '';
-
+    
+    let chosenTemplate = document.querySelector('#note-template');
+    
+    if (chosenTemplate.value === 'Blank') {
+        document.querySelector('#fullscreen-textarea').style.backgroundImage = '';
+    }
+    else if (chosenTemplate.value === 'Lined') {
+        document.querySelector('#fullscreen-textarea').style.backgroundImage = 'url(templates/lined.svg)';
+        document.querySelector('#fullscreen-textarea').style.backgroundRepeat = 'repeat-y';
+        document.querySelector('#fullscreen-textarea').style.backgroundSize = '100% 30px';
+        document.querySelector('#fullscreen-textarea').style.backgroundPosition = 'top left';
+    }
+    else if (chosenTemplate.value === 'Grid') {
+        document.querySelector('#fullscreen-textarea').style.backgroundImage = 'url(templates/grid.svg)';
+        document.querySelector('#fullscreen-textarea').style.backgroundRepeat = 'repeat';
+        document.querySelector('#fullscreen-textarea').style.backgroundSize = '30px 30px';
+        document.querySelector('#fullscreen-textarea').style.backgroundPosition = 'top left';
+    }
+            
     // Reset currentNote when creating a new note
     currentNote = null;
 
@@ -152,34 +170,34 @@ document.querySelector('#fullscreen-textarea').addEventListener('input', () => {
 });
 
 // scroll
-document.addEventListener('DOMContentLoaded', function () {
-    const scrollLeftButton = document.getElementById('scroll-left');
-    const scrollRightButton = document.getElementById('scroll-right');
-    const cardsContainer = document.querySelector('.services__cards');
-    const cards = document.querySelectorAll('.services__card');
-    let currentIndex = 0;
+// document.addEventListener('DOMContentLoaded', function () {
+//     const scrollLeftButton = document.getElementById('scroll-left');
+//     const scrollRightButton = document.getElementById('scroll-right');
+//     const cardsContainer = document.querySelector('.services__cards');
+//     const cards = document.querySelectorAll('.services__card');
+//     let currentIndex = 0;
 
-    scrollLeftButton.addEventListener('click', function () {
-        if (currentIndex > 0) {
-            currentIndex--;
-            updateScrollPosition();
-        }
-    });
+//     scrollLeftButton.addEventListener('click', function () {
+//         if (currentIndex > 0) {
+//             currentIndex--;
+//             updateScrollPosition();
+//         }
+//     });
 
-    scrollRightButton.addEventListener('click', function () {
-        if (currentIndex < cards.length - 1) {
-            currentIndex++;
-            updateScrollPosition();
-        }
-    });
+//     scrollRightButton.addEventListener('click', function () {
+//         if (currentIndex < cards.length - 1) {
+//             currentIndex++;
+//             updateScrollPosition();
+//         }
+//     });
 
-    function updateScrollPosition() {
-        const cardWidth = cards[0].offsetWidth; // Get the width of a card
-        cardsContainer.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
-    }
-});
+//     function updateScrollPosition() {
+//         const cardWidth = cards[0].offsetWidth; // Get the width of a card
+//         cardsContainer.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+//     }
+// });
 
-function addNoteToUI(title){
+function addNoteToUI(title) {
     const note = document.createElement('div');
     note.className = 'note';
 
@@ -195,11 +213,38 @@ function addNoteToUI(title){
     </div>
     `;
 
-    //Adding favourite button
-    addFav(note,title);
+    // Adding favourite button
+    addFav(note, title);
+
+    // Add event listener for the delete button
+    const deleteButton = note.querySelector('.delete-note');
+
+deleteButton.addEventListener('click', async () => {
+    try {
+        const response = await fetch(`http://localhost:8080/notes/${noteId}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete note from server');
+        }
+
+        // Remove from local storage
+        localStorage.removeItem('note_' + title);
+        
+        // Remove from UI
+        note.remove();
+        
+        console.log(`Note "${title}" deleted from local storage`);
+    } catch (error) {
+        console.error('Error deleting note:', error);
+    }
+});
 
     // Append the new note to the notes container
     notesContainer.appendChild(note);
+    
     // Add event listener for the edit button
     const editButton = note.querySelector('.edit-note');
     editButton.addEventListener('click', () => {
@@ -217,7 +262,6 @@ function addNoteToUI(title){
 
         // Set the title, deadline, and content in the fullscreen note
         document.querySelector("#fullscreen-title").textContent = title;
-        // document.querySelector("#fullscreen-deadline").textContent = `Deadline: ${deadline.value}`;
         document.querySelector('#fullscreen-textarea').value = content;
     });
 }
@@ -307,3 +351,20 @@ function removeAllNotes(){
 
 loadAllUserNotes();
 
+
+const textArea = document.getElementById('fullscreen-textarea');
+
+// custom scrolling for notes to line up with template
+const lineHeight = 30;
+
+textArea.addEventListener('wheel', function (e) {
+    const scrollAmount = lineHeight; 
+
+    if (e.deltaY > 0) {
+        textArea.scrollTop += scrollAmount;  // scroll down
+    } else {
+        textArea.scrollTop -= scrollAmount;  // scroll up
+    }
+
+    e.preventDefault();
+});

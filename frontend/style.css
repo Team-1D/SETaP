@@ -235,16 +235,20 @@ select, input{
 
 #fullscreen-textarea {
     width: 100%;
-    height: calc(100% - 100px); /* Adjust height to fit the screen */
+    height: calc(100% - 150px); /* Adjust height to fit header and footer */
+    padding: 0 1em;
+    padding-top: 9px;
     border: 1px solid #ccc;
     border-radius: 0.5em;
-    padding: 0.5em;
-    resize: none; /* Disable resizing */
-    overflow-y: auto; /* Add scrollbar if content overflows */
-    white-space: pre-wrap; /* Preserve line breaks and spaces */
+    resize: none;
+    overflow-y: auto;
+    white-space: pre-wrap;
     background-color: white;
-    color: black; /* Default text color */
+    color: black;
     text-align: left;
+    font-size: 1rem;
+    font-family: "Press Start 2P", system-ui;
+    line-height: 30px; /* Match the line height to the SVG line spacing */
 }
 
 #fullscreen-textarea:empty::before {
