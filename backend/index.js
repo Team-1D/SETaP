@@ -48,7 +48,6 @@ app.post('/signup', async (req, res) => {
     try {
         const { email, nickname, password } = req.body;
         const result = await signupUser(email, nickname, password);
-        
         if (result.error) {
             return res.status(400).json({ 
                 success: false,
@@ -125,7 +124,7 @@ app.delete('/notes/:id', async (req, res) => {
         const note = await deleteNote(id);
         res.json(note);
     } catch (err) {
-        console.error("❌ Failed to delete note:", err);
+        console.error("Failed to delete note:", err);
         res.status(500).json({ error: "Failed to delete note" });
     }
 });
