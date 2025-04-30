@@ -120,7 +120,7 @@ app.put('/notes/:id', async (req, res) => {
 
 app.delete('/notes/:id', async (req, res) => {
     try {
-        const { id } = req.params;
+        const { id } =parseInt(req.params.id, 10);
         const note = await deleteNote(id);
         res.json(note);
     } catch (err) {
