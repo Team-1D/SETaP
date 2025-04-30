@@ -112,6 +112,8 @@ function showFlashcardActionPopup(flashcardElement) {
     };
 }
 
+// ---------------------------------------------------------------------------------
+// create flashcard pop-up
 // Hide the popup when the close button is clicked
 document.querySelector('.close-action-popup').addEventListener('click', () => {
     flashcardActionPopup.style.display = 'none';
@@ -173,3 +175,69 @@ flashcardForm.addEventListener('submit', (event) => {
 // Update scroll buttons on load and when resizing the window
 window.addEventListener('load', updateScrollButtons);
 window.addEventListener('resize', updateScrollButtons);
+
+// ---------------------------------------------------------------------------------
+//test-pop-up
+
+const testButton = document.getElementById('test-flashcard');
+const testPopup = document.getElementById('test-flashcard-popup');
+const testTermElement = document.getElementById('test-term');
+const testForm = document.getElementById('test-flashcard-form');
+const testDefinitionInput = document.getElementById('test-definition');
+const testResult = document.getElementById('test-result');
+
+let test_term = '';
+let test_definition = '';
+// Show the Test Flashcard popup
+testButton.addEventListener('click', () => {
+    if (flashcards.length === 0) {
+        alert('No flashcards available to test.');
+        return;
+    }
+
+    // Select a random flashcard
+    const randomFlashcard = flashcards[Math.floor(Math.random() * flashcards.length)];
+    test_term = randomFlashcard.term;
+    test_definition = randomFlashcard.definition;
+
+    console.log(`Term: ${test_term}, Definition: ${test_definition}`);
+    testTermElement.innerHTML = `${test_term}`; // Set the term here
+
+    // Show the popup
+    testPopup.style.display = 'block';
+    testPopup.classList.add('active');
+});
+
+// Select the close button for the test popup
+const closeTestPopup = document.querySelector('.close-test-popup');
+
+// Add an event listener to the close button
+if (closeTestPopup) {
+    closeTestPopup.addEventListener('click', () => {
+        const testPopup = document.getElementById('test-flashcard-popup');
+        testPopup.classList.remove('active'); // Remove the 'active' class to hide the popup
+        testDefinitionInput.value = ''; // Clear the input field
+        testResult.style.display = 'none'; // Hide the result message
+    });
+} else {
+    console.error('Close button for test popup not found.');
+}
+
+// Handle form submission for testing
+testForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const userDefinition = testDefinitionInput.value.trim();
+
+    if (userDefinition.toLowerCase() === test_definition.toLowerCase()) {
+        testResult.textContent = 'Correct!';
+        testPopup.style.backgroundColor = 'green';
+        console.log('correct');
+    } else {
+        testResult.textContent = `Incorrect! The correct definition is: ${test_definition}`;
+        testPopup.style.backgroundColor = 'red';
+        console.log('incorrect');
+    }
+
+    testResult.style.display = 'block'; // Show the result
+});
