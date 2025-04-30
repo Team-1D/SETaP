@@ -205,27 +205,38 @@ app.get('/flashcards/id/:id', async (req, res) => {
 
 
 app.put('/flashcards/:id', async (req, res) => {
-    const { id } = req.params;
+    const id = req.params.id;
     const { term, definition, colour } = req.body;
-    try {
-        const updatedFlashcard = await updateFlashcard(id, term, definition, colour);
-        res.status(200).json(updatedFlashcard);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to update flashcard' });
+
+    console.log('Update request received for ID:', id);
+    console.log('Request body:', req.body);
+
+    const updatedFlashcard = await updateFlashcard(id, term, definition, colour);
+    if (updatedFlashcard) {
+        return res.status(200).json({
+            message: 'Flashcard updated successfully',
+            flashcard: updatedFlashcard
+        });
+    } else {
+        return res.status(404).json({ message: 'Flashcard not found' });
     }
 });
 
 
 app.delete('/flashcards/:id', async (req, res) => {
+    console.log('DELETE request received for ID:', req.params.id);
     const { id } = req.params;
     try {
         const deletedFlashcard = await deleteFlashcard(id);
+        if (!deletedFlashcard) {
+            return res.status(404).json({ error: 'Flashcard not found' });
+        }
         res.status(200).json(deletedFlashcard);
     } catch (error) {
+        console.error('Error deleting flashcard:', error);
         res.status(500).json({ error: 'Failed to delete flashcard' });
     }
 });
-
 
 
 

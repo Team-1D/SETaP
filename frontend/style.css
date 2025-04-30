@@ -789,3 +789,26 @@ select, input{
 .scroll-container::-webkit-scrollbar {
     width: 8px;
 }
+
+/* Ensure the body and html take up full height */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main content area */
+body > .main-content {
+    flex: 1; /* This makes the main content grow to fill available space */
+}
+
+/* Footer styling */
+.footer__container {
+    background-color: #141414;
+    padding: 5rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
