@@ -1,12 +1,5 @@
-// Toggle password visibility
-document.getElementById("togglePassword").addEventListener("click", function() {
-    const passwordField = document.getElementById("password");
-    const type = passwordField.type === "password" ? "text" : "password";
-    passwordField.type = type;
-    
-    this.classList.toggle("bx-show");
-    this.classList.toggle("bx-hide");
-});
+// /frontend/js/login.js
+import { startActivityTimer } from './activitytimer.js';
 
 document.getElementById("loginForm").addEventListener("submit", async function(e) {
     e.preventDefault(); // Crucial: stops page refresh
@@ -31,6 +24,11 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
         // Store user data
         localStorage.setItem('userId', data.userId);
         localStorage.setItem('email', data.email);
+        
+        // Start the timer
+        startActivityTimer(data.userId);
+        
+        window.location.href = data.redirect;
 
         // Debug: Confirm before redirect
         console.log("Redirecting to:", data.redirect);
@@ -43,9 +41,4 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
         errorMessage.textContent = err.message;
         console.error("Login error:", err);
     }
-});
-
-document.querySelector(".createbtn").addEventListener("click", function(e) {
-    e.preventDefault();  
-    window.location.href = '/signup.html'; 
 });
