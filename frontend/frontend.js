@@ -137,7 +137,7 @@ document.querySelector('#note-form').addEventListener('submit', (event) => {
         if (!currentNote) {
             const dateCreated = new Date().toISOString();
             //console.log('im here');
-            createNote(title,  updatedContent, dateCreated, false);
+            createNote(title,  updatedContent, dateCreated, document.querySelector('#note-difficulty').value || 'low');
              myTextArea.textContent= '';
         }
     };
@@ -215,13 +215,14 @@ colorPicker.addEventListener('input', () => {
 //     }
 // });
 
-function addNoteToUI(title, content) {
+function addNoteToUI(title, content, difficulty) {
 
     const note = document.createElement('div');
     note.className = 'note';
 
     const noteData = JSON.parse(localStorage.getItem('note_' + title));
     const isFav = noteData && noteData.fav; // Check if the note is favourited
+    console.log('difficulty:',difficulty);
 
     note.innerHTML = `
     <div class="note-preview">
@@ -240,16 +241,6 @@ function addNoteToUI(title, content) {
     myTextArea.textContent = content;
     // Add event listener for the delete button
     const deleteButton = note.querySelector('.delete-note');
-
-    deleteButton.addEventListener('click', () => {
-        // Remove from local storage
-        localStorage.removeItem('note_' + title);
-        
-        // Remove from UI
-        note.remove();
-        
-        console.log(`Note "${title}" deleted from local storage`);
-
 
     deleteButton.addEventListener('click',  async() => {
         try {
@@ -279,14 +270,12 @@ function addNoteToUI(title, content) {
         }
 
     });
-
     // Append the new note to the notes container
     notesContainer.appendChild(note);
     
     // Add event listener for the edit button
     const editButton = note.querySelector('.edit-note');
     editButton.addEventListener('click',  () => editNote(title, note));
-}
 
 async function editNote(myTitle, note){
     console.log('Edit button clicked');
@@ -342,6 +331,7 @@ async function editNote(myTitle, note){
         const noteDate = noteData.date_created;
         updateNote(noteID, noteTitle, updatedContent,noteDate);
     };
+    }
 }
 
 async function updateNote(id, title, content, dateCreated) {
@@ -405,7 +395,6 @@ async function addFav(note, noteName){
                 return; 
             }
             heartIcon.style.color = isFavourited ? '' : 'red';
-            //addNoteToUI(data.title, data.content, data.dateCreated);
 
             // Update the note in localStorage to reflect the favourite status change
             const noteDataToUpdate = JSON.parse(localStorage.getItem(`note_${noteName}`));
