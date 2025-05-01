@@ -24,7 +24,7 @@ document.querySelector('.close-popup').addEventListener('click', () => {
 let currentNote = null;
 
 // Function to create a new note
-const createNote = async (title, content, dateCreated) => {
+const createNote = async (title, content, dateCreated, difficulty) => {
     //for now that we dont have auth
     const userId = 1;
     const favourite = false;
@@ -44,9 +44,17 @@ const createNote = async (title, content, dateCreated) => {
         console.error('Error saving note:', error);
     }
 
-    addNoteToUI(title, content);
+
+    addNoteToUI(title, content = '', difficulty);
+
     //Saving note to localstorage
-    const noteObj = {title: title,content: content,date: dateCreated,user: userId,fav: favourite};
+    const noteObj = {title: title,
+                     content: content,
+                     date: dateCreated,
+                     user: userId,
+                     fav: favourite,
+                     difficulty: difficulty
+                    };
     localStorage.setItem('note_' + title, JSON.stringify(noteObj));
 };
 
@@ -123,7 +131,7 @@ document.querySelector('#note-form').addEventListener('submit', (event) => {
         if (!currentNote) {
             const dateCreated = new Date().toISOString();
             //console.log('im here');
-            createNote(title,  updatedContent, dateCreated, false);
+            createNote(title, updatedContent, dateCreated, difficulty);
         }
     };
     myTextArea.value = '';
@@ -173,6 +181,9 @@ document.querySelector('#fullscreen-textarea').addEventListener('input', () => {
     document.execCommand('foreColor', false, selectedColor);
 });
 
+
+function addNoteToUI(title, content = '', difficulty) {
+
 // scroll
 // document.addEventListener('DOMContentLoaded', function () {
 //     const scrollLeftButton = document.getElementById('scroll-left');
@@ -202,13 +213,14 @@ document.querySelector('#fullscreen-textarea').addEventListener('input', () => {
 // });
 
 function addNoteToUI(title, content) {
+
     const note = document.createElement('div');
     note.className = 'note';
 
     note.innerHTML = `
     <div class="note-preview">
         <h3>${title}</h3>
-        
+        <span class="difficulty-badge ${difficulty.toLowerCase()}">${difficulty}</span>
         <div class="button-container">
             <button class="delete-note">Delete</button>
             <button class="edit-note">Edit</button>
@@ -222,6 +234,16 @@ function addNoteToUI(title, content) {
     myTextArea.value = content;
     // Add event listener for the delete button
     const deleteButton = note.querySelector('.delete-note');
+
+    deleteButton.addEventListener('click', () => {
+        // Remove from local storage
+        localStorage.removeItem('note_' + title);
+        
+        // Remove from UI
+        note.remove();
+        
+        console.log(`Note "${title}" deleted from local storage`);
+
 
     deleteButton.addEventListener('click',  async() => {
         try {
@@ -249,6 +271,7 @@ function addNoteToUI(title, content) {
         } catch (error) {
             console.error('Error deleting note:', error);
         }
+
     });
 
     // Append the new note to the notes container
@@ -350,7 +373,7 @@ function loadAllUserNotes(){
                 const noteData = JSON.parse(localStorage.getItem(key));
 
                 if (noteData && noteData.title) {
-                    addNoteToUI(noteData.title, noteData.content); // Pass content too if needed
+                    addNoteToUI(noteData.title, noteData.content, noteData.difficulty || 'low'); // Pass content too if needed
                 }
             } catch (e) {
                 console.error(`Error parsing note from localStorage for key "${key}":`, e);
