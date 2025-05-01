@@ -1,50 +1,50 @@
+const { pool } = require("./database-pool");
 
-const {Streak}  = require("./database-pool");
-
-
-async function getStreak(userID){
+async function getStreak(userId) {
     try {
-        const result = await pool.query('SELECT * FROM streaks WHERE user_id = $1', [userId]);
-        if (result.rows.length === 0) {
-            return { error: 'Streak not found' };
-        }
-        return result.rows[0]; // Return streak value
+        const result = await pool.query(
+            'SELECT streak_count FROM streaks WHERE user_id = $1', 
+            [userId]
+        );
+        return result.rows[0]?.streak_count || 0;
     } catch (err) {
         console.error(err);
-        return { error: 'Database error' };
+        return 0;
     }
 }
 
-async function updateStreak(userId, reset = false){
+async function updateStreak(userId) {
     try {
-        if (reset) {
-            // Reset streak count to 0
-            const result = await pool.query(
-                'UPDATE streaks SET streak_count = 0, last_updated = new Date() WHERE user_id = $1 RETURNING *',
-                [userId]
-            );
-            return result.rows[0];
-        } else {
-            // Increment streak count
-            const result = await pool.query(
-                'UPDATE streaks SET streak_count += 1, last_updated = new Date() WHERE user_id = $1 RETURNING *',
-                [userId]
-            );
-            return result.rows[0];
+        const today = new Date().toISOString().split('T')[0];
+        const check = await pool.query(
+            'SELECT last_updated FROM streaks WHERE user_id = $1',
+            [userId]
+        );
+        
+        if (check.rows.length > 0 && 
+            new Date(check.rows[0].last_updated).toISOString().split('T')[0] === today) {
+            return check.rows[0].streak_count;
         }
+
+        const result = await pool.query(`
+            UPDATE streaks 
+            SET 
+                streak_count = streak_count + 1,
+                last_updated = CURRENT_DATE
+            WHERE user_id = $1
+            RETURNING streak_count
+        `, [userId]);
+        
+        return result.rows[0].streak_count;
     } catch (err) {
         console.error(err);
-        return { error: 'Database error' };
+        return 0;
     }
-}
-
-async function createStreak(userID){
-    //streak will be created one a user signs in
 }
 
 
 module.exports = {
     getStreak,
-    updateStreak,
-    createStreak
+    updateStreak
+
 };
