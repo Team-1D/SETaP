@@ -2,6 +2,10 @@ const express = require('express'); // Correct import
 const cors = require('cors');
 const path = require('path');
 const pool = require('./database-pool');
+const multer = require('multer');
+const fs = require('fs');
+const port = 3000;
+
 
 const { createNote, getNotes, getNoteByName, updateNote, deleteNote, toggleFavourite } = require('./notes');
 const { getStreak, updateStreak, createStreak } = require('./streak');
@@ -250,6 +254,101 @@ app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
 
+
+//Upload profile picture
+
+const upload = multer({ storage: multer.memoryStorage() });
+
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+app.post('/upload-profile-picture/:id', upload.single('profile'), async (req, res) => {
+  const user_id = req.params.id;
+  const imageBuffer = req.file.buffer;
+
+  try {
+    await pool.query(
+      'UPDATE users SET profile_picture = $1 WHERE id = $2',
+      [imageBuffer, user_id]
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: 'Upload failed' });
+  }
+});
+
+
+
+//Fetch profile picture
+
+app.get('/profile-picture/:id', async (req, res) => {
+    const user_id = req.params.id;
+  
+    try {
+      const result = await pool.query(
+        'SELECT profile_picture FROM users WHERE id = $1',
+        [user_id]
+      );
+  
+      if (result.rows.length === 0 || !result.rows[0].profile_picture) {
+        return res.status(404).send('Not found');
+      }
+  
+      const imgBuffer = result.rows[0].profile_picture;
+  
+      res.writeHead(200, {
+        'Content-Type': 'image/jpeg',
+        'Content-Length': imgBuffer.length,
+      });
+      res.end(imgBuffer);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error fetching image');
+    }
+  });
+  
+  app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
+  });
+
+
+
+
+
+  //Fetch for username
+
+  app.get('/api/username', async (req, res) => {
+    const user_id = req.user.id; 
+  
+    try {
+      const result = await pool.query('SELECT username FROM users WHERE id = $1', [user_id]);
+      if (result.rows.length > 0) {
+        res.json({ username: result.rows[0].username });
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
+    } catch (err) {
+      res.status(500).json({ error: 'Database error' });
+    }
+  });
+
+
+
+  //endpoint api username 
+
+  app.get('/api/username', (req, res) => {
+    if (req.user) {
+      res.json({ username: req.user.username });
+    } else {
+      res.status(401).json({ error: 'Unauthorized' });
+    }
+  });
+    //Start server
+  app.listen(port, () => {
+    console.log(`Server listening at http://localhost:${port}`);
+  });
 
 
 // //Streak

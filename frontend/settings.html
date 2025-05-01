@@ -1,0 +1,89 @@
+
+
+<html>
+    <head>
+         <!-- link to style file -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="home.css">
+    <!-- icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <form id="upload-form" enctype="multipart/form-data">
+            <input type="file" name="profile" accept="image/*" required />
+            <button type="submit">Upload</button>
+          </form>
+        
+        
+        
+        
+        
+        <div class="left-side">
+            <div class="profpic">
+                <img id="profile-pic" src="" alt="Profile Picture" width="50" />
+                <script>
+                    const user_id = 1; // Hardcoded for test
+                    const form = document.querySelector('#upload-form');
+                    const img = document.querySelector('#profile-pic');
+          
+                // On form submit
+                    form.addEventListener('submit', async (e) => {
+                        e.preventDefault();
+          
+                    const formData = new FormData(form);
+                    const response = await fetch(`/upload-profile-picture/${user_id}`, {
+                        method: 'POST',
+                        body: formData,
+                    });
+          
+                    const result = await response.json();
+                    if (result.success) {
+                    // Fetch the updated profile picture and display it
+                        img.src = `/profile-picture/${user_id}?t=${Date.now()}`; // prevent caching
+                    } else {
+                        alert('Upload failed');
+                    }
+                });
+          
+                // Load existing picture on page load (optional)
+                    window.addEventListener('load', () => {
+                        img.src = `/profile-picture/${user_id}`;
+                    });
+                </script>
+            
+                
+            </div>
+
+            <div class="usernametxt">
+                <script>
+                    const authToken = localStorage.getItem('authToken'); // or use cookies
+
+                    fetch('/api/username', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`, // optional, only if using JWT
+                            }
+                    })
+                </script>
+
+
+
+            </div>
+            
+            <div class="bar">
+                <div id="exp-bar"></div>
+            </div>
+            <p>exp.</p>
+            <i class="bx bxs-hot"></i>
+        </div>
+        
+        
+        <script src="index.js"></script>
+    </body>
+</html>
+
