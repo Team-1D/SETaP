@@ -1,4 +1,4 @@
-CREATE DATABASE setap_cw;
+--CREATE DATABASE setap_cw;
 
 -- Create enum types first (lowercase names)
 CREATE TYPE timer_status AS ENUM ('active', 'paused', 'completed');
@@ -32,18 +32,18 @@ CREATE TABLE templates(
 
 -- Create collections before flashcards (since flashcards references it)
 CREATE TABLE collections (
-    id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
+    collection_id SERIAL PRIMARY KEY,
+    collection_name TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Combined flashcards table (merged both definitions)
 CREATE TABLE flashcards (
-    id SERIAL PRIMARY KEY,
+    flashcard_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
-    term VARCHAR(255) NOT NULL,
-    colour VARCHAR(25),
-    definition TEXT NOT NULL,
+    flashcard_term VARCHAR(255) NOT NULL,
+    flashcard_colour VARCHAR(25),
+    flashcard_definition TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -124,7 +124,10 @@ VALUES
 --dummy user for now
 INSERT INTO users (user_id,leaderboard_id, user_email, user_nickname, user_password, user_streak, user_points, user_coins) 
 VALUES 
-(1,1, 'myemail.com' ,'Test User', '$2b$10$lixETDYjQppF8VbXWJAKYuMxWYIUusRnJPAGY/6EuU2jqnn7t/luW', 3,100 , 0);
+(1,1, 'myemail.com' ,'Test User', '$2b$10$lixETDYjQppF8VbXWJAKYuMxWYIUusRnJPAGY/6EuU2jqnn7t/luW', 3,100 , 0); --1234 password
+
+--due to manually inseting users in the past
+SELECT setval('users_user_id_seq', (SELECT MAX(user_id) FROM users));
  
 
 

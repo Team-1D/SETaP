@@ -42,7 +42,7 @@ async function updateNote(id, title, content, dateCreated) {
 }
 
 async function deleteNote(id) {
-    const x = await pool.query("DELETE FROM notes WHERE id = $1 RETURNING *", [id]);
+    const x = await pool.query("DELETE FROM notes WHERE note_id = $1 RETURNING *", [id]);
     return x.rows[0]; // Return deleted note
 }
 
