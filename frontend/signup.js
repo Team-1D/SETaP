@@ -1,3 +1,6 @@
+
+
+
 // Toggle password visibility for both password fields
 document.querySelectorAll("#togglePassword").forEach(icon => {
     icon.addEventListener("click", function() {
@@ -56,6 +59,11 @@ document.getElementById("signupForm").addEventListener("submit", async function(
         localStorage.setItem('email', data.email);
         localStorage.setItem('nickname', data.nickname);
         
+        // After successful signup:
+        localStorage.setItem('userId', data.userId);
+        import('./activitytimer.js')
+            .then(module => module.startActivityTimer(data.userId))
+            .catch(err => console.error("Timer error:", err));
         window.location.href = data.redirect || '/login.html';
 
     } catch (err) {

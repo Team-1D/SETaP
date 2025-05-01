@@ -237,7 +237,33 @@ app.delete('/flashcards/:id', async (req, res) => {
     }
 });
 
+// Get user streak
+app.get('/api/streak/:userId', async (req, res) => {
+    try {
+    const { userId } = req.params;
+    const result = await pool.query(
+        'SELECT streak_count FROM streaks WHERE user_id = $1',
+        [userId]
+    );
+    res.json({ streak: result.rows[0]?.streak_count || 0 });
+    } catch (error) {
+    res.status(500).json({ error: "Failed to fetch streak" });
+    }
+});
 
+// Award XP
+app.post('/api/update-xp', async (req, res) => {
+    try {
+    const { userId, xp } = req.body;
+    await pool.query(
+        'UPDATE users SET user_points = user_points + $1 WHERE user_id = $2',
+        [xp, userId]
+    );
+    res.json({ success: true });
+    } catch (error) {
+    res.status(500).json({ error: "Failed to update XP" });
+    }
+});
 
 app.use(express.static(path.join(__dirname, '../frontend')));
 
