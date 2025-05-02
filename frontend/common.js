@@ -2,6 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const userId = localStorage.getItem('userId');
     if (userId) {
+        //import { startActivityTimer } from '/frontend/activitytimer.js';????
         import('./activitytimer.js')
             .then(module => module.startActivityTimer(userId))
             .catch(err => console.error("Timer error:", err));
@@ -10,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Clean up when leaving page
 window.addEventListener('beforeunload', () => {
+    //import { startActivityTimer } from '/frontend/activitytimer.js';
     import('./activitytimer.js')
         .then(module => module.stopActivityTimer())
         .catch(err => console.error("Timer error:", err));

@@ -61,6 +61,7 @@ document.getElementById("signupForm").addEventListener("submit", async function(
         
         // After successful signup:
         localStorage.setItem('userId', data.userId);
+        //import { startActivityTimer } from '/frontend/activitytimer.js';
         import('./activitytimer.js')
             .then(module => module.startActivityTimer(data.userId))
             .catch(err => console.error("Timer error:", err));
