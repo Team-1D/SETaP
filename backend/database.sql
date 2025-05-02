@@ -21,7 +21,8 @@ CREATE TABLE users (
     user_password VARCHAR(100) NOT NULL,
     user_streak INT NOT NULL,
     user_points INT NOT NULL,
-    user_coins INT NOT NULL
+    user_coins INT NOT NULL,
+    profile_picture BYTEA  --added profile picture attribute to fetch
 );
 
 -- Create templates table (with added semicolon)
