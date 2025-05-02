@@ -4,7 +4,6 @@ const path = require('path');
 const pool = require('./database-pool');
 const multer = require('multer');
 const fs = require('fs');
-const port = 3000;
 
 
 const { createNote, getNotes, getNoteByName, updateNote, deleteNote, toggleFavourite } = require('./notes');
@@ -290,13 +289,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.post('/upload-profile-picture/:id', upload.single('profile'), async (req, res) => {
-  const user_id = req.params.id;
+  const userId = req.params.id;
   const imageBuffer = req.file.buffer;
 
   try {
     await pool.query(
       'UPDATE users SET profile_picture = $1 WHERE id = $2',
-      [imageBuffer, user_id]
+      [imageBuffer, userId]
     );
     res.json({ success: true });
   } catch (err) {
@@ -310,12 +309,12 @@ app.post('/upload-profile-picture/:id', upload.single('profile'), async (req, re
 //Fetch profile picture
 
 app.get('/profile-picture/:id', async (req, res) => {
-    const user_id = req.params.id;
+    const userId = req.params.id;
   
     try {
       const result = await pool.query(
         'SELECT profile_picture FROM users WHERE id = $1',
-        [user_id]
+        [userId]
       );
   
       if (result.rows.length === 0 || !result.rows[0].profile_picture) {
@@ -334,10 +333,7 @@ app.get('/profile-picture/:id', async (req, res) => {
       res.status(500).send('Error fetching image');
     }
   });
-  
-  app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-  });
+
 
 
 
@@ -346,10 +342,10 @@ app.get('/profile-picture/:id', async (req, res) => {
   //Fetch for username
 
   app.get('/api/username', async (req, res) => {
-    const user_id = req.user.id; 
+    const userId = req.user.id; 
   
     try {
-      const result = await pool.query('SELECT username FROM users WHERE id = $1', [user_id]);
+      const result = await pool.query('SELECT username FROM users WHERE id = $1', [userId]);
       if (result.rows.length > 0) {
         res.json({ username: result.rows[0].username });
       } else {
@@ -371,11 +367,7 @@ app.get('/profile-picture/:id', async (req, res) => {
       res.status(401).json({ error: 'Unauthorized' });
     }
   });
-    //Start server
-  app.listen(port, () => {
-    console.log(`Server listening at http://localhost:${port}`);
-  });
-
+    
 
 // //Streak
 // let streak = getStreak();
