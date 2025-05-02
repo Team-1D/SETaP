@@ -1,11 +1,10 @@
-const express = require('express'); // Correct import
+const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const pool = require('./database-pool');
 const multer = require('multer');
 const fs = require('fs');
-const port = 3000;
-
+const port = 8080; // Using only one port
 
 const { createNote, getNotes, getNoteByName, updateNote, deleteNote, toggleFavourite } = require('./notes');
 const { getStreak, updateStreak, createStreak } = require('./streak');
@@ -13,11 +12,9 @@ const { getFlashcards, getFlashcardById, createFlashcard, updateFlashcard, delet
 const { loginUser } = require('./loginController');
 const { signupUser } = require('./signupController');
 
-
-
-const app = express(); // Initialize the Express app
-app.use(cors()); // Use CORS middleware
-app.use(express.json()); // Parse JSON request bodies
+const app = express();
+app.use(cors());
+app.use(express.json());
 
 
 app.post('/login', async (req, res) => {
@@ -275,11 +272,6 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/login.html'));
 });
 
-const PORT = 8080;
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
-
 
 //Upload profile picture
 
@@ -334,43 +326,39 @@ app.get('/profile-picture/:id', async (req, res) => {
       res.status(500).send('Error fetching image');
     }
   });
-  
-  app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-  });
-
-
-
 
 
   //Fetch for username
 
-  app.get('/api/username', async (req, res) => {
-    const user_id = req.user.id; 
-  
+  // Combined /api/username endpoint that handles both cases
+app.get('/api/username', async (req, res) => {
     try {
-      const result = await pool.query('SELECT username FROM users WHERE id = $1', [user_id]);
-      if (result.rows.length > 0) {
-        res.json({ username: result.rows[0].username });
-      } else {
-        res.status(404).json({ error: 'User not found' });
-      }
+        // Case 1: If using authenticated user (from session/JWT)
+        if (req.user) {
+            return res.json({ username: req.user.username });
+        }
+        
+        // Case 2: If fetching by user_id from query params
+        const user_id = req.query.user_id;
+        if (user_id) {
+            const result = await pool.query(
+                'SELECT username FROM users WHERE id = $1', 
+                [user_id]
+            );
+            if (result.rows.length > 0) {
+                return res.json({ username: result.rows[0].username });
+            }
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // If neither case is met
+        return res.status(401).json({ error: 'Unauthorized - no user information provided' });
+
     } catch (err) {
-      res.status(500).json({ error: 'Database error' });
+        console.error('Error fetching username:', err);
+        res.status(500).json({ error: 'Database error' });
     }
-  });
-
-
-
-  //endpoint api username 
-
-  app.get('/api/username', (req, res) => {
-    if (req.user) {
-      res.json({ username: req.user.username });
-    } else {
-      res.status(401).json({ error: 'Unauthorized' });
-    }
-  });
+});
     //Start server
   app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
