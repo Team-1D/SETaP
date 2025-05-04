@@ -1,3 +1,5 @@
+console.log(">>> Server script has started");
+
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -240,6 +242,7 @@ app.delete('/flashcards/:id', async (req, res) => {
 
 // Get user streak
 app.get('/api/streak/:userId', async (req, res) => {
+    console.log('api streak started');
     try {
     const { userId } = req.params;
     const result = await pool.query(
@@ -254,6 +257,7 @@ app.get('/api/streak/:userId', async (req, res) => {
 
 // Award XP
 app.post('/api/update-xp', async (req, res) => {
+    console.log('api xp started');
     try {
     const { userId, xp } = req.body;
     await pool.query(
@@ -371,6 +375,10 @@ app.get('/api/username', async (req, res) => {
       res.status(401).json({ error: 'Unauthorized' });
     }
   });
+
+app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+});
     
 
 // //Streak
