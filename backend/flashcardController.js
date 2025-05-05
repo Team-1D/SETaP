@@ -9,9 +9,8 @@ const { pool } = require("./database-pool"); // Adjust path as necessary
 async function createFlashcard({ userId, term, definition, colour }) {
     try {
         const result = await pool.query(
-
-            `INSERT INTO flashcards (user_id, flashcard_term, flashcard_definition, flashcard_colour)
-            VALUES ($1, $2, $3, $4)
+            `INSERT INTO flashcards (user_id, term, definition, colour)
+             VALUES ($1, $2, $3, $4)
              RETURNING *`,
             [userId, term, definition, colour]
         );
