@@ -5,9 +5,6 @@ build:
   tools:
     python: "3.12"
 
-sphinx:
-  configuration: false  # We're not using Sphinx
-
 mkdocs:
   configuration: mkdocs.yml  # Name of your config file
 
