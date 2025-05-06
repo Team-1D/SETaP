@@ -215,7 +215,7 @@ colorPicker.addEventListener('input', () => {
 //     }
 // });
 
-function addNoteToUI(title, content, difficulty) {
+function addNoteToUI(title, content, difficulty= "low") {
 
     const note = document.createElement('div');
     note.className = 'note';
