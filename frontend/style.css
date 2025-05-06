@@ -915,3 +915,43 @@ body > .main-content {
     align-items: center;
 }
 
+/* Account Page */
+
+#account-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: 1fr 3fr;
+    gap: 10px;
+    padding: 30px;
+}
+
+.profile {
+    background-color: rgb(238, 204, 141);
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+.points-container {
+    grid-area: 1 / 2 / 2 / 3;
+}
+
+.streaks-container {
+    grid-area: 1 / 3 / 2 / 4;
+}
+
+.bx.bxs-hot {
+    font-size: 2em;
+}
+
+.details-container {
+    grid-area: 2 / 1 / 3 / 2;
+    color: gray;
+    font-size: small;
+}
+
+.personal-details-container {
+    grid-area: 2 / 2 / 3 / 3;
+}
+
+.leaderboard-container {
+    grid-area: 2 / 3 / 3 / 4;
+}
