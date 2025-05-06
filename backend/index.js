@@ -324,7 +324,31 @@ app.get('/api/username', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
-    
+
+
+
+//Fetch user points
+
+app.get('/users/points', async (req, res) => {
+    const userId = req.params.id;
+  
+    try {
+      const result = await pool.query('SELECT user_points FROM users WHERE id = $1', [userId]);
+      
+      if (result.rows.length === 0) {
+        return res.status(404).send('User not found');
+      }
+  
+      const userPoints = result.rows[0].user_points;
+      res.render('points', { points: userPoints });
+  
+    } catch (err) {
+      console.error('Error fetching user points:', err);
+      res.status(500).send('Server error');
+    }
+  });
+
+  
 
 // //Streak
 // let streak = getStreak();
