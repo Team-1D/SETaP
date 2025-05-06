@@ -4,7 +4,6 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const pool = require('./database-pool');
-const multer = require('multer');
 const fs = require('fs');
 const port = 8080; // Using only one port
 
@@ -276,60 +275,6 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/login.html'));
 });
 
-
-//Upload profile picture
-
-const upload = multer({ storage: multer.memoryStorage() });
-
-
-app.use(express.static(path.join(__dirname, 'public')));
-
-
-app.post('/upload-profile-picture/:id', upload.single('profile'), async (req, res) => {
-  const userId = req.params.id;
-  const imageBuffer = req.file.buffer;
-
-  try {
-    await pool.query(
-      'UPDATE users SET profile_picture = $1 WHERE id = $2',
-      [imageBuffer, userId]
-    );
-    res.json({ success: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, error: 'Upload failed' });
-  }
-});
-
-
-
-//Fetch profile picture
-
-app.get('/profile-picture/:id', async (req, res) => {
-    const userId = req.params.id;
-  
-    try {
-      const result = await pool.query(
-        'SELECT profile_picture FROM users WHERE id = $1',
-        [userId]
-      );
-  
-      if (result.rows.length === 0 || !result.rows[0].profile_picture) {
-        return res.status(404).send('Not found');
-      }
-  
-      const imgBuffer = result.rows[0].profile_picture;
-  
-      res.writeHead(200, {
-        'Content-Type': 'image/jpeg',
-        'Content-Length': imgBuffer.length,
-      });
-      res.end(imgBuffer);
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Error fetching image');
-    }
-  });
 
 
   //Fetch for username
