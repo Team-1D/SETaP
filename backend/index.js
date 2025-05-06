@@ -12,6 +12,7 @@ const { getStreak, updateStreak, createStreak } = require('./streak');
 const { getFlashcards, getFlashcardById, createFlashcard, updateFlashcard, deleteFlashcard } = require('./flashcardController');
 const { loginUser } = require('./loginController');
 const { signupUser } = require('./signupController');
+const {getLeaderboard, getUser, updateUserPoints } = require('./leaderboardController');
 
 const app = express();
 app.use(cors());
@@ -320,11 +321,48 @@ app.get('/api/username', async (req, res) => {
       res.status(401).json({ error: 'Unauthorized' });
     }
   });
+    
+
+  // Route to get the leaderboard
+  app.get('/leaderboard', getLeaderboard);
+
+// Route to get a specific user's data
+app.get('/users/:id', async (req, res) => {
+    const userId = req.params.id;
+    try {
+        const userData = await getUser(userId);
+        if (userData) {
+            res.json(userData);
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (err) {
+        console.error("Error fetching user data:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Route to update user points
+app.put('/users/:id', async (req, res) => {
+    const userId = req.params.id;
+    const newPoints = req.body.user_points; // Assuming the request body contains { user_points: new_value }
+
+    try {
+        const updatedUser = await updateUserPoints(userId, newPoints);
+        if (updatedUser) {
+            res.json({ message: 'User points updated successfully', user: updatedUser });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
-    
 
 // //Streak
 // let streak = getStreak();
