@@ -1,1 +1,2 @@
-Add Read the Docs configuration here
+mkdocs
+mkdocs-material
