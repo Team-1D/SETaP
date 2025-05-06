@@ -24,7 +24,7 @@ document.querySelector('.close-popup').addEventListener('click', () => {
 let currentNote = null;
 
 // Function to create a new note
-const createNote = async (title, content, dateCreated) => {
+const createNote = async (title, content, dateCreated, difficulty) => {
     //for now that we dont have auth
     const userId = 1;
     const favourite = false;
@@ -44,9 +44,15 @@ const createNote = async (title, content, dateCreated) => {
         console.error('Error saving note:', error);
     }
 
-    addNoteToUI(title);
+    addNoteToUI(title, content = '', difficulty);
     //Saving note to localstorage
-    const noteObj = {title: title,content: content,date: dateCreated,user: userId,fav: favourite};
+    const noteObj = {title: title,
+                     content: content,
+                     date: dateCreated,
+                     user: userId,
+                     fav: favourite,
+                     difficulty: difficulty
+                    };
     localStorage.setItem('note_' + title, JSON.stringify(noteObj));
 };
 
@@ -75,7 +81,25 @@ document.querySelector('#note-form').addEventListener('submit', (event) => {
     document.querySelector("#fullscreen-title").textContent = title;
     // document.querySelector("#fullscreen-deadline").textContent = `Deadline: ${deadline}`;
     document.querySelector('#fullscreen-textarea').value = '';
-
+    
+    let chosenTemplate = document.querySelector('#note-template');
+    
+    if (chosenTemplate.value === 'Blank') {
+        document.querySelector('#fullscreen-textarea').style.backgroundImage = '';
+    }
+    else if (chosenTemplate.value === 'Lined') {
+        document.querySelector('#fullscreen-textarea').style.backgroundImage = 'url(templates/lined.svg)';
+        document.querySelector('#fullscreen-textarea').style.backgroundRepeat = 'repeat-y';
+        document.querySelector('#fullscreen-textarea').style.backgroundSize = '100% 30px';
+        document.querySelector('#fullscreen-textarea').style.backgroundPosition = 'top left';
+    }
+    else if (chosenTemplate.value === 'Grid') {
+        document.querySelector('#fullscreen-textarea').style.backgroundImage = 'url(templates/grid.svg)';
+        document.querySelector('#fullscreen-textarea').style.backgroundRepeat = 'repeat';
+        document.querySelector('#fullscreen-textarea').style.backgroundSize = '30px 30px';
+        document.querySelector('#fullscreen-textarea').style.backgroundPosition = 'top left';
+    }
+            
     // Reset currentNote when creating a new note
     currentNote = null;
 
@@ -101,7 +125,7 @@ document.querySelector('#note-form').addEventListener('submit', (event) => {
         if (!currentNote) {
             const dateCreated = new Date().toISOString();
             //console.log('im here');
-            createNote(title,  updatedContent, dateCreated, false);
+            createNote(title, updatedContent, dateCreated, difficulty);
         }
     };
     myTextArea.textContent = '';
@@ -151,42 +175,14 @@ document.querySelector('#fullscreen-textarea').addEventListener('input', () => {
     document.execCommand('foreColor', false, selectedColor);
 });
 
-// scroll
-document.addEventListener('DOMContentLoaded', function () {
-    const scrollLeftButton = document.getElementById('scroll-left');
-    const scrollRightButton = document.getElementById('scroll-right');
-    const cardsContainer = document.querySelector('.services__cards');
-    const cards = document.querySelectorAll('.services__card');
-    let currentIndex = 0;
-
-    scrollLeftButton.addEventListener('click', function () {
-        if (currentIndex > 0) {
-            currentIndex--;
-            updateScrollPosition();
-        }
-    });
-
-    scrollRightButton.addEventListener('click', function () {
-        if (currentIndex < cards.length - 1) {
-            currentIndex++;
-            updateScrollPosition();
-        }
-    });
-
-    function updateScrollPosition() {
-        const cardWidth = cards[0].offsetWidth; // Get the width of a card
-        cardsContainer.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
-    }
-});
-
-function addNoteToUI(title){
+function addNoteToUI(title, content = '', difficulty) {
     const note = document.createElement('div');
     note.className = 'note';
 
     note.innerHTML = `
     <div class="note-preview">
         <h3>${title}</h3>
-        
+        <span class="difficulty-badge ${difficulty.toLowerCase()}">${difficulty}</span>
         <div class="button-container">
             <button class="delete-note">Delete</button>
             <button class="edit-note">Edit</button>
@@ -195,11 +191,24 @@ function addNoteToUI(title){
     </div>
     `;
 
-    //Adding favourite button
-    addFav(note,title);
+    // Adding favourite button
+    addFav(note, title);
+
+    // Add event listener for the delete button
+    const deleteButton = note.querySelector('.delete-note');
+    deleteButton.addEventListener('click', () => {
+        // Remove from local storage
+        localStorage.removeItem('note_' + title);
+        
+        // Remove from UI
+        note.remove();
+        
+        console.log(`Note "${title}" deleted from local storage`);
+    });
 
     // Append the new note to the notes container
     notesContainer.appendChild(note);
+    
     // Add event listener for the edit button
     const editButton = note.querySelector('.edit-note');
     editButton.addEventListener('click', () => {
@@ -217,7 +226,6 @@ function addNoteToUI(title){
 
         // Set the title, deadline, and content in the fullscreen note
         document.querySelector("#fullscreen-title").textContent = title;
-        // document.querySelector("#fullscreen-deadline").textContent = `Deadline: ${deadline.value}`;
         document.querySelector('#fullscreen-textarea').value = content;
     });
 }
@@ -291,7 +299,7 @@ function loadAllUserNotes(){
                 const noteData = JSON.parse(localStorage.getItem(key));
 
                 if (noteData && noteData.title) {
-                    addNoteToUI(noteData.title, noteData.content); // Pass content too if needed
+                    addNoteToUI(noteData.title, noteData.content, noteData.difficulty || 'low'); // Pass content too if needed
                 }
             } catch (e) {
                 console.error(`Error parsing note from localStorage for key "${key}":`, e);
@@ -307,3 +315,20 @@ function removeAllNotes(){
 
 loadAllUserNotes();
 
+
+const textArea = document.getElementById('fullscreen-textarea');
+
+// custom scrolling for notes to line up with template
+const lineHeight = 30;
+
+textArea.addEventListener('wheel', function (e) {
+    const scrollAmount = lineHeight; 
+
+    if (e.deltaY > 0) {
+        textArea.scrollTop += scrollAmount;  // scroll down
+    } else {
+        textArea.scrollTop -= scrollAmount;  // scroll up
+    }
+
+    e.preventDefault();
+});

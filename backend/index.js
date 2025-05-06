@@ -5,8 +5,7 @@ const pool = require('./database-pool');
 
 const { createNote, getNotes, getNoteByName, updateNote, deleteNote, toggleFavourite } = require('./notes');
 const { getStreak, updateStreak, createStreak } = require('./streak');
-const { getFlashcards, getFlashcardById, createFlashcard, updateFlashcard, deleteFlashcard } = require('./flashcard');
-const { createCollection, getAllCollections, getCollectionById, updateCollection, deleteCollection, addFlashcardToCollection, getFlashcardsByCollectionId } = require('./collections');
+const { getFlashcards, getFlashcardById, createFlashcard, updateFlashcard, deleteFlashcard } = require('./flashcardController');
 const { loginUser } = require('./loginController');
 const { signupUser } = require('./signupController');
 
@@ -16,17 +15,6 @@ const app = express(); // Initialize the Express app
 app.use(cors()); // Use CORS middleware
 app.use(express.json()); // Parse JSON request bodies
 
-app.get('/flashcards/:id', getFlashcardById); 
-app.post('/flashcards', createFlashcard);     
-app.put('/flashcards/:id', updateFlashcard);  
-app.delete('/flashcards/:id', deleteFlashcard);
-
-app.get('/collections', getAllCollections); 
-app.get('/collections/:id', getCollectionById);
-app.post('/collections', createCollection);
-app.put('/collections/:id', updateCollection);
-app.delete('/collections/:id', deleteCollection);
-app.get('/collections/:collection_id/flashcards', getFlashcardsByCollectionId);
 
 app.post('/login', async (req, res) => {
     try {
@@ -178,126 +166,68 @@ app.put('/streak/:userId', async (req, res) => {
     res.json(result);
 });
 
+// Flashcard routes
 app.post('/flashcards', async (req, res) => {
-    const { qustion, answer, collection_id, colour, template } = req.body;
-    const result = await createFlashcard(qustion, answer, collection_id, colour, template);
-    if (result.error) {
-        return res.status(500).json(result);
+    const { userId, term, definition, colour } = req.body; 
+    try {
+        const flashcard = await createFlashcard({ userId, term, definition, colour });
+        res.status(201).json(flashcard);
+    } catch (error) {
+        console.error('Failed to create flashcard:', error); // Log the error for debugging
+        res.status(500).json({ error: 'Failed to create flashcard' });
     }
-    res.json(result);
 });
 
-app.get('/flashcards', async (req, res) => {
-    const result = await getFlashcards();
-    
-    if (result.error) {
-        return res.status(500).json(result);
+
+app.get('/flashcards/:userId', async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const flashcards = await getFlashcards(userId);
+        res.status(200).json(flashcards);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch flashcards' });
     }
-    res.json(result);
 });
 
-app.get('/flashcards/:id', async (req, res) => {
+
+app.get('/flashcards/id/:id', async (req, res) => {
     const { id } = req.params;
-    const result = await getFlashcardById(id);
-    
-    if (result.error) {
-        return res.status(404).json(result);
+    try {
+        const flashcard = await getFlashcardById(id);
+        if (!flashcard) {
+            return res.status(404).json({ error: 'Flashcard not found' });
+        }
+        res.status(200).json(flashcard);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch flashcard' });
     }
-    res.json(result);
 });
+
 
 app.put('/flashcards/:id', async (req, res) => {
     const { id } = req.params;
-    const {  question, answer, collection_id, color, template } = req.body;
-    const result = await updateFlashcard( question, answer, collection_id, color, template);
-    
-    if (result.error) {
-        return res.status(500).json(result);
+    const { term, definition, colour } = req.body;
+    try {
+        const updatedFlashcard = await updateFlashcard(id, term, definition, colour);
+        res.status(200).json(updatedFlashcard);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update flashcard' });
     }
-    res.json(result);
 });
+
 
 app.delete('/flashcards/:id', async (req, res) => {
     const { id } = req.params;
-    const result = await deleteFlashcard(id);
-    
-    if (result.error) {
-        return res.status(500).json(result);
+    try {
+        const deletedFlashcard = await deleteFlashcard(id);
+        res.status(200).json(deletedFlashcard);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to delete flashcard' });
     }
-    res.json({ message: "Flashcard deleted successfully" });
 });
 
-app.post('/collections', async (req, res) => {
-    const { name } = req.body;
-    const result = await createCollection(name);
-    
-    if (result.error) {
-        return res.status(500).json(result);
-    }
-    res.json(result);
-});
 
-app.get('/collections', async (req, res) => {
-    const result = await getAllCollections();
-    
-    if (result.error) {
-        return res.status(500).json(result);
-    }
-    res.json(result);
-});
 
-app.get('/collections/:id', async (req, res) => {
-    const { id } = req.params;
-    const result = await getCollectionById(id);
-    
-    if (result.error) {
-        return res.status(404).json(result);
-    }
-    res.json(result);
-});
-
-app.put('/collections/:id', async (req, res) => {
-    const { id } = req.params;
-    const { name } = req.body;
-    const result = await updateCollection(id, name);
-    
-    if (result.error) {
-        return res.status(500).json(result);
-    }
-    res.json(result);
-});
-
-app.delete('/collections/:id', async (req, res) => {
-    const { id } = req.params;
-    const result = await deleteCollection(id);
-    
-    if (result.error) {
-        return res.status(500).json(result);
-    }
-    res.json({ message: "Collection deleted successfully" });
-});
-
-app.post('/collections/:id/flashcards', async (req, res) => {
-    const { id } = req.params;
-    const { question, answer, collection_id, color, template } = req.body;
-    
-    const result = await addFlashcardToCollection(id, question, answer, collection_id, color, template);
-    if (result.error) {
-        return res.status(500).json(result);
-    }
-    res.json(result);
-});
-
-app.get('/collections/:id/flashcards', async (req, res) => {
-    const { id } = req.params;
-    
-    const result = await getFlashcardsByCollectionId(id);
-    
-    if (result.error) {
-        return res.status(500).json(result);
-    }
-    res.json(result);
-});
 
 app.use(express.static(path.join(__dirname, '../frontend')));
 

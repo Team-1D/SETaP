@@ -38,14 +38,14 @@ CREATE TABLE collections (
 );
 
 -- Combined flashcards table (merged both definitions)
-CREATE TABLE flashcards(
-    flashcard_id SERIAL PRIMARY KEY,
-    question TEXT NOT NULL,
-    answer TEXT NOT NULL,
-    collection_id INT REFERENCES collections(id),
-    color VARCHAR(20),
+CREATE TABLE flashcards (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    term VARCHAR(255) NOT NULL,
+    colour VARCHAR(25),
+    definition TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    points_for_completion INT NOT NULL
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Other tables with corrected references and enum usage
@@ -58,7 +58,7 @@ CREATE TABLE flashcards(
 -- );
 
 CREATE TABLE notes (
-    note_id SERIAL PRIMARY KEY, 
+    note_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE, 
     note_title VARCHAR(100) NOT NULL UNIQUE,
     note_content TEXT,
@@ -101,6 +101,21 @@ CREATE TABLE profiles(
 );
 
 
+
+CREATE OR REPLACE FUNCTION update_modified_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER update_user_updated_at
+BEFORE UPDATE ON users
+FOR EACH ROW
+EXECUTE FUNCTION update_modified_column();
+
 --test leaderboard
 INSERT INTO leaderboards(leaderboard_id, leaderboard_start_date, leaderboard_end_date)
 VALUES
@@ -110,3 +125,6 @@ VALUES
 INSERT INTO users (user_id,leaderboard_id, user_email, user_nickname, user_password, user_streak, user_points, user_coins) 
 VALUES 
 (1,1, 'myemail.com' ,'Test User', '$2b$10$lixETDYjQppF8VbXWJAKYuMxWYIUusRnJPAGY/6EuU2jqnn7t/luW', 3,100 , 0);
+ 
+
+
