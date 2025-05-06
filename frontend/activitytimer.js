@@ -1,5 +1,5 @@
-console.log('im here');
-// /frontend/js/activitytimer.js
+console.log('activity timer activated');
+
 let activityTimer;
 let currentXp = 10; // Starts at 10 XP
 const INTERVAL_MINUTES = 1;
@@ -13,14 +13,21 @@ export function startActivityTimer(userId) {
         try {
             console.log("Fetching streak...");
             // 1. Get current streak from backend
-            const streakResponse = await fetch(`/api/streak/${userId}`);
-            if (!streakResponse.ok) {
-                throw new Error('Failed to fetch streak');
+            console.log("Fetching streak...");
+            let streakRes = await fetch(`/api/streak/${userId}`);
+
+            console.log('streakRes:', streakRes);
+
+            if (!streakRes.ok) {
+                throw new Error(`HTTP error! status: ${streakRes.status}`);
             }
             
-            const streakData = await streakResponse.json();
-            console.log('streak:', streakData.streak);
-            
+    
+            const { streak } = await streakRes.json();
+            console.log('streak', streak);
+
+            const data = streak.data || 0;
+            console.log ('Current streak:', streak);
             // 2. Calculate XP: Base (increasing) × Streak Multiplier
             const multiplier = 1 + Math.floor(streakData.streak / 7); // 1x, 2x, 3x...
             const xpToAward = currentXp * multiplier;
@@ -28,11 +35,15 @@ export function startActivityTimer(userId) {
             console.log('multiplier:', multiplier);
             
             // 3. Award XP
-            const xpResponse = await fetch('/api/update-xp', {
+            const xpRes = await fetch('/api/update-xp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId, xp: xpToAward })
             });
+
+            if (!xpRes.ok) {
+                throw new Error(`HTTP error! status: ${xpRes.status}`);
+            }
             
             if (!xpResponse.ok) {
                 throw new Error('Failed to update XP');
@@ -62,5 +73,4 @@ export function stopActivityTimer() {
 window.addEventListener('beforeunload', () => {
     if (localStorage.getItem('userId')) {
         stopActivityTimer();
-    }
 });
