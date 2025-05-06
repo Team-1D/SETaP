@@ -287,6 +287,7 @@ app.post('/api/update-xp', async (req, res) => {
 });
 
 app.use(express.static(path.join(__dirname, '../frontend')));
+app.use('/pfp', express.static(path.join(__dirname, '/pfp')));
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/login.html'));
