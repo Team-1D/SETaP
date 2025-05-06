@@ -73,4 +73,4 @@ export function stopActivityTimer() {
 window.addEventListener('beforeunload', () => {
     if (localStorage.getItem('userId')) {
         stopActivityTimer();
-});
+}});
