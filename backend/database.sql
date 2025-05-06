@@ -129,6 +129,13 @@ VALUES
 
 --due to manually inseting users in the past
 SELECT setval('users_user_id_seq', (SELECT MAX(user_id) FROM users));
- 
+ INSERT INTO users (user_id, leaderboard_id, user_email, user_nickname, user_password, user_streak, user_points, user_coins)
+VALUES
+(3, 1, 'alice@example.com', 'Alice', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 5, 150, 10),
+(4, 1, 'bob@example.com', 'BobTheBrave', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 2, 80, 5),
+(5, 1, 'charlie@example.com', 'CharlieC', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 0, 20, 0),
+(6, 1, 'diana@example.com', 'DianaD', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 7, 200, 25),
+(7, 1, 'eve@example.com', 'EveTheWise', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 4, 120, 15);
+
 
 

@@ -359,6 +359,8 @@ app.put('/users/:id', async (req, res) => {
     }
 });
 
+const bcrypt = require("bcrypt");
+bcrypt.hash("12345", 10).then(console.log);
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
