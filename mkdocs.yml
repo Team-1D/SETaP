@@ -1,0 +1,7 @@
+site_name: Reviit
+
+nav:
+  - Home: index.md
+
+theme:
+  name: mkdocs
