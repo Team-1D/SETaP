@@ -4,6 +4,8 @@
 
     <!-- link to style file -->
     <link rel="stylesheet" href="style.css">
+    <script type="module" src="leaderboard.js"></script>
+    <script type="module" src="common.js"></script>
     <!-- icons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
@@ -46,57 +48,14 @@
         </ul>
     </div>
     <!-- Using javascript we change our position(id="myRank")-->
-     <h1 id="title">Leaderboard</h1>
+    <h1 id="title">Leaderboard</h1>
     <section id="leaderboard">
         <section class="container">
             <h1>My Rank</h1>
             <h1 id="myRank">N/A</h1>
         </section>
         <div class="scroll-container">
-            <ol>
-                <li>
-                    <p class="name">User-1</p>
-                    <div class="medal gold">
-                        <p class="score">100pt</p>
-                        <i class='bx bxs-medal'></i>
-                    </div>
-                </li>
-                <li>
-                    <p class="name">User-2</p>
-                    <div class="medal silver">
-                        <p class="score">80pt</p>
-                        <i class='bx bxs-medal'></i>
-                    </div>
-                </li>
-                <li>
-                    <p class="name">User-3</p>
-                    <div class="medal bronze">
-                        <p class="score">40pt</p>
-                        <i class='bx bxs-medal'></i>
-                    </div>
-                </li>
-                <li>
-                    <p class="name">User-4</p>
-                    <div class="medal bronze">
-                        <p class="score">20pt</p>
-                        <i class='bx bxs-medal' style="visibility: hidden;"></i>
-                    </div>
-                </li>
-                <li>
-                    <p class="name">User-5</p>
-                    <div class="medal bronze">
-                        <p class="score">10pt</p>
-                        <i class='bx bxs-medal' style="visibility: hidden;"></i>
-                    </div>
-                </li>
-                <li>
-                    <p class="name">User-6</p>
-                    <div class="medal bronze">
-                        <p class="score">5pt</p>
-                        <i class='bx bxs-medal' style="visibility: hidden;"></i>
-                    </div>
-                </li>
-            </ol>
+            <ol id="leaderboard-list"></ol>
         </div>
     </section>    
 </body>

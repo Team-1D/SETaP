@@ -295,10 +295,11 @@ async function getFlashcardById(id) {
 // Function to update a flashcard
 async function updateFlashcard(id, term, definition, colour) {
     try {
+        console.log(`Updating flashcard in DB with ID=${id}, term=${term}, definition=${definition}, colour=${colour}`); // Add logging
         const response = await fetch(`http://localhost:8080/flashcards/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ term, definition, colour })
+            body: JSON.stringify({ id, term, definition, colour }) // Ensure colour is included
         });
         if (!response.ok) {
             throw new Error('Failed to update flashcard');
@@ -345,4 +346,3 @@ function rgbToHex(rgb) {
         ? "#" + result.slice(1).map(x => ("0" + parseInt(x).toString(16)).slice(-2)).join('')
         : rgb; // fallback
 }
-

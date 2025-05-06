@@ -874,6 +874,7 @@ select, input{
 .scroll-container::-webkit-scrollbar {
     width: 8px;
 }
+
 /* for the difficulty */
 .difficulty-badge {
     display: inline-block;
@@ -889,3 +890,28 @@ select, input{
 .difficulty-badge.low { background-color: #4CAF50; }
 .difficulty-badge.medium { background-color: #FFC107; color: black; }
 .difficulty-badge.high { background-color: #F44336; }
+
+
+/* Ensure the body and html take up full height */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main content area */
+body > .main-content {
+    flex: 1; /* This makes the main content grow to fill available space */
+}
+
+/* Footer styling */
+.footer__container {
+    background-color: #141414;
+    padding: 5rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+

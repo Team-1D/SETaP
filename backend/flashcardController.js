@@ -38,7 +38,7 @@ async function getFlashcards(userId) {
 
 async function getFlashcardById(id) {
     try {
-        const result = await pool.query("SELECT * FROM flashcards WHERE id = $1", [id]);
+        const result = await pool.query("SELECT * FROM flashcards WHERE flashcard_id = $1", [id]);
         console.log('Query result:', result.rows);
         return result.rows[0];
     } catch (err) {
@@ -49,26 +49,43 @@ async function getFlashcardById(id) {
 
 async function updateFlashcard(id, term, definition, colour) {
     try {
+        console.log(`Updating flashcard with ID: ${id}`);
         const result = await pool.query(
-            "UPDATE flashcards SET term = $1, definition = $2, colour = $3, updated_at = CURRENT_TIMESTAMP WHERE id = $4 RETURNING *",
+            "UPDATE flashcards SET flashcard_term = $1, flashcard_definition = $2, flashcard_colour = $3, updated_at = CURRENT_TIMESTAMP WHERE id = $4 RETURNING *",
             [term, definition, colour, id]
         );
-        return result.rows[0]; 
+        if (result.rowCount === 0) {
+            console.log("No rows updated, possibly wrong ID or no changes.");
+            return null; // No rows updated
+        }
+        console.log(`Flashcard with ID: ${id} successfully updated:`, result.rows[0]);
+        return result.rows[0]; // Return the updated flashcard
     } catch (err) {
         console.error('Error updating flashcard:', err);
         throw err;
     }
 }
 
+
 async function deleteFlashcard(id) {
     try {
-        const result = await pool.query("DELETE FROM flashcards WHERE id = $1 RETURNING *", [id]);
-        return result.rows[0]; // Return deleted flashcard
+        console.log(`Attempting to delete flashcard with ID: ${id}`);
+        const result = await pool.query(
+            "DELETE FROM flashcards WHERE flashcard_id = $1 RETURNING *",
+            [id]
+        );
+        if (result.rowCount === 0) {
+            console.log("No flashcard found to delete, possibly wrong ID.");
+            return null; // No rows deleted
+        }
+        console.log(`Flashcard with ID: ${id} successfully deleted:`, result.rows[0]);
+        return result.rows[0]; // Return the deleted flashcard
     } catch (err) {
         console.error('Error deleting flashcard:', err);
         throw err;
     }
 }
+
 
 module.exports = {
     createFlashcard,
