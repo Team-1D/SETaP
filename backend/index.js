@@ -259,14 +259,30 @@ app.get('/api/streak/:userId', async (req, res) => {
 app.post('/api/update-xp', async (req, res) => {
     console.log('api xp started');
     try {
-    const { userId, xp } = req.body;
-    await pool.query(
-        'UPDATE users SET user_points = user_points + $1 WHERE user_id = $2',
-        [xp, userId]
-    );
-    res.json({ success: true });
+        const { userId, xp } = req.body;
+        console.log(`Updating XP for user ${userId} with ${xp} points`);
+        
+        const result = await pool.query(
+            'UPDATE users SET user_points = user_points + $1 WHERE user_id = $2 RETURNING user_points',
+            [xp, userId]
+        );
+        
+        if (result.rowCount === 0) {
+            console.error('User not found for XP update');
+            return res.status(404).json({ error: "User not found" });
+        }
+        
+        console.log(`Successfully updated XP. New total: ${result.rows[0].user_points}`);
+        res.json({ 
+            success: true,
+            newPoints: result.rows[0].user_points 
+        });
     } catch (error) {
-    res.status(500).json({ error: "Failed to update XP" });
+        console.error("Failed to update XP:", error);
+        res.status(500).json({ 
+            error: "Failed to update XP",
+            details: error.message 
+        });
     }
 });
 
