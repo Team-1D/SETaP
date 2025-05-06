@@ -17,9 +17,16 @@
         <nav class="navbar">
             <!-- Left Side (Profile) -->
             <div class="left-side">
-                <a href="#"><i class='bx bxs-user'></i></a>
-                <div class="bar">
-                    <div id="exp-bar"></div>
+                <a href="accounts.html"><i class='bx bxs-user'></i></a>
+                <div class="xp-points">
+                    <script>
+                        fetch(`/api/user/${userId}/points`)
+                          .then(res => res.json())
+                          .then(data => {
+                            document.querySelector('.points').textContent = `${data.points} points.`;
+                          })
+                          
+                      </script>
                 </div>
                 <p>exp.</p>
                 <i class="bx bxs-hot"></i>

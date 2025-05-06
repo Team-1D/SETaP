@@ -70,6 +70,13 @@ select, input{
     transform: scale(1.3);
 }
 
+.xp-points{
+    position: relative;
+    width: 5em;
+    margin-top: 1em;
+}
+
+
 .bar{
     position: relative;
     border: 2px solid #d8893f;
