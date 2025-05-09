@@ -123,7 +123,7 @@ VALUES
 (1, '10-05-2025','17-05-2025');
 
 --dummy user for now
-INSERT INTO users (user_id,leaderboard_id, user_email, user_nickname, user_password, user_streak, user_points, user_coins) 
+INSERT INTO users (user_id,leaderboard_id, user_email, user_nickname, user_password, user_streak, user_points, user_coins, profile_pic) 
 VALUES 
 (1,1, 'myemail.com' ,'Test User', '$2b$10$lixETDYjQppF8VbXWJAKYuMxWYIUusRnJPAGY/6EuU2jqnn7t/luW', 3,100 , 0, 'emily.jpg'); --1234 password
 

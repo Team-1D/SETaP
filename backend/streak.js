@@ -9,7 +9,7 @@ async function getStreak(userId) {
         return result.rows[0]?.streak_count || 0;
     } catch (err) {
         console.error(err);
-        return 0;
+        return { streak: 0, error: "Failed to fetch streak" };
     }
 }
 
@@ -41,9 +41,6 @@ async function updateStreak(userId) {
         return 0;
     }
 }
-
-
-
 
 
 module.exports = {
