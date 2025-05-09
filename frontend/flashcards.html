@@ -16,7 +16,7 @@
         <nav class="navbar">
             <!-- Left Side (Profile) -->
             <div class="left-side">
-                <a href="#"><i class='bx bxs-user'></i></a>
+                <a href="accounts.html"><i class='bx bxs-user'></i></a>
                 <div class="bar">
                     <div id="exp-bar"></div>
                 </div>
@@ -54,6 +54,7 @@
         <h1>Flashcards</h1>
         <div class="addButton">
             <button class="CreateButton"id="create-flashcard">Create Flashcard</button>
+            <button class="CreateButton"id="test-flashcard">Test Flashcards</button>
         </div>
     </div>
 
@@ -84,14 +85,37 @@
         </div>
     </div>
 
+    <div id="test-flashcard-popup" class="popup">
+        <div class="popup-content">
+            <!-- Closing page -->
+            <span class="close-popup">x</span>
+    
+            
+            </form>
+        </div>
+    </div>
+
+   <!-- Test popup -->
+   <div id="test-flashcard-popup" class="popup">
+    <div class="popup-content">
+        <span class="close-test-popup">x</span>
+        <h1 id="test-term">Term</h1>
+        <form id="test-flashcard-form">
+            <label for="test_definition">Write the definition</label>
+            <input type="text" id="test-definition" required><br>
+            <button type="test-submit">SUBMIT ANSWER</button>
+        </form>
+        <p id="test-result" style="display: none;"></p>
+    </div>
+</div>
+
+<!-- Flashcard Container -->
     <div class="flashcard_container">
         <button class="scroll_button" id="scroll-left">←</button>
         <div class="flashcards carousel">
         <button class="scroll_button" id="scroll-right">→</button>
     </div>
             
-
-
 
     <!-- footer -->
     <div class="footer__container">

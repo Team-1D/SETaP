@@ -22,7 +22,7 @@ CREATE TABLE users (
     user_streak INT NOT NULL,
     user_points INT NOT NULL,
     user_coins INT NOT NULL,
-    profile_picture BYTEA  --added profile picture attribute to fetch
+    profile_pic TEXT  --added profile picture attribute to fetch
 );
 
 -- Create templates table (with added semicolon)
@@ -125,7 +125,7 @@ VALUES
 --dummy user for now
 INSERT INTO users (user_id,leaderboard_id, user_email, user_nickname, user_password, user_streak, user_points, user_coins) 
 VALUES 
-(1,1, 'myemail.com' ,'Test User', '$2b$10$lixETDYjQppF8VbXWJAKYuMxWYIUusRnJPAGY/6EuU2jqnn7t/luW', 3,100 , 0); --1234 password
+(1,1, 'myemail.com' ,'Test User', '$2b$10$lixETDYjQppF8VbXWJAKYuMxWYIUusRnJPAGY/6EuU2jqnn7t/luW', 3,100 , 0, 'emily.jpg'); --1234 password
 
 --due to manually inseting users in the past
 SELECT setval('users_user_id_seq', (SELECT MAX(user_id) FROM users));

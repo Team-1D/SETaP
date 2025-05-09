@@ -7,6 +7,8 @@ const addNoteButton = document.querySelector('.add-note');
 const allFavs = document.querySelector('#favourites');
 allFavs.addEventListener('click', findFavs);
 
+// Return the notes
+let showingFavorites = false;
 // Open popup
 function addNewNote (){
     console.log('added plus button');
@@ -411,28 +413,35 @@ async function addFav(note, noteName){
     });
 }
 
-async function findFavs(){
+async function findFavs() {
+    // Toggle the state
+    showingFavorites = !showingFavorites;
+    
     // Clear existing displayed notes
     removeAllNotes();
 
-    // Go through all localStorage items
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        
-        // Only process notes
-        if (key.startsWith('note_')) {
-            try {
-                const noteData = JSON.parse(localStorage.getItem(key));
+    if (showingFavorites) {
+        // Show only favorites
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            
+            if (key.startsWith('note_')) {
+                try {
+                    const noteData = JSON.parse(localStorage.getItem(key));
 
-                // Check if the note is favourited
-                if (noteData.fav) {
-                    // Add this favourited note to the UI
-                    addNoteToUI(noteData.title, noteData.content);
+                    // Check if the note is favourited
+                    if (noteData.fav) {
+                        // Add this favourited note to the UI
+                        addNoteToUI(noteData.title, noteData.content, noteData.difficulty || 'low');
+                    }
+                } catch (e) {
+                    console.error(`Error parsing note from localStorage for key "${key}":`, e);
                 }
-            } catch (e) {
-                console.error(`Error parsing note from localStorage for key "${key}":`, e);
             }
         }
+    } else {
+        // Show all notes
+        loadAllUserNotes();
     }
 }
 //getting the note by finding the title --> due to using locastorage this is possible
@@ -458,7 +467,8 @@ async function getNoteByName(title) {
 //this is needed as a page reload needs to put everything in again
 function loadAllUserNotes(){
     addNoteButton.addEventListener('click',addNewNote);
-    removeAllNotes();
+    // Remove this line: removeAllNotes();
+    
     //when the page loads this will load in all the individual notes
     console.log('reloading page');
     for (let i = 0; i < localStorage.length; i++) {
@@ -468,7 +478,7 @@ function loadAllUserNotes(){
                 const noteData = JSON.parse(localStorage.getItem(key));
 
                 if (noteData && noteData.title) {
-                    addNoteToUI(noteData.title, noteData.content, noteData.difficulty || 'low'); // Pass content too if needed
+                    addNoteToUI(noteData.title, noteData.content, noteData.difficulty || 'low');
                 }
             } catch (e) {
                 console.error(`Error parsing note from localStorage for key "${key}":`, e);
@@ -482,6 +492,8 @@ function removeAllNotes(){
     notes.forEach(note => note.remove());
 }
 
+// At the end of your file, replace the current loadAllUserNotes() call with:
+showingFavorites = false;
 loadAllUserNotes();
 
 

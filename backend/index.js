@@ -259,18 +259,35 @@ app.get('/api/streak/:userId', async (req, res) => {
 app.post('/api/update-xp', async (req, res) => {
     console.log('api xp started');
     try {
-    const { userId, xp } = req.body;
-    await pool.query(
-        'UPDATE users SET user_points = user_points + $1 WHERE user_id = $2',
-        [xp, userId]
-    );
-    res.json({ success: true });
+        const { userId, xp } = req.body;
+        console.log(`Updating XP for user ${userId} with ${xp} points`);
+        
+        const result = await pool.query(
+            'UPDATE users SET user_points = user_points + $1 WHERE user_id = $2 RETURNING user_points',
+            [xp, userId]
+        );
+        
+        if (result.rowCount === 0) {
+            console.error('User not found for XP update');
+            return res.status(404).json({ error: "User not found" });
+        }
+        
+        console.log(`Successfully updated XP. New total: ${result.rows[0].user_points}`);
+        res.json({ 
+            success: true,
+            newPoints: result.rows[0].user_points 
+        });
     } catch (error) {
-    res.status(500).json({ error: "Failed to update XP" });
+        console.error("Failed to update XP:", error);
+        res.status(500).json({ 
+            error: "Failed to update XP",
+            details: error.message 
+        });
     }
 });
 
 app.use(express.static(path.join(__dirname, '../frontend')));
+app.use('/pfp', express.static(path.join(__dirname, '/pfp')));
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/login.html'));
@@ -321,7 +338,13 @@ app.get('/api/username', async (req, res) => {
       res.status(401).json({ error: 'Unauthorized' });
     }
   });
-    
+
+  app.get('/api/user/:id', async (req, res) => {
+    const result = await pool.query('SELECT user_nickname, profile_pic FROM users WHERE user_id = $1', [req.params.id]);
+    const user = result.rows[0];
+    user.profile_pic_url = `http://localhost:8080/pfp/${user.profile_pic}`;
+    res.json(user);
+});
 
   // Route to get the leaderboard
   app.get('/leaderboard', getLeaderboard);
@@ -365,6 +388,31 @@ bcrypt.hash("12345", 10).then(console.log);
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
+    
+
+
+//Fetch user points
+
+app.get('/users/points', async (req, res) => {
+    const userId = req.params.id;
+  
+    try {
+      const result = await pool.query('SELECT user_points FROM users WHERE id = $1', [userId]);
+      
+      if (result.rows.length === 0) {
+        return res.status(404).send('User not found');
+      }
+  
+      const userPoints = result.rows[0].user_points;
+      res.render('points', { points: userPoints });
+  
+    } catch (err) {
+      console.error('Error fetching user points:', err);
+      res.status(500).send('Server error');
+    }
+  });
+
+  
 
 // //Streak
 // let streak = getStreak();
