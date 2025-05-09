@@ -338,7 +338,13 @@ app.get('/api/username', async (req, res) => {
       res.status(401).json({ error: 'Unauthorized' });
     }
   });
-    
+
+  app.get('/api/user/:id', async (req, res) => {
+    const result = await pool.query('SELECT user_nickname, profile_pic FROM users WHERE user_id = $1', [req.params.id]);
+    const user = result.rows[0];
+    user.profile_pic_url = `http://localhost:8080/pfp/${user.profile_pic}`;
+    res.json(user);
+});
 
   // Route to get the leaderboard
   app.get('/leaderboard', getLeaderboard);
