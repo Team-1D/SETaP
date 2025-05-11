@@ -1,7 +1,26 @@
-site_name: Reviit
+site_name: REViiT
 
 nav:
   - Home: index.md
+
+  - User Authentication:
+      - Login: login.md
+      - Signup: signup.md
+      - Account Page: account.md
+      - Settings: settings.md
+
+  - Notes & Flashcards:
+      - Notes Feature: notes.md
+      - Flashcards Feature: flashcards.md
+
+  - Leaderboards: leaderboard.md
+
+  - Backend & Database:
+      - Database Tables: database.md
+
+  - Project Details:
+      - Testing: testing.md
+      - Contribution Guide: contribution.md
 
 theme:
   name: mkdocs
