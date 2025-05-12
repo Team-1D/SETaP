@@ -13,7 +13,6 @@ export function startActivityTimer(userId) {
         // try {
             console.log("Fetching streak...");
             // 1. Get current streak from backend
-            console.log("Fetching streak...");
             let streakRes = await fetch(`/api/streak/${userId}`);
 
             console.log('streakRes:', streakRes);
