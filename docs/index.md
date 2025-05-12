@@ -1,12 +1,12 @@
-# Welcome to Reviit
+# Welcome to REViiT
 
 Reviit is a gamified revision app designed to help students learn better through note-taking, flashcards, and XP rewards.
 
 ## Features
 
 - 📝 Write notes from templates
-- 🎮 Earn XP and climb the leaderboard
 - 🧠 Test yourself with flashcards
+- 🎮 Earn XP and climb the leaderboard
 
 ## Technologies
 
