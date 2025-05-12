@@ -46,25 +46,25 @@ async function getFlashcardById(id) {
         throw err;
     }
 }
-
 async function updateFlashcard(id, term, definition, colour) {
     try {
         console.log(`Updating flashcard with ID: ${id}`);
         const result = await pool.query(
-            "UPDATE flashcards SET flashcard_term = $1, flashcard_definition = $2, flashcard_colour = $3, updated_at = CURRENT_TIMESTAMP WHERE id = $4 RETURNING *",
+            "UPDATE flashcards SET term = $1, definition = $2, colour = $3, updated_at = CURRENT_TIMESTAMP WHERE id = $4 RETURNING *",
             [term, definition, colour, id]
         );
         if (result.rowCount === 0) {
             console.log("No rows updated, possibly wrong ID or no changes.");
-            return null; // No rows updated
+            return null;
         }
         console.log(`Flashcard with ID: ${id} successfully updated:`, result.rows[0]);
-        return result.rows[0]; // Return the updated flashcard
+        return result.rows[0];
     } catch (err) {
         console.error('Error updating flashcard:', err);
         throw err;
     }
 }
+
 
 
 async function deleteFlashcard(id) {

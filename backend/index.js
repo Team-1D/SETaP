@@ -240,6 +240,25 @@ app.delete('/flashcards/:id', async (req, res) => {
     }
 });
 
+// Function to update user score in the database
+async function updateUserScore(newPoints) {
+    try {
+        const response = await fetch(`http://localhost:8080/users/${userId}/score`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ points: newPoints }) // Send the points to be added
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update user score');
+        }
+
+        console.log('User score updated successfully');
+    } catch (error) {
+        console.error('Error updating user score:', error);
+    }
+}
+
 // Get user streak
 app.get('/api/streak/:userId', async (req, res) => {
     console.log('api streak started');
@@ -381,7 +400,6 @@ app.put('/users/:id', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
