@@ -1,7 +1,7 @@
-const { getStreak, updateStreak } = require('../streak');
-const { pool } = require('../database-pool');
+const { getStreak, updateStreak } = require('../backend/streak');
+const { pool } = require('../backend/database-pool');
 
-jest.mock('../database-pool', () => {
+jest.mock('../backend/database-pool', () => {
   return {
     pool: {
       query: jest.fn()

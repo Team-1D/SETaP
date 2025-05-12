@@ -1,8 +1,8 @@
-const { createNote, getNotes, getNoteByName, updateNote, deleteNote, toggleFavourite } = require('../notes');
-const { pool } = require('../database-pool');
+const { createNote, getNotes, getNoteByName, updateNote, deleteNote, toggleFavourite } = require('../backend/notes');
+const { pool } = require('../backend/database-pool');
 
 // Mock the pool.query method
-jest.mock('../database-pool', () => {
+jest.mock('../backend/database-pool', () => {
   const mPool = {
     query: jest.fn()
   };
