@@ -11,7 +11,9 @@ const flashcardTermInput = document.getElementById('flashcard-term');
 const flashcardDefinitionInput = document.getElementById('flashcard-definition');
 const colorInput = document.getElementById('background-color');
 
-
+let flashcards = [];
+let currentFlashcardIndex = 0; // Track the current flashcard index
+let userPoints = 0; // Track user points
 const userId = 1; // for testing
 
 // Function to add flashcard to UI
@@ -203,6 +205,7 @@ const testForm = document.getElementById('test-flashcard-form');
 const testDefinitionInput = document.getElementById('test-definition');
 const testResult = document.getElementById('test-result');
 
+
 let test_term = '';
 let test_definition = '';
 // Show the Test Flashcard popup
@@ -212,18 +215,29 @@ testButton.addEventListener('click', () => {
         return;
     }
 
-    // Select a random flashcard
-    const randomFlashcard = flashcards[Math.floor(Math.random() * flashcards.length)];
-    test_term = randomFlashcard.term;
-    test_definition = randomFlashcard.definition;
-
-    console.log(`Term: ${test_term}, Definition: ${test_definition}`);
-    testTermElement.innerHTML = `${test_term}`; // Set the term here
-
-    // Show the popup
-    testPopup.style.display = 'block';
-    testPopup.classList.add('active');
+    currentFlashcardIndex = 0; // Reset index for a new test
+    userPoints = 0; // Reset points
+    showNextFlashcard(); // Show the first flashcard
 });
+
+function showNextFlashcard() {
+    if (currentFlashcardIndex < flashcards.length) {
+        const currentFlashcard = flashcards[currentFlashcardIndex];
+        test_term = currentFlashcard.term;
+        test_definition = currentFlashcard.definition;
+
+        testTermElement.innerHTML = `${test_term}`; // Display the term
+        testResult.style.display = 'none'; // Hide previous result
+        testPopup.classList.add('active'); // Show the popup
+        testDefinitionInput.value = ''; // Clear the input field
+    } else {
+        // End of test
+        testResult.textContent = `Test complete! Your score: ${userPoints}/${flashcards.length}`;
+        testResult.style.display = 'block'; // Show final score
+        testDefinitionInput.style.display = 'none'; // Hide input
+        document.querySelector('button[type="submit"]').disabled = true; // Disable submit button
+    }
+}
 
 // Select the close button for the test popup
 const closeTestPopup = document.querySelector('.close-test-popup');
@@ -231,10 +245,9 @@ const closeTestPopup = document.querySelector('.close-test-popup');
 // Add an event listener to the close button
 if (closeTestPopup) {
     closeTestPopup.addEventListener('click', () => {
-        const testPopup = document.getElementById('test-flashcard-popup');
-        testPopup.classList.remove('active'); // Remove the 'active' class to hide the popup
-        testDefinitionInput.value = ''; // Clear the input field
-        testResult.style.display = 'none'; // Hide the result message
+        testPopup.classList.remove('active'); // Hide pop up
+        testDefinitionInput.value = ''; // Clear input field
+        testResult.style.display = 'none'; // Hide result message
     });
 } else {
     console.error('Close button for test popup not found.');
@@ -247,17 +260,46 @@ testForm.addEventListener('submit', (event) => {
     const userDefinition = testDefinitionInput.value.trim();
 
     if (userDefinition.toLowerCase() === test_definition.toLowerCase()) {
+        userPoints++; // Increase user points for correct answer
         testResult.textContent = 'Correct!';
-        testPopup.style.backgroundColor = 'green';
-        console.log('correct');
+        testPopup.style.backgroundColor = 'green'; // Change background to green
+
+        // Revert color after 1.5 seconds
+        setTimeout(() => {
+            testPopup.style.backgroundColor = ''; // Reset to original
+        }, 1250);
     } else {
         testResult.textContent = `Incorrect! The correct definition is: ${test_definition}`;
-        testPopup.style.backgroundColor = 'red';
-        console.log('incorrect');
+        testPopup.style.backgroundColor = 'red'; // Change background to red
+
+    
+        setTimeout(() => {
+            testPopup.style.backgroundColor = ''; // Reset to original
+        }, 1250);
     }
 
-    testResult.style.display = 'block'; // Show the result
+    currentFlashcardIndex++; // Move to the next flashcard
+    showNextFlashcard(); // Show the next flashcard
 });
+
+// Function to update user score in the database
+async function updateUserScore(newPoints) {
+    try {
+        const response = await fetch(`http://localhost:8080/users/${userId}/score`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ points: newPoints }) // Send the points to be added
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update user score');
+        }
+
+        console.log('User score updated successfully');
+    } catch (error) {
+        console.error('Error updating user score:', error);
+    }
+}
 
 // Function to create a new flashcard
 async function createFlashcard(term, definition, colour, userId) {
@@ -330,15 +372,14 @@ async function deleteFlashcard(id) {
 async function loadFlashcards() {
     try {
         const response = await fetch(`http://localhost:8080/flashcards/${userId}`);
-        const flashcards = await response.json();
+        const data = await response.json();
+        
+        flashcards = data; // ✅ update global array
         flashcards.forEach(addFlashcardToUI); // Add each flashcard to the UI
     } catch (error) {
         console.error('Error loading flashcards:', error);
     }
 }
-
-// Load flashcards when the page loads
-window.addEventListener('DOMContentLoaded', loadFlashcards);
 
 function rgbToHex(rgb) {
     const result = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/.exec(rgb);
@@ -346,3 +387,7 @@ function rgbToHex(rgb) {
         ? "#" + result.slice(1).map(x => ("0" + parseInt(x).toString(16)).slice(-2)).join('')
         : rgb; // fallback
 }
+
+// Load flashcards when the page loads
+window.addEventListener('DOMContentLoaded', loadFlashcards);
+
