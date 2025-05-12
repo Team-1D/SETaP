@@ -1,3 +1,4 @@
+
 // /frontend/js/login.js
 import { startActivityTimer } from './activitytimer.js';
 
