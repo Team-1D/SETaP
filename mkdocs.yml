@@ -6,8 +6,6 @@ nav:
   - User Authentication:
       - Login: login.md
       - Signup: signup.md
-      - Account Page: account.md
-      - Settings: settings.md
 
   - Notes & Flashcards:
       - Notes Feature: notes.md
