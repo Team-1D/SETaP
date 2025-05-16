@@ -35,7 +35,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
         console.log("Redirecting to:", data.redirect);
         
         // Force redirect
-        window.location.href = data.redirect || '/index.html';
+        window.location.href = data.redirect || '/home.html';
 
     } catch (err) {
         errorMessage.style.display = "block";

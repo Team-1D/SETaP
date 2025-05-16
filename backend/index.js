@@ -3,7 +3,7 @@ console.log(">>> Server script has started");
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const pool = require('./database-pool');
+const { pool } = require('./database-pool');
 const fs = require('fs');
 const port = 8080; // Using only one port
 
@@ -35,7 +35,7 @@ app.post('/login', async (req, res) => {
             success: true,
             userId: result.userId,
             email: result.email,
-            redirect: '/home.html'
+            redirect: './frontend/home.html'
         });
 
     } catch (err) {
@@ -262,16 +262,17 @@ async function updateUserScore(newPoints) {
 // Get user streak
 app.get('/api/streak/:userId', async (req, res) => {
     console.log('api streak started');
-    try {
-    const { userId } = req.params;
-    const result = await pool.query(
-        'SELECT streak_count FROM streaks WHERE user_id = $1',
-        [userId]
-    );
-    res.json({ streak: result.rows[0]?.streak_count || 0 });
-    } catch (error) {
-    res.status(500).json({ error: "Failed to fetch streak" });
-    }
+    // try {
+        const { userId } = req.params;
+        console.log(userId);
+        const result = await pool.query(
+            'SELECT streak_count FROM streaks WHERE user_id = $1',
+            [userId]
+        );
+        res.json({ streak: result.rows[0]?.streak_count || 0 });
+    // } catch (error) {
+    //     res.status(500).json({ error: "Failed to fetch streak" });
+    // }
 });
 
 // Award XP
@@ -282,10 +283,10 @@ app.post('/api/update-xp', async (req, res) => {
         console.log(`Updating XP for user ${userId} with ${xp} points`);
         
         const result = await pool.query(
-            'UPDATE users SET user_points = user_points + $1 WHERE user_id = $2 RETURNING user_points',
+            'UPDATE users SET user_points = COALESCE(user_points, 0) + $1 WHERE user_id = $2 RETURNING user_points',
             [xp, userId]
         );
-        
+        console.log(result);
         if (result.rowCount === 0) {
             console.error('User not found for XP update');
             return res.status(404).json({ error: "User not found" });

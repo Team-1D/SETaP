@@ -101,7 +101,7 @@ CREATE TABLE profiles(
     profile_img VARCHAR(255)
 );
 
-
+ALTER TABLE users ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
 CREATE OR REPLACE FUNCTION update_modified_column()
 RETURNS TRIGGER AS $$
@@ -120,22 +120,24 @@ EXECUTE FUNCTION update_modified_column();
 --test leaderboard
 INSERT INTO leaderboards(leaderboard_id, leaderboard_start_date, leaderboard_end_date)
 VALUES
-(1, '10-05-2025','17-05-2025');
+(1, '10-05-2025', '12-05-2025');
 
 --dummy user for now
-INSERT INTO users (user_id,leaderboard_id, user_email, user_nickname, user_password, user_streak, user_points, user_coins) 
+INSERT INTO users (user_id,leaderboard_id, user_email, user_nickname, user_password, user_streak, user_points, user_coins, profile_pic) 
 VALUES 
-(1,1, 'myemail.com' ,'Test User', '$2b$10$lixETDYjQppF8VbXWJAKYuMxWYIUusRnJPAGY/6EuU2jqnn7t/luW', 3,100 , 0, 'emily.jpg'); --1234 password
+(1,1, 'myemail.com' ,'Test User', '$2b$10$lixETDYjQppF8VbXWJAKYuMxWYIUusRnJPAGY/6EuU2jqnn7t/luW', 3, 100, 0, 'emily.jpg'),--1234 password
+(2, 1, 'shane@example.com', 'Shane', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 8, 200, 10, 'shane.jpg'),
+(3, 1, 'alice@example.com', 'Alice', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 5, 150, 10, 'abigail.jpg'),
+(4, 1, 'bob@example.com', 'BobTheBrave', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 2, 80, 5, 'gus.jpg'),
+(5, 1, 'charlie@example.com', 'CharlieC', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 0, 20, 0, 'leah.jpg'),
+(6, 1, 'diana@example.com', 'DianaD', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 7, 200, 25, 'robin.jpg'),
+(7, 1, 'eve@example.com', 'EveTheWise', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 4, 120, 15, 'maru.jpg'); 
 
 --due to manually inseting users in the past
 SELECT setval('users_user_id_seq', (SELECT MAX(user_id) FROM users));
- INSERT INTO users (user_id, leaderboard_id, user_email, user_nickname, user_password, user_streak, user_points, user_coins)
-VALUES
-(3, 1, 'alice@example.com', 'Alice', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 5, 150, 10),
-(4, 1, 'bob@example.com', 'BobTheBrave', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 2, 80, 5),
-(5, 1, 'charlie@example.com', 'CharlieC', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 0, 20, 0),
-(6, 1, 'diana@example.com', 'DianaD', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 7, 200, 25),
-(7, 1, 'eve@example.com', 'EveTheWise', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 4, 120, 15);
+
+
+
 
 
 

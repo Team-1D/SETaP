@@ -2,7 +2,7 @@ console.log('activity timer activated');
 
 let activityTimer;
 let currentXp = 10; // Starts at 10 XP
-const INTERVAL_MINUTES = 1;
+const INTERVAL_MINUTES = 15;
 const INTERVAL_MS = INTERVAL_MINUTES * 60 * 1000;
 
 
@@ -10,10 +10,9 @@ export function startActivityTimer(userId) {
     stopActivityTimer();
     
     activityTimer = setInterval(async () => {
-        try {
+        // try {
             console.log("Fetching streak...");
             // 1. Get current streak from backend
-            console.log("Fetching streak...");
             let streakRes = await fetch(`/api/streak/${userId}`);
 
             console.log('streakRes:', streakRes);
@@ -26,10 +25,10 @@ export function startActivityTimer(userId) {
             const { streak } = await streakRes.json();
             console.log('streak', streak);
 
-            const data = streak.data || 0;
-            console.log ('Current streak:', streak);
+            const streakData = streak.data || 0;
+            console.log ('Current data:', streakData);
             // 2. Calculate XP: Base (increasing) × Streak Multiplier
-            const multiplier = 1 + Math.floor(streakData.streak / 7); // 1x, 2x, 3x...
+            const multiplier = 1 + Math.floor(streakData / 7); // 1x, 2x, 3x...
             const xpToAward = currentXp * multiplier;
             console.log('xpToAward:', xpToAward);
             console.log('multiplier:', multiplier);
@@ -45,20 +44,20 @@ export function startActivityTimer(userId) {
                 throw new Error(`HTTP error! status: ${xpRes.status}`);
             }
             
-            if (!xpResponse.ok) {
-                throw new Error('Failed to update XP');
-            }
+            // if (!xpResponse.ok) {
+            //     throw new Error('Failed to update XP');
+            // }
             
-            const xpResult = await xpResponse.json();
+            const xpResult = await xpRes.json();
             console.log(`Awarded ${xpToAward} XP (Base: ${currentXp} × ${multiplier}x). New total: ${xpResult.newPoints}`);
             
             // 4. Increase base XP for next interval (+10)
             currentXp += 10;
             console.log('Current xp:', currentXp);
         
-        } catch (error) {
-            console.error("Error in activity timer:", error);
-        }
+        // } catch (error) {
+        //     console.error("Error in activity timer:", error);
+        // }
     }, INTERVAL_MS);
 }
 
