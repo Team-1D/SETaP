@@ -46,5 +46,4 @@ async function updateStreak(userId) {
 module.exports = {
     getStreak,
     updateStreak
-
 };

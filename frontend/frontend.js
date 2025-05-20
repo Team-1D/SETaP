@@ -51,13 +51,15 @@ const createNote = async (title, content, dateCreated, difficulty) => {
 
     addNoteToUI(title, content = '', difficulty);
 
+    const chosenTemplate = document.querySelector('#note-template').value;
     //Saving note to localstorage
     const noteObj = {title: title,
                      content: content,
                      date: dateCreated,
                      user: userId,
                      fav: favourite,
-                     difficulty: difficulty
+                     difficulty: difficulty,
+                     template: chosenTemplate
                     };
     localStorage.setItem('note_' + title, JSON.stringify(noteObj));
 };
@@ -272,12 +274,38 @@ function addNoteToUI(title, content, difficulty= "low") {
         }
 
     });
+
+    note.addEventListener('click', () => {
+        if (classList.contains('edit-note') || classList.contains('delete-note') || classList.contains('add-favourite')) {
+            return;
+        }
+        setTemplateBackground(template);
+    });
+
     // Append the new note to the notes container
     notesContainer.appendChild(note);
     
     // Add event listener for the edit button
     const editButton = note.querySelector('.edit-note');
     editButton.addEventListener('click',  () => editNote(title, note));
+}
+
+function setTemplateBackground(template) {
+    const textarea = document.querySelector('#fullscreen-textarea');
+    if (template === 'Blank') {
+        textarea.style.backgroundImage = '';
+    } else if (template === 'Lined') {
+        textarea.style.backgroundImage = 'url(templates/lined.svg)';
+        textarea.style.backgroundRepeat = 'repeat-y';
+        textarea.style.backgroundSize = '100% 30px';
+        textarea.style.backgroundPosition = 'top left';
+    } else if (template === 'Grid') {
+        textarea.style.backgroundImage = 'url(templates/grid.svg)';
+        textarea.style.backgroundRepeat = 'repeat';
+        textarea.style.backgroundSize = '30px 30px';
+        textarea.style.backgroundPosition = 'top left';
+    }
+}
 
 async function editNote(myTitle, note){
     console.log('Edit button clicked');
@@ -301,6 +329,11 @@ async function editNote(myTitle, note){
     document.querySelector("#fullscreen-title").textContent = myTitle;
     myTextArea.textContent = noteContent;
     console.log(myTextArea.textContent);
+
+    const localNoteData = JSON.parse(localStorage.getItem('note_' + myTitle));
+    const template = localNoteData && localNoteData.template ? localNoteData.template : 'Blank';
+    setTemplateBackground(template);
+    document.querySelector('#note-template').value = template;
 
     // Add event listener for the "Update" button
     const updateButton = document.querySelector('#update');
@@ -333,8 +366,8 @@ async function editNote(myTitle, note){
         const noteDate = noteData.date_created;
         updateNote(noteID, noteTitle, updatedContent,noteDate);
     };
-    }
 }
+
 
 async function updateNote(id, title, content, dateCreated) {
     try {

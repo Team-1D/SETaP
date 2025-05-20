@@ -7,6 +7,7 @@ const { pool } = require('./database-pool');
 const fs = require('fs');
 const port = 8080; // Using only one port
 
+//controllers
 const { createNote, getNotes, getNoteByName, updateNote, deleteNote, toggleFavourite } = require('./notes');
 const { getStreak, updateStreak, createStreak } = require('./streak');
 const { getFlashcards, getFlashcardById, createFlashcard, updateFlashcard, deleteFlashcard } = require('./flashcardController');
@@ -35,7 +36,7 @@ app.post('/login', async (req, res) => {
             success: true,
             userId: result.userId,
             email: result.email,
-            redirect: '/home.html'
+            redirect: './frontend/home.html'
         });
 
     } catch (err) {
