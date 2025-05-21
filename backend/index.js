@@ -7,6 +7,7 @@ const { pool } = require('./database-pool');
 const fs = require('fs');
 const port = 8080; // Using only one port
 
+//controllers
 const { createNote, getNotes, getNoteByName, updateNote, deleteNote, toggleFavourite } = require('./notes');
 const { getStreak, updateStreak, createStreak } = require('./streak');
 const { getFlashcards, getFlashcardById, createFlashcard, updateFlashcard, deleteFlashcard } = require('./flashcardController');
@@ -306,6 +307,48 @@ app.post('/api/update-xp', async (req, res) => {
     }
 });
 
+
+// get the xp points
+
+
+app.get('/xp/:userId', async (req, res) => {
+    const { userId } = req.params;
+  
+    try {
+      const result = await pool.query(
+        'SELECT user_points FROM users WHERE user_id = $1',
+        [userId]
+      );
+  
+      if (result.rows.length > 0) {
+        res.json({ xp: result.rows[0].user_points });
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Database error' });
+    }
+  });
+
+
+  //fetch xp points
+
+  fetch(`http://localhost:8080/xp/${userId}`)
+  .then(res => res.json())
+  .then(data => {
+    document.querySelector('#xp-points').textContent = data.xp;
+  })
+  .catch(err => {
+    console.error('Error fetching XP:', err);
+    document.querySelector('#xp-points').textContent = 'Error';
+  });
+
+
+
+
+
+
 app.use(express.static(path.join(__dirname, '../frontend')));
 app.use('/pfp', express.static(path.join(__dirname, '/pfp')));
 
@@ -315,56 +358,9 @@ app.get('/', (req, res) => {
 
 
 
-  //Fetch for username
-
-  // Combined /api/username endpoint that handles both cases
-app.get('/api/username', async (req, res) => {
-    try {
-        // Case 1: If using authenticated user (from session/JWT)
-        if (req.user) {
-            return res.json({ username: req.user.username });
-        }
-        
-        // Case 2: If fetching by user_id from query params
-        const userId = req.query.userId;
-        if (userId) {
-            const result = await pool.query(
-                'SELECT username FROM users WHERE id = $1', 
-                [userId]
-            );
-            if (result.rows.length > 0) {
-                return res.json({ username: result.rows[0].username });
-            }
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        // If neither case is met
-        return res.status(401).json({ error: 'Unauthorized - no user information provided' });
-
-    } catch (err) {
-        console.error('Error fetching username:', err);
-        res.status(500).json({ error: 'Database error' });
-    }
-  });
+ 
 
 
-
-  //endpoint api username 
-
-  app.get('/api/username', (req, res) => {
-    if (req.user) {
-      res.json({ username: req.user.username });
-    } else {
-      res.status(401).json({ error: 'Unauthorized' });
-    }
-  });
-
-  app.get('/api/user/:id', async (req, res) => {
-    const result = await pool.query('SELECT user_nickname, profile_pic FROM users WHERE user_id = $1', [req.params.id]);
-    const user = result.rows[0];
-    user.profile_pic_url = `http://localhost:8080/pfp/${user.profile_pic}`;
-    res.json(user);
-});
 
   // Route to get the leaderboard
   app.get('/leaderboard', getLeaderboard);
@@ -429,7 +425,71 @@ app.get('/users/points', async (req, res) => {
     }
   });
 
+
+
+
+//get username
+  app.get('/username/:id', async (req, res) => {
+    const userId = req.params.id;
   
+    try {
+      const result = await pool.query(
+        'SELECT user_nickname FROM users WHERE user_id = $1',
+        [userId]
+      );
+  
+      if (result.rows.length > 0) {
+        res.json({ username: result.rows[0].user_nickname });
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Database error' });
+    }
+  });
+  
+  app.listen(8080, () => {
+    console.log('Server running on http://localhost:8080');
+  });
+
+
+
+  fetch(`http://localhost:8080/username/${userId}`)
+  .then(response => response.json())
+  .then(data => {
+    document.querySelector('#username').textContent = data.nickname;
+  })
+  .catch(err => {
+    document.querySelector('#username').textContent = 'Error loading nickname';
+    console.error(err);
+  });
+
+
+
+
+
+
+
+  //fetch streak 
+
+  fetch(`http://localhost:8080/streak/${userId}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Assuming `data.streak` contains the streak number
+        document.querySelector('#streak-count').textContent = data.streak;
+      })
+      .catch(error => {
+        console.error('Error fetching streak:', error);
+        document.querySelector('#streak-count').textContent = 'Error';
+      });
+
+
 
 // //Streak
 // let streak = getStreak();
