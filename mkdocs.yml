@@ -21,4 +21,7 @@ nav:
       - Contribution Guide: contribution.md
 
 theme:
-  name: mkdocs
+  name: material
+  features:
+  - navigation.sections
+  - navigation.expand
