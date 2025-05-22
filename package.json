@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "This is a revision app created by TEAM 1D for Software Engineering Theory and Practice Coursework",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "node backend/index.js",
     "test": "jest",

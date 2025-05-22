@@ -1,7 +1,7 @@
-const { getStreak, updateStreak } = require('../backend/streak');
-const { pool } = require('../backend/database-pool');
+const { getStreak, updateStreak } = require('../streak');
+const { pool } = require('../database-pool');
 
-jest.mock('../backend/database-pool', () => {
+jest.mock('../database-pool', () => {
   return {
     pool: {
       query: jest.fn()
@@ -14,28 +14,35 @@ describe('Streak functions', () => {
     jest.clearAllMocks();
   });
 
+  //getStreak
   describe('getStreak', () => {
     test('returns streak count when found', async () => {
       pool.query.mockResolvedValueOnce({ rows: [{ streak_count: 5 }] });
+
       const result = await getStreak(1);
       expect(result).toBe(5);
+      expect(pool.query).toHaveBeenCalledWith(
+        expect.stringContaining('SELECT streak_count'),
+        [1]
+      );
     });
 
     test('returns 0 when no streak is found', async () => {
       pool.query.mockResolvedValueOnce({ rows: [] });
+
       const result = await getStreak(1);
       expect(result).toBe(0);
     });
 
     test('returns fallback object on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {});
       pool.query.mockRejectedValueOnce(new Error('DB error'));
+
       const result = await getStreak(1);
       expect(result).toEqual({ streak: 0, error: 'Failed to fetch streak' });
-      console.error.mockRestore();
     });
   });
 
+  //updateStreak
   describe('updateStreak', () => {
     test('does not update if already updated today', async () => {
       const today = new Date().toISOString().split('T')[0];
@@ -72,11 +79,11 @@ describe('Streak functions', () => {
     });
 
     test('returns 0 if update fails', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {});
       pool.query.mockRejectedValueOnce(new Error('DB error'));
+
       const result = await updateStreak(1);
       expect(result).toBe(0);
-      console.error.mockRestore();
     });
   });
 });
+

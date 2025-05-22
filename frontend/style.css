@@ -70,13 +70,6 @@ select, input{
     transform: scale(1.3);
 }
 
-.xp-points{
-    position: relative;
-    width: 5em;
-    margin-top: 1em;
-}
-
-
 .bar{
     position: relative;
     border: 2px solid #d8893f;
@@ -586,8 +579,6 @@ select, input{
     transition: transform 0.2s;
 }
 
-
-
 .flashcard:hover {
     transform: scale(1.05);
 }
@@ -678,14 +669,9 @@ select, input{
     background-color: #141414;
     padding: 5rem 0;
     display: flex;
-    float: left;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    position: relative;
-
-
 }
 
 
@@ -737,84 +723,6 @@ select, input{
 .footer__link--items a:hover {
     color: #e9e9e9;
     transition: 0.3s ease-out;
-}
-
-/* test flashcard popup */
-#test-flashcard-popup {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #ffe9b8;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    border-radius: 8px;
-    width: 400px;
-    text-align: center;
-}
-
-#test-flashcard-popup.active {
-    display: block;
-}
-
-#test-flashcard-popup .popup-content {
-    position: relative;
-}
-
-#test-flashcard-popup .close-test-popup {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    font-size: 1.5rem;
-    color: #000;
-}
-
-#test-flashcard-popup h2 {
-    margin-bottom: 1rem;
-}
-
-#test-flashcard-popup input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-}
-
-#test-flashcard-popup button {
-    padding: 10px 20px;
-    font-size: 1rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-#test-flashcard-popup button:hover {
-    background-color: #0056b3;
-}
-
-#test-flashcard-popup p {
-    margin-top: 1rem;
-    font-size: 1rem;
-}
-
-#test_term {
-    font-family: "Press Start 2P", system-ui;
-    font-weight: bolder;
-    background-color: #f8e6af;
-    color: #000;
-}
-
-#test-definition {
-    display: flex;
-}
-
-.close-test-popup {
-    display: flex;
 }
 
 /* Style for leaderboard */
@@ -882,23 +790,6 @@ select, input{
     width: 8px;
 }
 
-/* for the difficulty */
-.difficulty-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 12px;
-    margin-left: 8px;
-    color: white;
-    font-weight: bold;
-    text-transform: capitalize;
-}
-
-.difficulty-badge.low { background-color: #4CAF50; }
-.difficulty-badge.medium { background-color: #FFC107; color: black; }
-.difficulty-badge.high { background-color: #F44336; }
-
-
 /* Ensure the body and html take up full height */
 html, body {
     height: 100%;
@@ -907,10 +798,6 @@ html, body {
     flex-direction: column;
 }
 
-/* Main content area */
-body > .main-content {
-    flex: 1; /* This makes the main content grow to fill available space */
-}
 
 /* Footer styling */
 .footer__container {
@@ -920,45 +807,4 @@ body > .main-content {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-/* Account Page */
-
-#account-container {
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    grid-template-rows: 1fr 3fr;
-    gap: 10px;
-    padding: 30px;
-}
-
-.profile {
-    background-color: rgb(238, 204, 141);
-    grid-area: 1 / 1 / 2 / 2;
-}
-
-.points-container {
-    grid-area: 1 / 2 / 2 / 3;
-}
-
-.streaks-container {
-    grid-area: 1 / 3 / 2 / 4;
-}
-
-.bx.bxs-hot {
-    font-size: 2em;
-}
-
-.details-container {
-    grid-area: 2 / 1 / 3 / 2;
-    color: gray;
-    font-size: small;
-}
-
-.personal-details-container {
-    grid-area: 2 / 2 / 3 / 3;
-}
-
-.leaderboard-container {
-    grid-area: 2 / 3 / 3 / 4;
 }
