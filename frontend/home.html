@@ -18,10 +18,17 @@
             <!-- Left Side (Profile) -->
             <div class="left-side">
                 <a href="accounts.html"><i class='bx bxs-user'></i></a>
-                <span id="username"></span>
-                <div class="xp-points"></div>
+                <div class="xp-points">
+                    <script>
+                        fetch(`/api/user/${userId}/points`)
+                          .then(res => res.json())
+                          .then(data => {
+                            document.querySelector('.points').textContent = `${data.points} points.`;
+                          })
+                          
+                      </script>
+                </div>
                 <p>exp.</p>
-                <span id="streak-count"></span>
                 <i class="bx bxs-hot"></i>
             </div>
         
