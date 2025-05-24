@@ -36,7 +36,7 @@ app.post('/login', async (req, res) => {
             success: true,
             userId: result.userId,
             email: result.email,
-            redirect: './frontend/home.html'
+            redirect: 'home.html'
         });
 
     } catch (err) {
