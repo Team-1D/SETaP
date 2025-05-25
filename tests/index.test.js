@@ -1,8 +1,9 @@
+//this file needs npm install --save-dev jest supertest
+
 const request = require('supertest');
 const express = require('express');
-const app = require('../backend/index'); // Adjust path if needed
+const app = require('../backend/index');
 
-// Example: Mock database connection
 jest.mock('../backend/database-pool', () => ({
   pool: {
     query: jest.fn()

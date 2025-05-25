@@ -4,8 +4,8 @@
 const express = require("express");
 const { pool }  = require("./database-pool");
 
-//CRUD OPERATIONS
-
+//CRUD OPERATIONS for database
+//Creating notes
 async function createNote(title, content, dateCreated, userId, favourite = false){
     const date = dateCreated || new Date().toISOString().split("T")[0];
     console.log('im here');
@@ -22,17 +22,20 @@ async function createNote(title, content, dateCreated, userId, favourite = false
     }
 }
 
+//Getting all notes from db
 async function getNotes(){
     const x = await pool.query("SELECT * FROM notes ORDER BY date_created DESC");
     return x.rows;
 }
 
+//getting certain notes by their name
 async function getNoteByName(name){
     const x  =  await pool.query("SELECT * FROM notes WHERE note_title = $1", [name]);
     console.log('Query result:', x.rows);
     return x.rows[0];
 } 
 
+//updating the notes 
 async function updateNote(id, title, content, dateCreated) {
     const x = await pool.query(
         "UPDATE notes SET note_title = $1, note_content = $2, date_created = $3 WHERE note_id = $4 RETURNING *",
@@ -41,11 +44,13 @@ async function updateNote(id, title, content, dateCreated) {
     return x.rows[0]; // Return updated note
 }
 
+//deleting notes
 async function deleteNote(id) {
     const x = await pool.query("DELETE FROM notes WHERE note_id = $1 RETURNING *", [id]);
     return x.rows[0]; // Return deleted note
 }
 
+//adding or removing the favourite attribute
 async function toggleFavourite(id){
     try{
         const check = await pool.query('SELECT favourite FROM notes WHERE note_id = $1', [id]);
