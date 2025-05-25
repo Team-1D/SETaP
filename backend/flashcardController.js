@@ -50,7 +50,7 @@ async function updateFlashcard(id, term, definition, colour) {
     try {
         console.log(`Updating flashcard with ID: ${id}`);
         const result = await pool.query(
-            "UPDATE flashcards SET term = $1, definition = $2, colour = $3, updated_at = CURRENT_TIMESTAMP WHERE id = $4 RETURNING *",
+            "UPDATE flashcards SET flashcard_term = $1, flashcard_definition = $2, flashcard_colour = $3, updated_at = CURRENT_TIMESTAMP WHERE user_id = $4 RETURNING *",
             [term, definition, colour, id]
         );
         if (result.rowCount === 0) {
