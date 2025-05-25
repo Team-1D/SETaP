@@ -308,7 +308,7 @@ async function createFlashcard(term, definition, colour, userId) {
         const response = await fetch('http://localhost:8080/flashcards', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ term, definition, colour, userId })
+            body: JSON.stringify({ userId ,term, definition, colour })
         });
 
         if (!response.ok) {
@@ -335,13 +335,13 @@ async function getFlashcardById(id) {
 }
 
 // Function to update a flashcard
-async function updateFlashcard(id, term, definition, colour) {
+async function updateFlashcard(user_id, term, definition, colour) {
     try {
-        console.log(`Updating flashcard in DB with ID=${id}, term=${term}, definition=${definition}, colour=${colour}`); // Add logging
-        const response = await fetch(`http://localhost:8080/flashcards/${id}`, {
+        console.log(`Updating flashcard in DB with ID=${user_id}, term=${term}, definition=${definition}, colour=${colour}`); // Add logging
+        const response = await fetch(`http://localhost:8080/flashcards/${user_id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id, term, definition, colour }) // Ensure colour is included
+            body: JSON.stringify({ user_id, term, definition, colour }) // Ensure colour is included
         });
         if (!response.ok) {
             throw new Error('Failed to update flashcard');
