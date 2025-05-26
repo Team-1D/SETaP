@@ -4,8 +4,8 @@
 const express = require("express");
 const { pool } = require("./database-pool"); // Adjust path as necessary
 
-// CRUD OPERATIONS
-
+// CRUD OPERATIONS FOR DATABASE
+//Creating new flashcard
 async function createFlashcard({ userId, term, definition, colour }) {
     try {
         console.log('Creating flashcard with:', { userId, term, definition, colour });
@@ -24,7 +24,7 @@ async function createFlashcard({ userId, term, definition, colour }) {
     }
 }
 
-
+//getting all flashcards
 async function getFlashcards(userId) {
     try {
         const result = await pool.query(
@@ -38,6 +38,7 @@ async function getFlashcards(userId) {
     }
 }
 
+//getting flashcard by id
 async function getFlashcardById(id) {
     try {
         const result = await pool.query("SELECT * FROM flashcards WHERE flashcard_id = $1", [id]);
@@ -48,6 +49,8 @@ async function getFlashcardById(id) {
         throw err;
     }
 }
+
+//updating the flashard attributes
 async function updateFlashcard(id, term, definition, colour) {
     try {
         console.log(`Updating flashcard with ID: ${id}`);
@@ -67,8 +70,7 @@ async function updateFlashcard(id, term, definition, colour) {
     }
 }
 
-
-
+//deleting flashcard
 async function deleteFlashcard(id) {
     try {
         console.log(`Attempting to delete flashcard with ID: ${id}`);

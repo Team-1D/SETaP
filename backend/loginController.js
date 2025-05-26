@@ -1,6 +1,7 @@
 const { pool } = require('./database-pool');
 const bcrypt = require('bcrypt');
 
+//comparing inputted user info to the user info in the database if it is a match then the user id let into the homepage if not error messages appear
 async function loginUser(email, password) {
     if (!email || !password) {
         return { error: 'Username and password are required' };

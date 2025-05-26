@@ -1,44 +1,44 @@
 --CREATE DATABASE setap_cw;
 
--- Create enum types first (lowercase names)
+-- Create enum types first
 CREATE TYPE timer_status AS ENUM ('active', 'paused', 'completed');
 CREATE TYPE todo_status AS ENUM ('in_progress', 'completed');
 CREATE TYPE difficulty AS ENUM ('low', 'medium', 'high');
 
--- Create leaderboards table first (users depends on it)
+-- Create leaderboards table 
 CREATE TABLE leaderboards (
     leaderboard_id SERIAL PRIMARY KEY, 
-    leaderboard_start_date DATE NOT NULL,  -- Fixed typo in column name
-    leaderboard_end_date DATE NOT NULL     -- Fixed typo in column name
+    leaderboard_start_date DATE NOT NULL, 
+    leaderboard_end_date DATE NOT NULL    
 );
 
--- Create users table with correct foreign key reference
+-- Create users table 
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY, 
-    leaderboard_id INT NOT NULL REFERENCES leaderboards(leaderboard_id),  -- Fixed plural 'leaderboards'
+    leaderboard_id INT NOT NULL REFERENCES leaderboards(leaderboard_id),  
     user_email VARCHAR(50) NOT NULL,
     user_nickname VARCHAR(100) NOT NULL,
     user_password VARCHAR(100) NOT NULL,
     user_streak INT NOT NULL,
     user_points INT NOT NULL,
     user_coins INT NOT NULL,
-    profile_pic TEXT  --added profile picture attribute to fetch
+    profile_pic TEXT
 );
 
--- Create templates table (with added semicolon)
+-- Create templates table 
 CREATE TABLE templates(
     temp_id SERIAL PRIMARY KEY,
     temp_name VARCHAR(100) NOT NULL
 );
 
--- Create collections before flashcards (since flashcards references it)
+-- Create collections 
 CREATE TABLE collections (
     collection_id SERIAL PRIMARY KEY,
     collection_name TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Combined flashcards table (merged both definitions)
+-- Combined flashcards table 
 CREATE TABLE flashcards (
     flashcard_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
@@ -49,15 +49,16 @@ CREATE TABLE flashcards (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Other tables with corrected references and enum usage
 -- CREATE TABLE pomodoro_timers(
 --     timer_id SERIAL PRIMARY KEY, 
 --     user_id INT UNIQUE NOT NULL REFERENCES users(user_id) ON DELETE CASCADE, 
 --     timer_start_time TIME NOT NULL,
 --     timer_end_time TIME NOT NULL,
---     status timer_status NOT NULL  -- Lowercase enum type
+--     status timer_status NOT NULL 
 -- );
 
+
+-- CREATE TABLE notes
 CREATE TABLE notes (
     note_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE, 
@@ -67,6 +68,7 @@ CREATE TABLE notes (
     favourite BOOLEAN NOT NULL DEFAULT false
 );
 
+--CREATE intersection TABLE connecting users and flashcards
 CREATE TABLE users_flashcards(
     user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     flashcard_id INT NOT NULL REFERENCES flashcards(flashcard_id) ON DELETE CASCADE,
@@ -77,11 +79,12 @@ CREATE TABLE users_flashcards(
 --     todo_id SERIAL PRIMARY KEY, 
 --     user_id INT UNIQUE NOT NULL REFERENCES users(user_id) ON DELETE CASCADE, 
 --     todo_description TEXT,
---     status todo_status NOT NULL,  -- Lowercase enum type
---     difficulty difficulty NOT NULL,  -- Lowercase enum type
+--     status todo_status NOT NULL,  
+--     difficulty difficulty NOT NULL,  
 --     deadline DATE
 -- );
 
+--CREATE TABLE streaks
 CREATE TABLE streaks (
     streak_id SERIAL PRIMARY KEY,
     user_id INT UNIQUE NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
@@ -89,18 +92,21 @@ CREATE TABLE streaks (
     streak_count INT NOT NULL DEFAULT 0
 );
 
+--CREATE intersection TABLE conecting notes and templates
 CREATE TABLE temp_notes(
     note_id INT NOT NULL REFERENCES notes(note_id) ON DELETE CASCADE,
     temp_id INT NOT NULL REFERENCES templates(temp_id) ON DELETE CASCADE,
     PRIMARY KEY (note_id, temp_id)
 );
 
+--CREATE TABLE profiles - not used in final app version
 CREATE TABLE profiles(
     profile_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     profile_img VARCHAR(255)
 );
 
+--Triggers for updating user xp points
 ALTER TABLE users ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
 CREATE OR REPLACE FUNCTION update_modified_column()
@@ -122,7 +128,7 @@ INSERT INTO leaderboards(leaderboard_id, leaderboard_start_date, leaderboard_end
 VALUES
 (1, '10-05-2025', '12-05-2025');
 
---dummy user for now
+--dummy users
 INSERT INTO users (user_id,leaderboard_id, user_email, user_nickname, user_password, user_streak, user_points, user_coins, profile_pic) 
 VALUES 
 (1,1, 'myemail.com' ,'Test User', '$2b$10$lixETDYjQppF8VbXWJAKYuMxWYIUusRnJPAGY/6EuU2jqnn7t/luW', 3, 100, 0, 'emily.jpg'),--1234 password

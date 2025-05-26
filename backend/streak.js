@@ -1,5 +1,7 @@
 const { pool } = require("./database-pool");
 
+//functions for the streak entity in database
+//getting the streak info by finding id
 async function getStreak(userId) {
     try {
         const result = await pool.query(
@@ -13,6 +15,7 @@ async function getStreak(userId) {
     }
 }
 
+//updating the streak based in login - updates daily if user uses app
 async function updateStreak(userId) {
     try {
         const today = new Date().toISOString().split('T')[0];

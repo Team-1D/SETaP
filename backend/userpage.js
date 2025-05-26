@@ -1,3 +1,5 @@
+//not being used in final version of app
+
 const profilepics = {
     'Emily': "http://localhost:8080/pfp/emily.jpeg",
     'Abigail': "http://localhost:8080/pfp/abigail.jpg",

@@ -7,7 +7,7 @@ const { pool } = require('./database-pool');
 const fs = require('fs');
 const port = 8080; // Using only one port
 
-//controllers
+//controllers - functions from each backend file
 const { createNote, getNotes, getNoteByName, updateNote, deleteNote, toggleFavourite } = require('./notes');
 const { getStreak, updateStreak, createStreak } = require('./streak');
 const { getFlashcards, getFlashcardById, createFlashcard, updateFlashcard, deleteFlashcard } = require('./flashcardController');
@@ -19,7 +19,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
+//LOGIN
+//checking user login okay - if yes the user is let into the homepage
 app.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -48,6 +49,8 @@ app.post('/login', async (req, res) => {
     }
 });
 
+//SIGNUP
+//signs user up and lets them into homepage
 app.post('/signup', async (req, res) => {
     try {
         const { email, nickname, password } = req.body;
@@ -76,6 +79,8 @@ app.post('/signup', async (req, res) => {
     }
 });
 
+//NOTES ROUTES
+//gets all notes 
 app.get('/notes', async (req, res) => {
     try {
         const notes = await getNotes();
@@ -86,6 +91,7 @@ app.get('/notes', async (req, res) => {
     }
 });
 
+//saves a note to database
 app.post('/notes', async (req, res) => {
     try {
         const { title, content, dateCreated, userId } = req.body;
@@ -97,6 +103,7 @@ app.post('/notes', async (req, res) => {
     }
 });
 
+//getting note by title
 app.get('/notes/name/:title', async (req, res) => {
     const { title } = req.params;
     console.log(`Fetching note with title: ${title}`);
@@ -110,6 +117,7 @@ app.get('/notes/name/:title', async (req, res) => {
     }
 });
 
+//updating the given note
 app.put('/notes/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -122,6 +130,7 @@ app.put('/notes/:id', async (req, res) => {
     }
 });
 
+//deleting note
 app.delete('/notes/:id', async (req, res) => {
     try {
         const { id } =parseInt(req.params.id, 10);
@@ -133,6 +142,7 @@ app.delete('/notes/:id', async (req, res) => {
     }
 });
 
+//toggling the favourite attribute
 app.put('/notes/favourite/:id', async (req, res) => {
     const { id } = req.params;
     console.log(`Received request to toggle favourite for user ID: ${id}`);
@@ -143,6 +153,8 @@ app.put('/notes/favourite/:id', async (req, res) => {
     res.json(result);
 });
 
+//STREAK ROUTES
+//getting streak by id
 app.get('/streak/:userId', async (req, res) => {
     const { userId } = req.params;
     const result = await getStreak(userId);
@@ -151,6 +163,8 @@ app.get('/streak/:userId', async (req, res) => {
     }
     res.json(result);
 });
+
+//creating streak
 app.post('/streak/:userId', async (req, res) => {
     const { userId } = req.params;
     const result = await createStreak(userId);
@@ -169,7 +183,8 @@ app.put('/streak/:userId', async (req, res) => {
     res.json(result);
 });
 
-// Flashcard routes
+// FLASHCARD ROUTES
+//creating flashcard
 app.post('/flashcards', async (req, res) => {
     const { userId, term, definition, colour } = req.body; 
     try {
@@ -181,7 +196,7 @@ app.post('/flashcards', async (req, res) => {
     }
 });
 
-
+//getting all flashcards
 app.get('/flashcards/:userId', async (req, res) => {
     const { userId } = req.params;
     try {
@@ -192,7 +207,7 @@ app.get('/flashcards/:userId', async (req, res) => {
     }
 });
 
-
+//getting flashcard by id 
 app.get('/flashcards/id/:id', async (req, res) => {
     const { id } = req.params;
     try {
@@ -206,7 +221,7 @@ app.get('/flashcards/id/:id', async (req, res) => {
     }
 });
 
-
+//updating flashcard
 app.put('/flashcards/:id', async (req, res) => {
     const id = req.params.id;
     const { term, definition, colour } = req.body;
@@ -225,7 +240,7 @@ app.put('/flashcards/:id', async (req, res) => {
     }
 });
 
-
+//delering flashcard
 app.delete('/flashcards/:id', async (req, res) => {
     console.log('DELETE request received for ID:', req.params.id);
     const { id } = req.params;
@@ -241,6 +256,7 @@ app.delete('/flashcards/:id', async (req, res) => {
     }
 });
 
+//ACTIVITY TIMER ROUES
 // Function to update user score in the database
 async function updateUserScore(newPoints) {
     try {
@@ -430,11 +446,7 @@ app.get('/users/points', async (req, res) => {
     }
   });
 
-  
-
-// //Streak
 // let streak = getStreak();
-
 
 // // Calculate Points // 
 // function checkMultiplier () { 
