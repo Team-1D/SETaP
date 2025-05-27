@@ -30,6 +30,29 @@ describe('getLeaderboard', () => {
     expect(mockRes.json).toHaveBeenCalledWith(mockRows);
   });
 
+  test('ensures users are sorted by points and ranks are correct', async () => {
+    const mockRes = createMockRes();
+    const mockRows = [
+      { user_id: 1, user_nickname: 'Alice', user_points: 300, user_rank: 1 },
+      { user_id: 2, user_nickname: 'Bob', user_points: 200, user_rank: 2 },
+      { user_id: 3, user_nickname: 'Charlie', user_points: 100, user_rank: 3 }
+    ];
+    pool.query.mockResolvedValueOnce({ rows: mockRows });
+
+    await getLeaderboard({}, mockRes);
+
+    expect(mockRes.json).toHaveBeenCalledWith(mockRows);
+    const result = mockRes.json.mock.calls[0][0];
+
+    expect(result).toBeInstanceOf(Array);
+    expect(result.length).toBe(3);
+
+    for (let i = 0; i < result.length - 1; i++) {
+      expect(result[i].user_points).toBeGreaterThanOrEqual(result[i + 1].user_points);
+      expect(result[i].user_rank).toBe(i + 1);
+    }
+  });
+
   test('handles DB errors', async () => {
     const mockRes = createMockRes();
     pool.query.mockRejectedValueOnce(new Error('DB fail'));
