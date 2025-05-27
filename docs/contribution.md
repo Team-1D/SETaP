@@ -11,6 +11,6 @@ After that, we decided that we should break the code down to features that we ar
 ## Branches
 Rather than making different branches for each feature we decided to just split the branches to frontend and backend so that team members can help each other out and the frontend can see how all the pages would look like integrated together. Additionally, the style of the application would then be consistent. Furthermore, the backend can help each other to have consistent error messages and coding style with the `GET` and `POST` functions. We used branches to allow us to have better version control and incase for any issues, it allows us to roll back our code.
 
-## Different commits
+## Different Amount of Commits
 Due to some member having the database installed on their laptop and other's do not have the database, we needed ask them to test our code and we would make the small edits on their computer can commit to the github so that others can get the fixed code on their own computers and continue developing it further. Therefore, some member may have a lot more commits than other members as some have committed less are more focused on pushing big commits when there are a large change to a feature, whereas others have done lots of small commits that are for fixing the code.
 
