@@ -19,15 +19,25 @@ jest.mock('../backend/database-pool', () => ({
       const res = await signupUser('', 'nick', 'Password1');
       expect(res).toEqual({ error: 'All fields are required' });
     });
-  
+    
     test('fails on invalid email format', async () => {
       const res = await signupUser('bad‑email', 'nick', 'Password1');
+      expect(res.error).toMatch(/Invalid email format/);
+    });
+
+    test('fails if email does not contain @ symbol', async () => {
+      const res = await signupUser('userexample.com', 'nick', 'Password1');
       expect(res.error).toMatch(/Invalid email format/);
     });
   
     test('fails on weak password', async () => {
       const res = await signupUser('a@b.com', 'nick', 'weak');
       expect(res.error).toMatch(/Password must be at least 8 characters/);
+    });
+
+    test('fails if password lacks required complexity', async () => {
+      const res = await signupUser('a@b.com', 'nick', 'password'); // 8 lowercase characters
+      expect(res.error).toMatch(/Password must.*uppercase.*lowercase.*number/i);
     });
   
     test('fails if email already exists', async () => {
