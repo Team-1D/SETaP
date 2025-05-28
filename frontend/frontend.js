@@ -244,9 +244,12 @@ async function addNoteToUI(title, content, difficulty = "low") {
         notesContainer.querySelectorAll('.note').forEach(note => note.remove());
 
         notes.forEach(noteData => {
+            
+            const localNoteData = JSON.parse(localStorage.getItem('note_' + noteData.note_title));
+
             const title = noteData.note_title || "Untitled";
             const content = noteData.note_content || "";
-            const difficulty = noteData.difficulty || "low";
+            const difficulty = localNoteData.difficulty || "low";
             const fav = noteData.fav || false;
 
             const note = document.createElement('div');

@@ -17,7 +17,6 @@ nav:
       - Database Tables: database.md
 
   - Project Details:
-      - Testing: testing.md
       - Contribution Guide: contribution.md
 
 theme:
