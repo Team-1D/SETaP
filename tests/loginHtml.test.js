@@ -3,10 +3,10 @@ import fs from 'fs';
 import path from 'path';
 import { JSDOM } from 'jsdom';
 
-// HTML Button Functionality Tests 
-describe('Login HTML Button Functionality Tests', () => {
+describe('Login Page Tests', () => {
   let dom;
   let document;
+  let window;
 
   beforeAll(() => {
     const html = fs.readFileSync(path.join(__dirname, '../frontend/login.html'), 'utf8');
@@ -15,26 +15,56 @@ describe('Login HTML Button Functionality Tests', () => {
       resources: "usable"
     });
     document = dom.window.document;
+    window = dom.window;
   });
 
   afterAll(() => {
     dom.window.close();
   });
 
-  test('Login button should be present', () => {
+  test('Login button with valid email and password', () => {
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
     const loginButton = document.querySelector('button[type="submit"]');
-    expect(loginButton).not.toBeNull();
-    expect(loginButton.textContent).toBe('Login');
+    const errorMessage = document.getElementById('errorMessage');
+
+    emailInput.value = 'test@example.com';
+    passwordInput.value = 'ValidPass123';
+    loginButton.click();
+
+    expect(errorMessage.textContent).toBe('');
+    // Add expectation for successful login navigation if applicable
   });
 
-  test('Create an account button should be present', () => {
+  test('Login button with email but no password shows error', () => {
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const loginButton = document.querySelector('button[type="submit"]');
+    const errorMessage = document.getElementById('errorMessage');
+
+    emailInput.value = 'test@example.com';
+    passwordInput.value = '';
+    loginButton.click();
+
+    expect(errorMessage.textContent).toContain('error');
+  });
+
+  test('Login button with password but no email shows error', () => {
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const loginButton = document.querySelector('button[type="submit"]');
+    const errorMessage = document.getElementById('errorMessage');
+
+    emailInput.value = '';
+    passwordInput.value = 'ValidPass123';
+    loginButton.click();
+
+    expect(errorMessage.textContent).toContain('error');
+  });
+
+  test('Create account button redirects to signup page', () => {
     const createAccountButton = document.querySelector('.createbtn');
-    expect(createAccountButton).not.toBeNull();
-    expect(createAccountButton.textContent).toBe('Create an account');
-  });
-
-  test('Toggle password visibility icon should be present', () => {
-    const togglePasswordButton = document.getElementById('togglePassword');
-    expect(togglePasswordButton).not.toBeNull();
+    createAccountButton.click();
+    expect(window.location.href).toContain('signup.html');
   });
 });
