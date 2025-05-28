@@ -1,39 +1,78 @@
-// HTML Button Functionality Tests for Signup Page
+// HTML Tests for Notes Page
 import fs from 'fs';
 import path from 'path';
 import { JSDOM } from 'jsdom';
 
-// HTML Button Functionality Tests 
-describe('Signup HTML Button Functionality Tests', () => {
+describe('Notes Page Tests', () => {
   let dom;
   let document;
+  let window;
 
   beforeAll(() => {
-    const html = fs.readFileSync(path.join(__dirname, '../frontend/signup.html'), 'utf8');
+    const html = fs.readFileSync(path.join(__dirname, '../frontend/notes.html'), 'utf8');
     dom = new JSDOM(html, {
       runScripts: "dangerously",
       resources: "usable"
     });
     document = dom.window.document;
+    window = dom.window;
   });
 
   afterAll(() => {
     dom.window.close();
   });
 
-  test('Create Account button should be present', () => {
-    const createAccountButton = document.querySelector('button[type="submit"]');
-    expect(createAccountButton).not.toBeNull();
-    expect(createAccountButton.textContent).toBe('Create Account');
+  
+  test('Click "+" button shows creation popup', () => {
+    const addButton = document.querySelector('.add-note');
+    const popup = document.getElementById('note-popup');
+    
+    addButton.click();
+    expect(popup.style.display).toBe('block');
   });
 
-  test('Error message element should be present', () => {
-    const errorMessage = document.getElementById('errorMessage');
-    expect(errorMessage).not.toBeNull();
+  
+  test('Submit note with title is valid', () => {
+    const titleInput = document.getElementById('note-title');
+    const submitButton = document.querySelector('#note-popup button[type="submit"]');
+    const errorMessage = document.getElementById('note-error-message');
+
+    titleInput.value = 'Test Note';
+    submitButton.click();
+
+    expect(errorMessage.textContent).toBe('');
   });
 
-  test('Toggle password visibility icon should be present', () => {
-    const togglePasswordButton = document.querySelector('#togglePassword');
-    expect(togglePasswordButton).not.toBeNull();
+  
+  test('Submit empty title shows error', () => {
+    const titleInput = document.getElementById('note-title');
+    const submitButton = document.querySelector('#note-popup button[type="submit"]');
+    const errorMessage = document.getElementById('note-error-message');
+
+    titleInput.value = '';
+    submitButton.click();
+
+    expect(errorMessage.textContent).toContain('required');
+  });
+
+  test('Difficulty selection updates label', () => {
+    const difficultySelect = document.getElementById('note-difficulty');
+    const difficultyLabel = document.getElementById('difficulty-label');
+
+    difficultySelect.value = 'Medium';
+    difficultySelect.dispatchEvent(new window.Event('change'));
+    
+    expect(difficultyLabel.textContent).toBe('Medium');
+  });
+
+ 
+  test('Template selection changes background', () => {
+    const templateSelect = document.getElementById('note-template');
+    const notePreview = document.getElementById('note-preview');
+
+    templateSelect.value = 'Lined';
+    templateSelect.dispatchEvent(new window.Event('change'));
+    
+    expect(notePreview.classList.contains('lined')).toBe(true);
   });
 });
