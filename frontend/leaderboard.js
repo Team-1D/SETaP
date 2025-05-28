@@ -40,7 +40,7 @@ async function displayLeaderboard() {
 async function displayCurrentUserRank() {
     try {
         // Replace with your actual method of getting the current user's ID
-        const currentUserId = 1; // <--- REPLACE WITH ACTUAL USER ID
+        const currentUserId = JSON.parse(localStorage.getItem('userId')); // <--- REPLACE WITH ACTUAL USER ID
 
         console.log(`Fetching user data for user ID: ${currentUserId}`);
         const userData = await fetchData(`/users/${currentUserId}`);
