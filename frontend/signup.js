@@ -73,6 +73,11 @@ document.getElementById("signupForm").addEventListener("submit", async function(
     }
 });
 
+document.querySelector(".back-to-login").addEventListener('click', function (event) {
+    event.preventDefault();
+    window.location.href = 'login.html';
+});
+
 function showError(message) {
     const errorMessage = document.getElementById("errorMessage");
     errorMessage.style.display = "block";

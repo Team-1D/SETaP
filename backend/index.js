@@ -8,12 +8,12 @@ const fs = require('fs');
 const port = 8080; // Using only one port
 
 //controllers - functions from each backend file
-const { createNote, getNotes, getNoteByName, updateNote, deleteNote, toggleFavourite } = require('./notes');
+const { createNote, getNotes, getNoteByName, updateNote, deleteNote, toggleFavourite, getFavNotes } = require('./notes');
 const { getStreak, updateStreak, createStreak } = require('./streak');
 const { getFlashcards, getFlashcardById, createFlashcard, updateFlashcard, deleteFlashcard } = require('./flashcardController');
 const { loginUser } = require('./loginController');
 const { signupUser } = require('./signupController');
-const {getLeaderboard, getUser, updateUserPoints } = require('./leaderboardController');
+const {getLeaderboard, getUser, updateUserPoints, getLeaderboardSlice } = require('./leaderboardController');
 
 const app = express();
 app.use(cors());
@@ -81,15 +81,17 @@ app.post('/signup', async (req, res) => {
 
 //NOTES ROUTES
 //gets all notes 
-app.get('/notes', async (req, res) => {
+app.get('/notes/:userId', async (req, res) => {
     try {
-        const notes = await getNotes();
+        const { userId } = req.params;
+        const notes = await getNotes(userId);
         res.json(notes);
     } catch (err) {
         console.error("Failed to get notes:", err.message);
         res.status(500).json({ error: "Failed to fetch notes" });
     }
 });
+
 
 //saves a note to database
 app.post('/notes', async (req, res) => {
@@ -133,7 +135,7 @@ app.put('/notes/:id', async (req, res) => {
 //deleting note
 app.delete('/notes/:id', async (req, res) => {
     try {
-        const { id } =parseInt(req.params.id, 10);
+        const id = parseInt(req.params.id, 10);
         const note = await deleteNote(id);
         res.json(note);
     } catch (err) {
@@ -151,6 +153,18 @@ app.put('/notes/favourite/:id', async (req, res) => {
         return res.status(404).json(result);
     }
     res.json(result);
+});
+
+app.get('/notes/favourite/:userId', async (req, res) => {
+    const { userId } = req.params;
+    console.log(`Fetching favourite notes for user ID: ${userId}`);
+    try {
+        const notes = await getFavNotes(userId);
+        res.json(notes);
+    } catch (err) {
+        console.error("Failed to fetch favourite notes:", err);
+        res.status(500).json({ error: "Failed to fetch favourite notes" });
+    }
 });
 
 //STREAK ROUTES
@@ -377,15 +391,33 @@ app.get('/api/username', async (req, res) => {
     }
   });
 
-  app.get('/api/user/:id', async (req, res) => {
-    const result = await pool.query('SELECT user_nickname, profile_pic FROM users WHERE user_id = $1', [req.params.id]);
-    const user = result.rows[0];
-    user.profile_pic_url = `http://localhost:8080/pfp/${user.profile_pic}`;
-    res.json(user);
-});
+    app.get('/api/user/:id', async (req, res) => {
+        try {
+            const result = await pool.query(
+                'SELECT user_nickname, user_email as email, user_points, profile_pic FROM users WHERE user_id = $1', 
+                [req.params.id]
+            );
+            
+            if (result.rows.length === 0) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            const user = result.rows[0];
+            user.profile_pic_url = user.profile_pic 
+                ? `/pfp/${user.profile_pic}` 
+                : '/pfp/default.png';
+                
+            res.json(user);
+        } catch (err) {
+            console.error('Error fetching user data:', err);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    });
 
   // Route to get the leaderboard
   app.get('/leaderboard', getLeaderboard);
+  app.get("/leaderboard/:id/around", getLeaderboardSlice);
+
 
 // Route to get a specific user's data
 app.get('/users/:id', async (req, res) => {
@@ -427,7 +459,6 @@ app.listen(port, () => {
 
 
 //Fetch user points
-
 app.get('/users/points', async (req, res) => {
     const userId = req.params.id;
   

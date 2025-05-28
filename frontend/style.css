@@ -184,7 +184,9 @@ select, input{
 .popup-notes{
     display: none;
     position: fixed;
-    margin-left: 40%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: #ffe9b8;
     padding: 2em;
     border-radius: 0.6em;
@@ -192,6 +194,7 @@ select, input{
     width: auto;
     text-align: center;
     justify-items: left;
+    z-index: 1000; /* Ensure it's above other content */
 }
 
 .close-popup{
@@ -961,4 +964,156 @@ body > .main-content {
 
 .leaderboard-container {
     grid-area: 2 / 3 / 3 / 4;
+}
+
+.logout-container button {
+    background-color: #d8893f;
+    color: white;
+    border: none;
+    margin: 4rem 0;
+    padding: 2rem 4rem;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+}
+
+.account-main {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.account-title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    background-image: linear-gradient(
+        to right,
+        #fdd49f,
+        #fdcb5f,
+        #f1be3d,
+        #f4b339,
+        #de8517,
+        #e68a0a
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+}
+
+.account-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+/* Profile Section */
+.profile-section {
+    flex: 1;
+    min-width: 280px;
+    text-align: center;
+    background-color: #ffe9b8;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-section img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #d8893f;
+    margin-bottom: 1rem;
+}
+
+.profile-section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.account-stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1.5rem;
+    gap: 1rem; 
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%; 
+    max-width: 200px; 
+    margin: 0 auto; 
+}
+
+
+.stat-item i {
+    font-size: 2rem;          
+    color: #d8893f;
+    margin-bottom: 0.3rem;
+    vertical-align: middle;    
+    line-height: 1;            
+}
+
+.stat-item span {
+    display: inline-block;
+    width: 100px; 
+    text-align: left;
+}
+
+.bx.bxs-hot {
+    position: relative;
+    top: -5px;
+}
+
+/* Details Section */
+.account-details-section {
+    flex: 2;
+    min-width: 400px;
+    background-color: #ffe9b8;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+.account-details-section h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.account-details-section label {
+    display: block;
+    margin-top: 1rem;
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.account-details-section span {
+    font-size: 1rem;
+    color: #222;
+}
+
+.detail-header {
+    margin-top: 1rem;
+}
+
+.leaderboard-user {
+    color: inherit;
+}
+
+.leaderboard-user.target-user {
+    color: #d8893f;
 }

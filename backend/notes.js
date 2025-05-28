@@ -8,7 +8,6 @@ const { pool }  = require("./database-pool");
 //Creating notes
 async function createNote(title, content, dateCreated, userId, favourite = false){
     const date = dateCreated || new Date().toISOString().split("T")[0];
-    console.log('im here');
     try {
         const result = await pool.query(
             "INSERT INTO notes (user_id, note_title, note_content, date_created, favourite) VALUES ($1, $2, $3, $4, $5) RETURNING *",
@@ -23,9 +22,18 @@ async function createNote(title, content, dateCreated, userId, favourite = false
 }
 
 //Getting all notes from db
-async function getNotes(){
-    const x = await pool.query("SELECT * FROM notes ORDER BY date_created DESC");
-    return x.rows;
+async function getNotes(user_Id) {
+    try {
+        const result = await pool.query(
+            "SELECT * FROM notes WHERE user_id = $1 ORDER BY date_created DESC",
+            [user_Id]
+        );
+        console.log(`Found ${result.rows.length} notes for user ${user_Id}`);
+        return result.rows;
+    } catch (err) {
+        console.error('Error in getNotes:', err);
+        throw err;
+    }
 }
 
 //getting certain notes by their name
@@ -46,7 +54,10 @@ async function updateNote(id, title, content, dateCreated) {
 
 //deleting notes
 async function deleteNote(id) {
-    const x = await pool.query("DELETE FROM notes WHERE note_id = $1 RETURNING *", [id]);
+    const x = await pool.query(
+        "DELETE FROM notes WHERE note_id = $1 RETURNING *", 
+        [id]
+    );
     return x.rows[0]; // Return deleted note
 }
 
@@ -70,6 +81,19 @@ async function toggleFavourite(id){
     }
 }
 
+async function getFavNotes(userId) {
+    try {
+        const result = await pool.query(
+            "SELECT * FROM notes WHERE user_id = $1 AND favourite = true ORDER BY date_created DESC",
+            [userId]
+        );
+        console.log(`Found ${result.rows.length} favorite notes for user ${userId}`);
+        return result.rows;
+    } catch (err) {
+        console.error('Error in getFavNotes:', err);
+        throw err;
+    }
+}
 
 module.exports = {
     createNote,
@@ -77,5 +101,6 @@ module.exports = {
     getNoteByName,
     updateNote,
     deleteNote,
-    toggleFavourite
+    toggleFavourite,
+    getFavNotes
 };

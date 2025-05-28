@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account - REViiT</title>
     <!-- link to style file -->
     <link rel="stylesheet" href="style.css">
     <!-- icons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
     <!-- font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
@@ -15,12 +17,7 @@
     <nav class="navbar">
         <!-- Left Side (Profile) -->
         <div class="left-side">
-            <a href="#"><i class='bx bxs-user'></i></a>
-            <div class="bar">
-                <div id="exp-bar"></div>
-            </div>
-            <p>exp.</p>
-            <i class="bx bxs-hot"></i>
+            <a href="#"><i class='bx bxs-user active'></i></a>
         </div>
 
         <!-- Centered Logo -->
@@ -30,8 +27,7 @@
 
         <!-- Right Side (Settings & Timer) -->
         <div class="right-side">
-            <a href="#"><i class='bx bxs-time'></i></a>
-            <a href="#"><i class='bx bxs-cog'></i></a>
+            <a href="settings.html"><i class='bx bxs-cog'></i></a>
         </div>
     </nav>
 
@@ -39,56 +35,58 @@
     <div class="nav-menu-container">
         <ul class="nav-menu">
             <li><a href="home.html" class="nav-link"><i class='bx bx-home'></i></a></li>
-            <li><a href="notes.html" class="nav-link active"><i class='bx bxs-note'></i></a></li>
-            <li><a href="#" class="nav-link"><i class='bx bxs-collection'></i></a></li>
+            <li><a href="notes.html" class="nav-link"><i class='bx bxs-note'></i></a></li>
+            <li><a href="flashcards.html" class="nav-link"><i class='bx bxs-collection'></i></a></li>
             <li><a href="leaderboard.html" class="nav-link"><i class='bx bxs-trophy'></i></a></li>
         </ul>
     </div>
 
-    <div id="account-container">
-        <!-- Profile Picture -->
-        <div class="profile">
-            <img src="profile.png" alt="Profile Picture">
-            <h1>USERNAME</h1>
+    <main class="account-main">
+        <h1 class="account-title">Account</h1>
+        
+        <div class="account-content">
+            <!-- Profile Section -->
+            <div class="account-section profile-section">
+                <img id="profile-pic" src="/pfp/default.png" alt="Profile Picture">
+                <h2 id="username-display">USERNAME</h2>
+                <div class="account-stats">
+                    <div class="stat-item">
+                        <i class='bx bxs-star'></i>
+                        <span id="points-value">0 pt</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class='bx bxs-hot'></i>
+                        <span id="streak-value">0 days</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class='bx bxs-trophy'></i>
+                        <span id="leaderboard-position">#--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Details Section -->
+            <div class="account-details-section">
+
+                <h2 class="detail-header">Personal Details</h2>
+
+                <label class="detail-header">Username:</label>
+                <span id="username-display-field">USERNAME</span>
+
+                <label class="detail-header">Email:</label>
+                <span id="email-display-field">email@example.com</span>
+
+                <section id="leaderboard">
+                    <div class="scroll-container">
+                        <ol id="leaderboard-list"></ol>
+                    </div>
+                </section> 
+
+            </div>
         </div>
+    </main>
 
-        <!-- Account Details -->
-        <div class="details-container">
-            <h3>Personal Details</h3>
-            <h3>Log Out</h3>
-        </div>
-
-        <div class="personal-details-container">
-            <h3>Username</h3>
-            <input type="text" id="username" required><br>
-            <button type="save-changes">save changes</button>
-
-            <h3>Email</h3>
-            <input type="text" id="email" required><br>
-            <button type="save-changes">save changes</button>
-
-            <h3>Password</h3>
-            <input type="text" id="password" required><br>
-            <button type="save-changes">save changes</button>
-        </div>
-
-        <!-- Points -->
-        <div class= "points-container">
-            <h1 id="points-text">POINTS</h1>
-        </div>
-
-        <!-- Streaks -->
-        <div class="streaks-container">
-            <i class="bx bxs-hot"></i>
-            <h2>STREAKS</h2>
-        </div>
-
-        <!-- Leaderboard -->
-         <div class="leaderboard">
-            <h2>Leaderboard</h2>
-         </div>
-    </div>
-
-    <script src="accountPage.js" type = "module"></script>
+    <script src="accountPage.js" type="module"></script>
+    <script src="common.js" type="module"></script>
 </body>
 </html>
