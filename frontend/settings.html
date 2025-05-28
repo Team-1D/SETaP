@@ -1,91 +1,58 @@
-
-
-<html>
-    <head>
-         <!-- link to style file -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account - REViiT</title>
+    <!-- link to style file -->
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="home.css">
     <!-- icons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    
     <!-- font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    </head>
-    <body>
-        <!-- <form id="upload-form" enctype="multipart/form-data">
-            <input type="file" name="profile" accept="image/*" required />
-            <button type="submit">Upload</button>
-          </form>
-         -->
-        
-        
-        
-        
+</head>
+<body>
+    <nav class="navbar">
+        <!-- Left Side (Profile) -->
         <div class="left-side">
-            <a href="home.html" class="nav-link"><i class='bx bx-home'></i></a>
-            <button class="logout" id="logout-button">Logout</button>
-            <!-- <div class="profpic">
-                <img id="profile-pic" src="" alt="Profile Picture" width="50" />
-                <script>
-                    const user_id = 1; // Hardcoded for test
-                    const form = document.querySelector('#upload-form');
-                    const img = document.querySelector('#profile-pic');
-          
-                // On form submit
-                    form.addEventListener('submit', async (e) => {
-                        e.preventDefault();
-          
-                    const formData = new FormData(form);
-                    const response = await fetch(`/upload-profile-picture/${user_id}`, {
-                        method: 'POST',
-                        body: formData,
-                    });
-          
-                    const result = await response.json();
-                    if (result.success) {
-                    // Fetch the updated profile picture and display it
-                        img.src = `/profile-picture/${user_id}?t=${Date.now()}`; // prevent caching
-                    } else {
-                        alert('Upload failed');
-                    }
-                });
-          
-                // Load existing picture on page load (optional)
-                    window.addEventListener('load', () => {
-                        img.src = `/profile-picture/${user_id}`;
-                    });
-                </script>
-            
-                
-            </div>
+            <a href="accountPage.html"><i class='bx bxs-user '></i></a>
+        </div>
 
-            <div class="usernametxt">
-                <script>
-                    const authToken = localStorage.getItem('authToken'); // or use cookies
+        <!-- Centered Logo -->
+        <div class="nav-logo">
+            <h1>REViiT</h1>
+        </div>
 
-                    fetch('/api/username', {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${authToken}`, // optional, only if using JWT
-                            }
-                    })
-                </script>
+        <!-- Right Side (Settings & Timer) -->
+        <div class="right-side">
+            <a href="#"><i class='bx bxs-time'></i></a>
+            <a href="settings.html"><i class='bx bxs-cog active'></i></a>
+        </div>
+    </nav>
 
-
-
-            </div>
-            
-            <div class="bar">
-                <div id="exp-bar"></div>
-            </div>
-            <p>exp.</p>
-            <i class="bx bxs-hot"></i>
-        </div> -->
+    <!-- Navigation Menu Below "REViiT" -->
+    <div class="nav-menu-container">
+        <ul class="nav-menu">
+            <li><a href="home.html" class="nav-link"><i class='bx bx-home'></i></a></li>
+            <li><a href="notes.html" class="nav-link"><i class='bx bxs-note'></i></a></li>
+            <li><a href="flashcards.html" class="nav-link"><i class='bx bxs-collection'></i></a></li>
+            <li><a href="leaderboard.html" class="nav-link"><i class='bx bxs-trophy'></i></a></li>
+        </ul>
+    </div>
         
-        
-        <script src="settings.js" type = "module"></script>  
+        <div class="logout-container">
+            <button id="logout-button">Logout</button>
+        </div>
+        <script>
+            document.querySelector('#logout-button').addEventListener('click', async () => {
+                window.location.href = 'login.html';
+                localStorage.removeItem('userId');
+                localStorage.removeItem('nickname');
+                localStorage.removeItem('email');
+            });
+        </script>  
         <script type="module" src="common.js"></script>
     </body>
 </html>

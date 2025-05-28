@@ -55,11 +55,11 @@ async function signupUser(email, nickname, password) {
         // Insert new user into database with default values
         const result = await pool.query(
             `INSERT INTO users 
-                (leaderboard_id, user_email, user_nickname, user_password, user_streak, user_points, user_coins) 
+                (leaderboard_id, user_email, user_nickname, user_password, user_streak, user_points, user_coins, profile_pic) 
             VALUES 
-                ($1, $2, $3, $4, $5, $6, $7) 
+                ($1, $2, $3, $4, $5, $6, $7, $8) 
             RETURNING user_id, user_email, user_nickname`,
-            [leaderboardId, email, nickname, hashedPassword, 0, 0, 0]
+            [leaderboardId, email, nickname, hashedPassword, 0, 0, 0, 'default.png']
         );
 
         // Also create an entry in the streaks table

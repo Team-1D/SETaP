@@ -377,13 +377,28 @@ app.get('/api/username', async (req, res) => {
     }
   });
 
-  app.get('/api/user/:id', async (req, res) => {
-    const result = await pool.query('SELECT user_nickname, profile_pic FROM users WHERE user_id = $1', [req.params.id]);
-    const user = result.rows[0];
-    user.profile_pic_url = `http://localhost:8080/pfp/${user.profile_pic}`;
-    res.json(user);
-});
+    app.get('/api/user/:id', async (req, res) => {
+        try {
+            const result = await pool.query(
+                'SELECT user_nickname, user_email as email, user_points, profile_pic FROM users WHERE user_id = $1', 
+                [req.params.id]
+            );
+            
+            if (result.rows.length === 0) {
+                return res.status(404).json({ error: 'User not found' });
+            }
 
+            const user = result.rows[0];
+            user.profile_pic_url = user.profile_pic 
+                ? `/pfp/${user.profile_pic}` 
+                : '/pfp/default.png';
+                
+            res.json(user);
+        } catch (err) {
+            console.error('Error fetching user data:', err);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    });
   // Route to get the leaderboard
   app.get('/leaderboard', getLeaderboard);
 
@@ -427,7 +442,6 @@ app.listen(port, () => {
 
 
 //Fetch user points
-
 app.get('/users/points', async (req, res) => {
     const userId = req.params.id;
   

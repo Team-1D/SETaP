@@ -2,6 +2,17 @@
 // /frontend/js/login.js
 import { startActivityTimer } from './activitytimer.js';
 
+document.querySelectorAll("#togglePassword").forEach(icon => {
+    icon.addEventListener("click", function() {
+        const passwordField = this.previousElementSibling;
+        const type = passwordField.type === "password" ? "text" : "password";
+        passwordField.type = type;
+        
+        this.classList.toggle("bx-show");
+        this.classList.toggle("bx-hide");
+    });
+});
+
 document.getElementById("loginForm").addEventListener("submit", async function(e) {
     e.preventDefault(); // Crucial: stops page refresh
     

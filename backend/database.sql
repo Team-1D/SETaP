@@ -137,7 +137,12 @@ VALUES
 (4, 1, 'bob@example.com', 'BobTheBrave', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 2, 80, 5, 'gus.jpg'),
 (5, 1, 'charlie@example.com', 'CharlieC', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 0, 20, 0, 'leah.jpg'),
 (6, 1, 'diana@example.com', 'DianaD', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 7, 200, 25, 'robin.jpg'),
-(7, 1, 'eve@example.com', 'EveTheWise', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 4, 120, 15, 'maru.jpg'); 
+(7, 1, 'eve@example.com', 'EveTheWise', '$2b$10$6wJAhRt.LivGjJrR5CtGNeFiqTuzy9ZCkKBe9xk.5uNJD.8r.KhT6', 4, 120, 15, 'maru.jpg');
+
+
+INSERT INTO streaks (user_id, streak_count)
+SELECT user_id, user_streak FROM users
+WHERE user_id NOT IN (SELECT user_id FROM streaks);
 
 --due to manually inseting users in the past
 SELECT setval('users_user_id_seq', (SELECT MAX(user_id) FROM users));
