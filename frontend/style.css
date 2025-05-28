@@ -962,3 +962,12 @@ body > .main-content {
 .leaderboard-container {
     grid-area: 2 / 3 / 3 / 4;
 }
+
+#logout-button {
+    background-color: #d8893f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
