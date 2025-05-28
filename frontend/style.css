@@ -184,7 +184,9 @@ select, input{
 .popup-notes{
     display: none;
     position: fixed;
-    margin-left: 40%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: #ffe9b8;
     padding: 2em;
     border-radius: 0.6em;
@@ -192,6 +194,7 @@ select, input{
     width: auto;
     text-align: center;
     justify-items: left;
+    z-index: 1000; /* Ensure it's above other content */
 }
 
 .close-popup{
@@ -1077,6 +1080,11 @@ body > .main-content {
     border-radius: 1rem;
     padding: 1.5rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
 }
 
 .account-details-section h2 {
@@ -1096,4 +1104,16 @@ body > .main-content {
 .account-details-section span {
     font-size: 1rem;
     color: #222;
+}
+
+.detail-header {
+    margin-top: 1rem;
+}
+
+.leaderboard-user {
+    color: inherit;
+}
+
+.leaderboard-user.target-user {
+    color: #d8893f;
 }

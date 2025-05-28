@@ -32,6 +32,44 @@ const getUser = async (userId) => {
     return result.rows[0];
 };
 
+const getLeaderboardSlice = async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        const result = await pool.query(
+            `
+            WITH ranked_users AS (
+                SELECT user_id, user_nickname, user_points,
+                    RANK() OVER (ORDER BY user_points DESC) as user_rank
+                FROM users
+            ),
+            target_user AS (
+                SELECT user_rank FROM ranked_users WHERE user_id = $1
+            )
+            SELECT * FROM ranked_users
+            WHERE user_rank IN (
+                (SELECT user_rank FROM target_user) - 2,
+                (SELECT user_rank FROM target_user) - 1,
+                (SELECT user_rank FROM target_user),
+                (SELECT user_rank FROM target_user) + 1,
+                (SELECT user_rank FROM target_user) + 2
+            )
+            ORDER BY user_rank
+            `,
+            [userId]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: "User not found or has no ranking." });
+        }
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error("Error fetching leaderboard slice:", err);
+        res.status(500).json({ error: err.message });
+    }
+};
+
 
 // Controller function to update user points
 const updateUserPoints = async (req, res) => {
@@ -57,5 +95,6 @@ const updateUserPoints = async (req, res) => {
 module.exports = {
     getLeaderboard,
     getUser,
-    updateUserPoints
+    updateUserPoints,
+    getLeaderboardSlice
 };

@@ -13,7 +13,7 @@ const { getStreak, updateStreak, createStreak } = require('./streak');
 const { getFlashcards, getFlashcardById, createFlashcard, updateFlashcard, deleteFlashcard } = require('./flashcardController');
 const { loginUser } = require('./loginController');
 const { signupUser } = require('./signupController');
-const {getLeaderboard, getUser, updateUserPoints } = require('./leaderboardController');
+const {getLeaderboard, getUser, updateUserPoints, getLeaderboardSlice } = require('./leaderboardController');
 
 const app = express();
 app.use(cors());
@@ -399,8 +399,11 @@ app.get('/api/username', async (req, res) => {
             res.status(500).json({ error: 'Internal server error' });
         }
     });
+
   // Route to get the leaderboard
   app.get('/leaderboard', getLeaderboard);
+  app.get("/leaderboard/:id/around", getLeaderboardSlice);
+
 
 // Route to get a specific user's data
 app.get('/users/:id', async (req, res) => {

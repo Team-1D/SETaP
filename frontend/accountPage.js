@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Load user data
     await loadUserData(userId);
+    displayLeaderboard(userId);
 });
 
 
@@ -90,5 +91,32 @@ async function loadLeaderboardPosition(userId) {
         }
     } catch (error) {
         console.error('Error loading leaderboard position:', error);
+    }
+}
+
+async function displayLeaderboard(userId) {
+    try {
+        const response = await fetch(`/leaderboard/${userId}/around`);
+        if (!response.ok) throw new Error('Failed to fetch leaderboard data');
+        
+        const leaderboardData = await response.json();
+        const leaderboardList = document.querySelector('#leaderboard-list');
+        leaderboardList.innerHTML = ''; // Clear existing list
+        
+        leaderboardData.forEach((user) => {
+            const listItem = document.createElement('li');
+            
+            // Apply orange color if this is the current user
+            const isCurrentUser = user.user_id == userId;
+            const nameStyle = isCurrentUser ? 'color: #d8893f; font-weight: bold;' : '';
+            
+            listItem.innerHTML = `
+                <p class="name" style="${nameStyle}">${user.user_nickname}</p>
+                <p class="score" style="${nameStyle}">${user.user_points}pt</p>
+            `;
+            leaderboardList.appendChild(listItem);
+        });
+    } catch (error) {
+        console.error("Error displaying leaderboard:", error);
     }
 }

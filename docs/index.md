@@ -6,9 +6,31 @@ Reviit is a gamified revision app designed to help students learn better through
 
 - 📝 Write notes from templates
 - 🧠 Test yourself with flashcards
-- 🎮 Earn XP and climb the leaderboard
+- 🎮 Earn XP and climb the leaderboar
 
-## Technologies
+### How to earn XP?
+
+Just revise and earn points!
+Stay logged into the app and earn at least **10 XP every 15 minutes**. The longer you revise, the more you earn — **every hour of active revision boosts your XP gain by an extra 10 XP.**
+
+**Want even more points?**
+
+**Streaks work as multipliers.**
+Log in daily to build your streak. For every 7 consecutive days, your XP multiplier increases by 1:
+
+- Days 1–7: 1x multiplier
+
+- Days 8–14: 2x multiplier
+
+- Days 15–21: 3x multiplier
+
+- And it keeps going!
+
+⚠️ **Miss a day, and your streak resets — so stay consistent!**
+
+
+
+## Languages
 
 - Languages used: **HTML**, **CSS**, **JavaScript**, **PostgreSQL**
 
