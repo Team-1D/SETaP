@@ -240,10 +240,11 @@ app.put('/flashcards/:id', async (req, res) => {
     }
 });
 
-//delering flashcard
+//deleteing flashcard
 app.delete('/flashcards/:id', async (req, res) => {
-    console.log('DELETE request received for ID:', req.params.id);
     const { id } = req.params;
+    console.log('DELETE request received for ID:', id);
+
     try {
         const deletedFlashcard = await deleteFlashcard(id);
         if (!deletedFlashcard) {
