@@ -8,7 +8,7 @@ const fs = require('fs');
 const port = 8080; // Using only one port
 
 //controllers - functions from each backend file
-const { createNote, getNotes, getNoteByName, updateNote, deleteNote, toggleFavourite } = require('./notes');
+const { createNote, getNotes, getNoteByName, updateNote, deleteNote, toggleFavourite, getFavNotes } = require('./notes');
 const { getStreak, updateStreak, createStreak } = require('./streak');
 const { getFlashcards, getFlashcardById, createFlashcard, updateFlashcard, deleteFlashcard } = require('./flashcardController');
 const { loginUser } = require('./loginController');
@@ -81,15 +81,17 @@ app.post('/signup', async (req, res) => {
 
 //NOTES ROUTES
 //gets all notes 
-app.get('/notes', async (req, res) => {
+app.get('/notes/:userId', async (req, res) => {
     try {
-        const notes = await getNotes();
+        const { userId } = req.params;
+        const notes = await getNotes(userId);
         res.json(notes);
     } catch (err) {
         console.error("Failed to get notes:", err.message);
         res.status(500).json({ error: "Failed to fetch notes" });
     }
 });
+
 
 //saves a note to database
 app.post('/notes', async (req, res) => {
@@ -133,7 +135,7 @@ app.put('/notes/:id', async (req, res) => {
 //deleting note
 app.delete('/notes/:id', async (req, res) => {
     try {
-        const { id } =parseInt(req.params.id, 10);
+        const id = parseInt(req.params.id, 10);
         const note = await deleteNote(id);
         res.json(note);
     } catch (err) {
@@ -151,6 +153,18 @@ app.put('/notes/favourite/:id', async (req, res) => {
         return res.status(404).json(result);
     }
     res.json(result);
+});
+
+app.get('/notes/favourite/:userId', async (req, res) => {
+    const { userId } = req.params;
+    console.log(`Fetching favourite notes for user ID: ${userId}`);
+    try {
+        const notes = await getFavNotes(userId);
+        res.json(notes);
+    } catch (err) {
+        console.error("Failed to fetch favourite notes:", err);
+        res.status(500).json({ error: "Failed to fetch favourite notes" });
+    }
 });
 
 //STREAK ROUTES

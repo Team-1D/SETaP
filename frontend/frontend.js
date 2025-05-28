@@ -30,13 +30,13 @@ let currentNote = null;
 // Function to create a new note
 const createNote = async (title, content, dateCreated, difficulty) => {
     //for now that we dont have auth
-    const userId = 1;
+    const userId = JSON.parse(localStorage.getItem('userId'));
     const favourite = false;
     try {
         const response = await fetch('http://localhost:8080/notes', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, content, dateCreated,userId , favourite})
+            body: JSON.stringify({ title, content, dateCreated, userId, favourite})
         });
 
         const data = await response.json();
@@ -219,76 +219,87 @@ colorPicker.addEventListener('input', () => {
 //     }
 // });
 
-function addNoteToUI(title, content, difficulty= "low") {
+async function addNoteToUI(title, content, difficulty = "low") {
+    const userId = JSON.parse(localStorage.getItem('userId'));
+    
+    try {
+        const response = await fetch(`http://localhost:8080/notes/${userId}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        });
 
-    const note = document.createElement('div');
-    note.className = 'note';
-
-    const noteData = JSON.parse(localStorage.getItem('note_' + title));
-    const isFav = noteData && noteData.fav; // Check if the note is favourited
-    console.log('difficulty:',difficulty);
-
-    note.innerHTML = `
-    <div class="note-preview">
-        <h3>${title}</h3>
-        <span class="difficulty-badge ${difficulty.toLowerCase()}">${difficulty}</span>
-        <div class="button-container">
-            <button class="delete-note">Delete</button>
-            <button class="edit-note">Edit</button>
-            <button class="add-favourite"><i class="bx bxs-heart"></i></button>
-        </div>
-    </div>
-    `;
-
-    // Adding favourite button
-    addFav(note, title);
-    myTextArea.textContent = content;
-    // Add event listener for the delete button
-    const deleteButton = note.querySelector('.delete-note');
-
-    deleteButton.addEventListener('click',  async() => {
-        try {
-            // Remove from local storage
-            localStorage.removeItem('note_' + title);
-            // Remove from UI
-            note.remove();
-            console.log(`Note "${title}" deleted from local storage`);
-
-            const noteData = await getNoteByName(title);
-            console.log('note:', noteData);
-            const noteId = noteData.note_id;
-            const response = await fetch(`http://localhost:8080/notes/${noteId}`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to delete note from server');
-            }
-            if (response.ok){
-                console.log('Deleted note from database');
-            }
-            
-        } catch (error) {
-            console.error('Error deleting note:', error);
-        }
-
-    });
-
-    note.addEventListener('click', () => {
-        if (classList.contains('edit-note') || classList.contains('delete-note') || classList.contains('add-favourite')) {
+        if (!response.ok) {
+            console.warn('Failed to fetch note data from server');
             return;
         }
-        setTemplateBackground(template);
-    });
 
-    // Append the new note to the notes container
-    notesContainer.appendChild(note);
-    
-    // Add event listener for the edit button
-    const editButton = note.querySelector('.edit-note');
-    editButton.addEventListener('click',  () => editNote(title, note));
+        const notes = await response.json();
+        console.log('Fetched notes:', notes);
+
+        if (!notesContainer) {
+            console.error('Missing #notesContainer element in HTML');
+            return;
+        }
+
+        notesContainer.querySelectorAll('.note').forEach(note => note.remove());
+
+        notes.forEach(noteData => {
+            const title = noteData.note_title || "Untitled";
+            const content = noteData.note_content || "";
+            const difficulty = noteData.difficulty || "low";
+            const fav = noteData.fav || false;
+
+            const note = document.createElement('div');
+            note.className = 'note';
+
+            note.innerHTML = `
+                <div class="note-preview">
+                    <h3>${title}</h3>
+                    <span class="difficulty-badge ${difficulty.toLowerCase()}">${difficulty}</span>
+                    <div class="button-container">
+                        <button class="delete-note">Delete</button>
+                        <button class="edit-note">Edit</button>
+                        <button class="add-favourite"><i class="bx bxs-heart"></i></button>
+                    </div>
+                </div>
+            `;
+
+            addFav(note, title, fav);
+
+            const deleteButton = note.querySelector('.delete-note');
+            deleteButton.addEventListener('click', async () => {
+                try {
+                    const noteData = await getNoteByName(title);
+                    if (noteData) {
+                        const noteId = noteData.note_id;
+                        const delRes = await fetch(`http://localhost:8080/notes/${noteId}`, {
+                            method: 'DELETE',
+                            headers: { 'Content-Type': 'application/json' },
+                        });
+
+                        if (!delRes.ok) throw new Error('Failed to delete note from server');
+                        
+                        // Only remove from UI and localStorage after successful deletion
+                        localStorage.removeItem('note_' + title);
+                        note.remove();
+                        console.log(`Note "${title}" deleted successfully`);
+                    }
+                } catch (error) {
+                    console.error('Error deleting note:', error);
+                }
+            });
+
+            const editButton = note.querySelector('.edit-note');
+            editButton.addEventListener('click', () => editNote(title, note));
+
+            notesContainer.appendChild(note);
+        });
+
+    } catch (error) {
+        console.error('Error adding note to UI:', error);
+    }
 }
+
 
 function setTemplateBackground(template) {
     const textarea = document.querySelector('#fullscreen-textarea');
@@ -401,43 +412,43 @@ async function updateNote(id, title, content, dateCreated) {
 }
 
 // add favourite button and its functions
-async function addFav(note, noteName){
+async function addFav(note, noteName, fav = false) {
     const favButton = note.querySelector('.add-favourite');
-    favButton.addEventListener('click', async function() {
-        //const id = this.dataset.note_id;
-        const heartIcon = this.querySelector('i');
-        // Toggle heart color between red and default
-        const isFavourited = heartIcon.style.color === 'red';
+    const heartIcon = favButton.querySelector('i');
+    
+    // Set initial color based on fav status
+    heartIcon.style.color = fav ? 'red' : '';
 
+    favButton.addEventListener('click', async function() {
         try {
             const noteData = await getNoteByName(noteName);
-            console.log('note:', noteData);
-            const noteId = noteData.note_id;
-            console.log(`how fun ${JSON.stringify(noteData)}, ${noteId}`);
-
-            if (!noteId) {
-                console.error('Note ID not found for title:', title);
+            if (!noteData) {
+                console.error('Note not found:', noteName);
                 return;
             }
-            const response = await fetch(`http://localhost:8080/notes/favourite/${noteId}`, {
+
+            const noteId = noteData.note_id;
+            const result = await fetch(`http://localhost:8080/notes/favourite/${noteId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
             });
-    
-            const data = await response.json();
-            if(data.error){
+
+            const data = await result.json();
+            if (data.error) {
                 console.error('Server error:', data.error);
-                return; 
+                return;
             }
+
+            // Toggle heart color
+            const isFavourited = heartIcon.style.color === 'red';
             heartIcon.style.color = isFavourited ? '' : 'red';
 
-            // Update the note in localStorage to reflect the favourite status change
-            const noteDataToUpdate = JSON.parse(localStorage.getItem(`note_${noteName}`));
-
-            if (noteDataToUpdate) {
-                // Update the favourite status of the note
-                noteDataToUpdate.fav = !isFavourited; // Toggle the favourite status
-                localStorage.setItem(`note_${noteName}`, JSON.stringify(noteDataToUpdate));
+            // Update localStorage
+            const noteKey = `note_${noteName}`;
+            const storedNote = JSON.parse(localStorage.getItem(noteKey));
+            if (storedNote) {
+                storedNote.fav = !isFavourited;
+                localStorage.setItem(noteKey, JSON.stringify(storedNote));
             }
 
         } catch (error) {
@@ -447,36 +458,61 @@ async function addFav(note, noteName){
 }
 
 async function findFavs() {
-    // Toggle the state
     showingFavorites = !showingFavorites;
-    
-    // Clear existing displayed notes
     removeAllNotes();
 
-    if (showingFavorites) {
-        // Show only favorites
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            
-            if (key.startsWith('note_')) {
-                try {
-                    const noteData = JSON.parse(localStorage.getItem(key));
+    const userId = JSON.parse(localStorage.getItem('userId'));
+    try {
+        const url = showingFavorites 
+            ? `http://localhost:8080/notes/favourite/${userId}`
+            : `http://localhost:8080/notes/${userId}`;
 
-                    // Check if the note is favourited
-                    if (noteData.fav) {
-                        // Add this favourited note to the UI
-                        addNoteToUI(noteData.title, noteData.content, noteData.difficulty || 'low');
-                    }
-                } catch (e) {
-                    console.error(`Error parsing note from localStorage for key "${key}":`, e);
-                }
-            }
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch notes');
         }
-    } else {
-        // Show all notes
-        loadAllUserNotes();
+
+        const notes = await response.json();
+        notes.forEach(note => {
+            addSingleNoteToUI(note);
+        });
+
+    } catch (err) {
+        console.error('Error fetching notes:', err);
     }
 }
+
+
+function addSingleNoteToUI(noteData) {
+    const title = noteData.note_title || "Untitled";
+    const content = noteData.note_content || "";
+    const difficulty = noteData.difficulty || "low";
+    const fav = noteData.favourite || false;
+
+    const note = document.createElement('div');
+    note.className = 'note';
+
+    note.innerHTML = `
+        <div class="note-preview">
+            <h3>${title}</h3>
+            <span class="difficulty-badge ${difficulty.toLowerCase()}">${difficulty}</span>
+            <div class="button-container">
+                <button class="delete-note">Delete</button>
+                <button class="edit-note">Edit</button>
+                <button class="add-favourite"><i class="bx bxs-heart"></i></button>
+            </div>
+        </div>
+    `;
+
+    addFav(note, title, fav);
+    notesContainer.appendChild(note);
+}
+
+
 //getting the note by finding the title --> due to using locastorage this is possible
 async function getNoteByName(title) {
     console.log('Fetching note with title:', title);
@@ -546,3 +582,4 @@ textArea.addEventListener('wheel', function (e) {
 
     e.preventDefault();
 });
+
