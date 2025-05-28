@@ -14,7 +14,7 @@ const colorInput = document.getElementById('background-color');
 let flashcards = [];
 let currentFlashcardIndex = 0; // Track the current flashcard index
 let userPoints = 0; // Track user points
-const userId = 1; // for testing
+const userId = localStorage.getItem('userId');
 
 // Function to add flashcard to UI
 function addFlashcardToUI(flashcard) {
@@ -38,6 +38,14 @@ function addFlashcardToUI(flashcard) {
     flashcardElement.querySelector('.flashcard-menu').addEventListener('click', () => {
         showFlashcardActionPopup(flashcardElement);
     });
+    
+    // Add click event to flip the card
+    flashcardElement.addEventListener('click', () => {
+        const currentText = flashcardElement.querySelector('h2').textContent;
+        flashcardElement.querySelector('h2').textContent = 
+            currentText === flashcard.term ? flashcard.definition : flashcard.term;
+    });
+    updateScrollButtons();
 }
 
 // Function to update the visibility of scroll buttons
@@ -124,9 +132,8 @@ function showFlashcardActionPopup(flashcardElement) {
 
     // Handle flashcard deletion
     deleteButton.onclick = async () => {
-    const id = flashcardElement.dataset.id; // Ensure you have the ID stored
     try {
-        await deleteFlashcard(id); // Call the function to delete from backend
+        await deleteFlashcardFront(id); // Call the function to delete from backend
         flashcardElement.remove(); // Remove from UI
         flashcardActionPopup.style.display = 'none'; // Hide the popup
         updateScrollButtons(); // Update scroll buttons visibility
@@ -140,7 +147,6 @@ function showFlashcardActionPopup(flashcardElement) {
     editForm.onsubmit = async (e) => {
     e.preventDefault();
     
-    const id = flashcardElement.dataset.id; // Retrieve the flashcard ID
     const term = termInput.value;
     const definition = definitionInput.value;
     const colour = editColorInput.value; // Get the updated color
@@ -153,6 +159,8 @@ function showFlashcardActionPopup(flashcardElement) {
             flashcardElement.querySelector('h2').textContent = term;
             flashcardElement.style.backgroundColor = colour || '#ffffff'; // Fallback to white if color is not set            flashcardActionPopup.style.display = 'none'; // Hide the popup
         }
+
+        flashcardActionPopup.style.display = 'none';
     } catch (error) {
         console.error('Error updating flashcard:', error);
     }
@@ -218,13 +226,18 @@ testButton.addEventListener('click', () => {
     currentFlashcardIndex = 0; // Reset index for a new test
     userPoints = 0; // Reset points
     showNextFlashcard(); // Show the first flashcard
+    testDefinitionInput.style.display = 'block'; // Hide input
+    testTermElement.style.display = 'block'; // Hide term
+    document.querySelector('#test_definition_label').style.display = 'block'; // Hide definition input
+    document.querySelector('#flashcard_test_submit').style.display = 'block';
 });
 
 function showNextFlashcard() {
     if (currentFlashcardIndex < flashcards.length) {
         const currentFlashcard = flashcards[currentFlashcardIndex];
-        test_term = currentFlashcard.term;
-        test_definition = currentFlashcard.definition;
+        console.log(currentFlashcard);
+        test_term = currentFlashcard.flashcard_term;
+        test_definition = currentFlashcard.flashcard_definition;
 
         testTermElement.innerHTML = `${test_term}`; // Display the term
         testResult.style.display = 'none'; // Hide previous result
@@ -235,7 +248,9 @@ function showNextFlashcard() {
         testResult.textContent = `Test complete! Your score: ${userPoints}/${flashcards.length}`;
         testResult.style.display = 'block'; // Show final score
         testDefinitionInput.style.display = 'none'; // Hide input
-        document.querySelector('button[type="submit"]').disabled = true; // Disable submit button
+        testTermElement.style.display = 'none'; // Hide term
+        document.querySelector('#test_definition_label').style.display = 'none'; // Hide definition input
+        document.querySelector('#flashcard_test_submit').style.display = 'none';
     }
 }
 
@@ -321,6 +336,7 @@ async function createFlashcard(term, definition, colour, userId) {
         }
 
         const data = await response.json();
+        loadFlashcards(); // Reload flashcards after creation
         return data;
     } catch (error) {
         console.error('Error creating flashcard:', error);
@@ -353,6 +369,7 @@ async function updateFlashcard(id, term, definition, colour) {
         if (!response.ok) {
             throw new Error('Failed to update flashcard');
         }
+        loadFlashcards(); // Reload flashcards after update
         return await response.json(); // Return updated flashcard
     } catch (error) {
         console.error('Error updating flashcard:', error);
@@ -360,7 +377,7 @@ async function updateFlashcard(id, term, definition, colour) {
 }
 
 // Function to delete a flashcard
-async function deleteFlashcard(id) {
+async function deleteFlashcardFront(id) {
     try {
         const response = await fetch(`http://localhost:8080/flashcards/${id}`, {
             method: 'DELETE',
@@ -368,6 +385,7 @@ async function deleteFlashcard(id) {
         if (!response.ok) {
             throw new Error('Failed to delete flashcard');
         }
+        loadFlashcards(); // Reload flashcards after deletion
         return await response.json(); // Return deleted flashcard info
     } catch (error) {
         console.error('Error deleting flashcard:', error);
@@ -382,9 +400,22 @@ async function loadFlashcards() {
         const data = await response.json();
         
         flashcards = data; // ✅ update global array
-        flashcards.forEach(addFlashcardToUI); // Add each flashcard to the UI
-    } catch (error) {
+
+        flashcardsContainer.innerHTML = '';
+        data.forEach(flashcard => { 
+            // Ensure all required fields are present
+            const processedFlashcard = {
+                id: flashcard.flashcard_id || flashcard.id,
+                term: flashcard.flashcard_term || flashcard.term,
+                definition: flashcard.flashcard_definition || flashcard.definition,
+                colour: flashcard.flashcard_colour || flashcard.colour || '#ffffff'
+            };
+            addFlashcardToUI(processedFlashcard);
+        });
+        updateScrollButtons();
+     } catch (error) {
         console.error('Error loading flashcards:', error);
+        alert('Failed to load flashcards. Please try again.');
     }
 }
 

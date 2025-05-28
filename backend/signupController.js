@@ -14,16 +14,16 @@ async function signupUser(email, nickname, password) {
     }
 
     // Password validation - so testing can be more complex
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-    if (!passwordRegex.test(password)) {
-        return { 
-            error: 'Password must be at least 8 characters long and include:' +
-                '\n- One uppercase letter' +
-                '\n- One lowercase letter' +
-                '\n- One number'
-        };
-    }
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
+        if (!passwordRegex.test(password)) {
+            return { 
+                error: 'Password must be at least 8 characters long and include:' +
+                    '\n• One uppercase letter (A-Z)' +
+                    '\n• One lowercase letter (a-z)' +
+                    '\n• One number (0-9)'
+            };
+        }
     try {
         // Check if email already exists
         const emailCheck = await pool.query(

@@ -11,7 +11,7 @@ async function createFlashcard({ userId, term, definition, colour }) {
         console.log('Creating flashcard with:', { userId, term, definition, colour });
 
         const result = await pool.query(
-            `INSERT INTO flashcards (user_id, term, definition, colour)
+            `INSERT INTO flashcards (user_id, flashcard_term, flashcard_definition, flashcard_colour)
              VALUES ($1, $2, $3, $4)
              RETURNING *`,
             [userId, term, definition, colour]
@@ -55,7 +55,7 @@ async function updateFlashcard(id, term, definition, colour) {
     try {
         console.log(`Updating flashcard with ID: ${id}`);
         const result = await pool.query(
-            "UPDATE flashcards SET term = $1, definition = $2, colour = $3, updated_at = CURRENT_TIMESTAMP WHERE id = $4 RETURNING *",
+            "UPDATE flashcards SET flashcard_term = $1, flashcard_definition = $2, flashcard_colour = $3, updated_at = CURRENT_TIMESTAMP WHERE flashcard_id = $4 RETURNING *",
             [term, definition, colour, id]
         );
         if (result.rowCount === 0) {
@@ -75,7 +75,7 @@ async function deleteFlashcard(id) {
     try {
         console.log(`Attempting to delete flashcard with ID: ${id}`);
         const result = await pool.query(
-            "DELETE FROM flashcards WHERE id = $1 RETURNING *",
+            "DELETE FROM flashcards WHERE flashcard_id = $1 RETURNING *",
             [id]
         );
         if (result.rowCount === 0) {
